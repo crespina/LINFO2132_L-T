@@ -389,7 +389,7 @@ public class Lexer {
             int bytesRead = r.read(buffer);
             
             if (bytesRead == 7 && buffer[0] == 'e' && buffer[1] == 'a' && buffer[2] == 'd' && buffer[3] == 'I' && buffer[4] == 'n' && buffer[5] == 't' && buffer[6] == ' ') {
-                return new Symbol("KeywordReadInt", null);
+                return new Symbol("IOProcedure", "readInt");
             } else {
                 // "Unread" the characters
                 for (int i = bytesRead - 1; i >= 0; i--) {
@@ -407,7 +407,7 @@ public class Lexer {
             int bytesRead = r.read(buffer);
             
             if (bytesRead == 10 && buffer[0] == 'e' && buffer[1] == 'a' && buffer[2] == 'd' && buffer[3] == 'S' && buffer[4] == 't' && buffer[5] == 'r' && buffer[6] == 'i' && buffer[7] == 'n' && buffer[8] == 'g' && buffer[9] == ' ') {
-                return new Symbol("KeywordReadString", null);
+                return new Symbol("IOProcedure", "readString");
             } else {
                 // "Unread" the characters
                 for (int i = bytesRead - 1; i >= 0; i--) {
@@ -425,33 +425,14 @@ public class Lexer {
             int bytesRead = r.read(buffer);
             
             if (bytesRead == 8 && buffer[0] == 'r' && buffer[1] == 'i' && buffer[2] == 't' && buffer[3] == 'e' && buffer[4] == 'I' && buffer[5] == 'n' && buffer[6] == 't' && buffer[7] == ' ') {
-                return new Symbol("KeywordWriteInt", null);
+                return new Symbol("IOProcedure", "writeInt");
             } else {
                 // "Unread" the characters
                 for (int i = bytesRead - 1; i >= 0; i--) {
                     r.unread(buffer[i]);
                 }
             }
-        }
-        
-        //Keyword "writeInt"
-        
-        if (c == 'w') {
-        	
-            // Read the next 8 characters
-            char[] buffer = new char[8];
-            int bytesRead = r.read(buffer);
-            
-            if (bytesRead == 8 && buffer[0] == 'r' && buffer[1] == 'i' && buffer[2] == 't' && buffer[3] == 'e' && buffer[4] == 'I' && buffer[5] == 'n' && buffer[6] == 't' && buffer[7] == ' ') {
-                return new Symbol("KeywordWriteInt", null);
-            } else {
-                // "Unread" the characters
-                for (int i = bytesRead - 1; i >= 0; i--) {
-                    r.unread(buffer[i]);
-                }
-            }
-        }
-        
+        }       
         
         //Keyword "readFloat"
         
@@ -462,7 +443,7 @@ public class Lexer {
             int bytesRead = r.read(buffer);
             
             if (bytesRead == 9 && buffer[0] == 'e' && buffer[1] == 'a' && buffer[2] == 'd' && buffer[3] == 'F' && buffer[4] == 'l' && buffer[5] == 'o' && buffer[6] == 'a'  && buffer[7] == 't' && buffer[8] == ' ') {
-                return new Symbol("KeywordReadFloat", null);
+                return new Symbol("IOProcedure", "readFloat");
             } else {
                 // "Unread" the characters
                 for (int i = bytesRead - 1; i >= 0; i--) {
@@ -480,7 +461,7 @@ public class Lexer {
             int bytesRead = r.read(buffer);
             
             if (bytesRead == 10 && buffer[0] == 'r' && buffer[1] == 'i' && buffer[2] == 't' && buffer[3] == 'e' && buffer[4] == 'F' && buffer[5] == 'l' && buffer[6] == 'o' && buffer[7] == 'a' && buffer[8] == 't' && buffer[9] == ' ') {
-                return new Symbol("KeywordWriteFloat", null);
+                return new Symbol("IOProcedure", "writeFloat");
             } else {
                 // "Unread" the characters
                 for (int i = bytesRead - 1; i >= 0; i--) {
@@ -498,7 +479,7 @@ public class Lexer {
             int bytesRead = r.read(buffer);
             
             if (bytesRead == 5 && buffer[0] == 'r' && buffer[1] == 'i' && buffer[2] == 't' && buffer[3] == 'e' && buffer[4] == ' ') {
-                return new Symbol("KeywordWrite", null);
+                return new Symbol("IOProcedure", "write");
             } else {
                 // "Unread" the characters
                 for (int i = bytesRead - 1; i >= 0; i--) {
@@ -516,7 +497,61 @@ public class Lexer {
             int bytesRead = r.read(buffer);
             
             if (bytesRead == 7 && buffer[0] == 'r' && buffer[1] == 'i' && buffer[2] == 't' && buffer[3] == 'e' && buffer[4] == 'l' && buffer[5] == 'n' && buffer[6] == ' ') {
-                return new Symbol("KeywordWriteLn", null);
+                return new Symbol("IOProcedure", "writeln");
+            } else {
+                // "Unread" the characters
+                for (int i = bytesRead - 1; i >= 0; i--) {
+                    r.unread(buffer[i]);
+                }
+            }
+        }
+        
+        // Keyword "chr" 
+        
+        if (c == 'c') {
+        	
+            // Read the next 3 characters
+            char[] buffer = new char[3];
+            int bytesRead = r.read(buffer);
+            
+            if (bytesRead == 3 && buffer[0] == 'h' && buffer[1] == 'r' && buffer[2] == ' ') {
+                return new Symbol("KeywordChr", null);
+            } else {
+                // "Unread" the characters
+                for (int i = bytesRead - 1; i >= 0; i--) {
+                    r.unread(buffer[i]);
+                }
+            }
+        }
+        
+        // Keyword "len" 
+        
+        if (c == 'l') {
+        	
+            // Read the next 3 characters
+            char[] buffer = new char[3];
+            int bytesRead = r.read(buffer);
+            
+            if (bytesRead == 3 && buffer[0] == 'e' && buffer[1] == 'n' && buffer[2] == ' ') {
+                return new Symbol("KeywordLen", null);
+            } else {
+                // "Unread" the characters
+                for (int i = bytesRead - 1; i >= 0; i--) {
+                    r.unread(buffer[i]);
+                }
+            }
+        }
+        
+        //Keyword "floor"
+        
+        if (c == 'f') {
+        	
+            // Read the next 5 characters
+            char[] buffer = new char[5];
+            int bytesRead = r.read(buffer);
+            
+            if (bytesRead == 5 && buffer[0] == 'l' && buffer[1] == 'o' && buffer[2] == 'o' && buffer[3] == 'r' && buffer[4] == ' ') {
+                return new Symbol("KeywordFloor", null);
             } else {
                 // "Unread" the characters
                 for (int i = bytesRead - 1; i >= 0; i--) {
@@ -567,7 +602,7 @@ public class Lexer {
         	}
         	
         	else {
-        		r.unread(c);
+        		return new Symbol("Operation", "!");
         	}
         	
         }
@@ -622,4 +657,12 @@ public class Lexer {
         
 		return new Symbol("IllegalToken", null);
     }
+	
+	// Built-in functions:
+	
+	
+//  string chr(int)             turns the character (an int value) into a string
+//  int len(string or array)    gives the length of a string or array
+//  int floor(float)             returns the largest integer less than or equal the float value
+
 }
