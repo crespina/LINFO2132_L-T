@@ -11,23 +11,23 @@ public class Symbol {
 		this.attribute = attribute;
 	}
 
-	protected String getToken() {
+	public String getToken() {
 		return token;
 	}
 
-	protected void setToken(String token) {
+	public void setToken(String token) {
 		this.token = token;
 	}
 
-	protected String getAttribute() {
+	public String getAttribute() {
 		return attribute;
 	}
 
-	protected void setAttribute(String attribute) {
+	public void setAttribute(String attribute) {
 		this.attribute = attribute;
 	}	
 	
-	protected boolean isNull() {
+	public boolean isNull() {
 		return (this.attribute == null && this.token == null);
 	}
 	
