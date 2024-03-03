@@ -11,7 +11,7 @@ public class TestLexer {
         String input = "int = 2;";
         StringReader reader = new StringReader(input);
         Lexer lexer = new Lexer(reader);
-        assertEquals(lexer.getNextSymbol().getToken(), "KeywordInt");
+        assertEquals(lexer.getNextSymbol().getToken(), "KeywordINT");
         assertEquals(lexer.getNextSymbol().getToken(), "EqualOperation");
         assertEquals(lexer.getNextSymbol().getToken(), "Number");
 
@@ -19,10 +19,10 @@ public class TestLexer {
         String input2 = "for String bool while * !=";
         StringReader reader2 = new StringReader(input2);
         Lexer lexer2 = new Lexer(reader2);
-        assertEquals(lexer2.getNextSymbol().getToken(), "KeywordFor");
-        assertEquals(lexer2.getNextSymbol().getToken(), "KeywordString");
-        assertEquals(lexer2.getNextSymbol().getToken(), "KeywordBool");
-        assertEquals(lexer2.getNextSymbol().getToken(), "KeywordWhile");
+        assertEquals(lexer2.getNextSymbol().getToken(), "KeywordFOR");
+        assertEquals(lexer2.getNextSymbol().getToken(), "KeywordSTRING");
+        assertEquals(lexer2.getNextSymbol().getToken(), "KeywordBOOL");
+        assertEquals(lexer2.getNextSymbol().getToken(), "KeywordWHILE");
         assertEquals(lexer2.getNextSymbol().getToken(), "MultOperation");
         assertEquals(lexer2.getNextSymbol().getToken(), "DifferentComparison");
     }
