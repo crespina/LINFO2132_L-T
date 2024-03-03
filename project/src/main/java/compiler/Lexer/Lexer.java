@@ -32,7 +32,7 @@ public class Lexer {
                 c=r.read();
             }
 
-            //Number
+            //Numbers
             
             if (c >= '0' && c <= '9') {       	
                 String s = ""+(char)c;    	
@@ -58,13 +58,15 @@ public class Lexer {
                 c = r.read();
                 if (c == '/') {
                     String comment = "";
-                    while ((int) c != 10) {
+                    while (c != 10) {
                         c = r.read();
                         comment += (char) c;
                     }
                     
                     return new Symbol("Comment", comment);
-                }      	       	
+                } else {
+                	r.unread(c);
+                }
             }
             
             //{([])}
