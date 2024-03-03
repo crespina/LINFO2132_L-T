@@ -3,8 +3,27 @@
  */
 package compiler;
 
+import java.io.IOException;
+import java.io.StringReader;
+import java.util.List;
+
+import compiler.Lexer.Lexer;
+import compiler.Lexer.Symbol;
+
 public class Compiler {
-    public static void main(String[] args) {
+	
+    public static void main(String[] args) throws IOException {
+    	if (args[0] == "lexer") {
+    		String input = args[1];
+            StringReader reader = new StringReader(input);
+            Lexer lexer = new Lexer(reader);
+            lexer.lex();
+    		List<Symbol> lexedInput = lexer.getLexedInput();
+    		for (Symbol s : lexedInput) {
+    			System.out.println(s);
+    		}
+    	}
+    	
         System.out.println("Hello from the compiler !");
     }
 }

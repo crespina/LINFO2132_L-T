@@ -18,9 +18,18 @@ public class Lexer {
     	this.r = new PushbackReader(input, 10);
     }   
     
-    protected List<Symbol> getLexedInput() {
+    public List<Symbol> getLexedInput() {
 		return lexedInput;
 	}
+    
+    public void lex() throws IOException {
+    	int c = r.read();
+    	while (c != -1) {
+    		r.unread(c);
+    		lexedInput.add(getNextSymbol());
+    		c = r.read();
+    	}
+    }
 
 	public Symbol getNextSymbol(){
         

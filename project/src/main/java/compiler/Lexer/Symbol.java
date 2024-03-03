@@ -30,6 +30,16 @@ public class Symbol {
 	public boolean isNull() {
 		return (this.attribute == null && this.token == null);
 	}
+
+	@Override
+	public String toString() {
+		if (this.attribute != null) {
+			return "token=" + token + ", attribute=" + attribute;
+		} else {
+			return "token=" + token;
+		}
+		
+	}
 	
 	
 }
