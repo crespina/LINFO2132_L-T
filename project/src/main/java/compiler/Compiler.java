@@ -4,26 +4,39 @@
 package compiler;
 
 import java.io.IOException;
-import java.io.StringReader;
+import java.io.FileReader;
 import java.util.List;
 
 import compiler.Lexer.Lexer;
 import compiler.Lexer.Symbol;
 
+
+/**
+ * @author A. Crespin & R. De Oliveira
+ *
+ */
 public class Compiler {
-	
-    public static void main(String[] args) throws IOException {
-    	if (args[0] == "lexer") {
-    		String input = args[1];
-            StringReader reader = new StringReader(input);
+
+	/**
+	 * @param argv : flags and parameters in the CLI command
+	 * @throws IOException
+	 * 
+	 * If the "-lexer" flag is present, the argument is used as filepath to launch the lexer, and output in stdout the list of symbols lexed from said file.
+	 */
+	public static void main(String ... argv) throws IOException {	
+		
+    	
+    	if (argv[0].equals("-lexer")) {
+            FileReader reader = new FileReader(argv[1]);
             Lexer lexer = new Lexer(reader);
             lexer.lex();
     		List<Symbol> lexedInput = lexer.getLexedInput();
     		for (Symbol s : lexedInput) {
     			System.out.println(s);
     		}
+    	} else {
+    		System.out.println("No filePath was passed as an argument");
     	}
-    	
-        System.out.println("Hello from the compiler !");
+       
     }
 }
