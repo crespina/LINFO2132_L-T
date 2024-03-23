@@ -256,7 +256,7 @@ public class Lexer {
                 r.unread(c);  
                 
                 if (isKeyword(s)){           	
-                    return new Symbol("Keyword"+s.toUpperCase(), null);                    
+                    return new Symbol("Keyword", s);                    
                 }else {                	
                     return new Symbol("Identifier", s);
                 }
