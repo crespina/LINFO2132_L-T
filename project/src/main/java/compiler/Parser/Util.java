@@ -137,4 +137,17 @@ public class Util {
 		return new StructureInstanciation(structName, instanceName, null);
 	}
 	
+	/**
+	 * @param curIndex
+	 * @param lexedInput
+	 * @return
+	 * @throws ParserException
+	 */
+	public static StructureAccess parseStructAccess(int curIndex, List<Symbol> lexedInput) throws ParserException {
+		String instance = Util.match("Identifier", null, curIndex, lexedInput).getAttribute(); // can also be a table access
+		Util.match("Operation", ".", curIndex, lexedInput);
+		String param = Util.match("Identifier", null, curIndex, lexedInput).getAttribute();
+		return new StructureAccess(instance, param);
+	}
+	
 }
