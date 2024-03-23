@@ -105,6 +105,12 @@ public class Util {
 		return new Method(name, returnType, parameters, body);
 	}
 	
+	/**
+	 * @param curIndex
+	 * @param lexedInput
+	 * @return
+	 * @throws ParserException
+	 */
 	public static Structure parseStructure(int curIndex, List<Symbol> lexedInput) throws ParserException {
 		Util.match("Keyword", "struct", curIndex, lexedInput);
 		String name = Util.match("Identifier", null, curIndex, lexedInput).getAttribute();
@@ -112,6 +118,23 @@ public class Util {
 		ArrayList<Param> parameters = Util.parseParams(curIndex, lexedInput);
 		Util.match("CloseCurlyBraket", null, curIndex, lexedInput);
 		return new Structure(name, parameters);
+	}
+	
+	/**
+	 * @param curIndex
+	 * @param lexedInput
+	 * @return
+	 * @throws ParserException
+	 */
+	public static StructureInstanciation parseStructInstanciation (int curIndex, List<Symbol> lexedInput) throws ParserException {
+		String structName = Util.match("Identifier", null, curIndex, lexedInput).getAttribute();
+		String instanceName = Util.match("Identifier", null, curIndex, lexedInput).getAttribute();
+		Util.match("Operation", "=", curIndex, lexedInput);
+		Util.match("Identifier", null, curIndex, lexedInput);
+		Util.match("OpenParenthesis", null, curIndex, lexedInput);
+		//ArrayList<Statement> statements = Util.parseStatements(curIndex, lexedInput); //identifier or operation
+		Util.match("CloseParenthesis", null, curIndex, lexedInput);
+		return new StructureInstanciation(structName, instanceName, null);
 	}
 	
 }
