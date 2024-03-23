@@ -143,7 +143,7 @@ public class Lexer {
             }  
             
             if (c == ',') {
-                return new Symbol("Colon", null);
+                return new Symbol("Comma", null);
             }   
             
             //Operations 

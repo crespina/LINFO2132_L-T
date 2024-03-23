@@ -6,8 +6,8 @@ package compiler.Lexer;
  */
 public class Symbol {
 	
-	private String token; 
-	private String attribute;
+	public String token; 
+	public String attribute;
 	
 	/**
 	 * @param token : Token of the symbol. Tokens can be : "Number", "Comment", "OpenCurlyBraket", "OpenParenthesis", "OpenSquareBraket", "CloseCurlyBraket", "CloseParenthesis", "CloseSquareBraket", "Dot", "Semicolon", "Colon", "Operation", "Identifier", "String", "Keyword"+name of the keyword in uppercase, or "IllegalToken"
