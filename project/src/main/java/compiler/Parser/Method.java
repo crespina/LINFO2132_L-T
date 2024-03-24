@@ -14,7 +14,6 @@ public class Method extends Statement{
 	ArrayList<Param> parameters;
 	ArrayList<Statement> body;
 	
-	
 	/**
 	 * @param identifier
 	 * @param returnType

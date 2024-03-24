@@ -1,10 +1,12 @@
 package compiler.Parser;
 
+import java.util.Objects;
+
 /**
  * @author Crespin
  *
  */
-public class Operation {
+public class Operation extends Statement{
 
 	
 	Operand operand1;
@@ -59,7 +61,13 @@ public class Operation {
 	}
 
     public String toString() {
-		return "Operation : " + "Operand1 = " + operand1 + ", operation = " + operation + ", operand2 = " + operand2 + "\n";
+		return "Operation : " + "Operand1 = " + operand1.toString() + ", " + operation + ", operand2 = " + operand2.toString() + "\n";
+	}
+
+	public boolean equals (Object o) {
+		Operation oper = (Operation) o;
+		return Objects.equals(this.operand1, oper.operand1) && Objects.equals(this.operand2, oper.operand2) 
+			&& Objects.equals(this.operation, oper.operation) && Objects.equals(this.op1, oper.op1) && Objects.equals(this.op2, oper.op2);
 	}
 
 }

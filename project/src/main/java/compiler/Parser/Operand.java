@@ -22,17 +22,9 @@ public class Operand{
 		this.value = value;
 	}
 
-
-	/**
-	 * @param type
-	 * @param value
-	 */
-	public Operand(String type, Float value) {
-		super();
-		this.type = type;
-		this.value = value;
+	
+	public String toString() {
+		return "Operand : " + type + ", Value = " + value;
 	}
-	
-	
 
 }

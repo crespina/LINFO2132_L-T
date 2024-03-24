@@ -3,8 +3,6 @@ package compiler.Parser;
 import java.util.ArrayList;
 import java.util.Objects;
 
-import javax.swing.plaf.nimbus.State;
-
 /**
  * @author A. Crespin & R. De Oliveira
  *

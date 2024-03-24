@@ -25,7 +25,7 @@ public class Variable extends Statement{
 	}
 	
 	public String toString() {
-		return "VarCreation : " + "isFinal = " + isFinal + "type = " + type + ", identifier = " + identifier + ", statement = " + statement + "\n";
+		return "VarCreation : " + "isFinal = " + isFinal + " " + type + ", identifier = " + identifier + ", statement = " + statement;
 	}
 
 	public boolean equals (Object o) {
