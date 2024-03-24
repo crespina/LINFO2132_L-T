@@ -120,6 +120,7 @@ public class Util {
 		Util.match("OpenParenthesis", null);
 		ArrayList<Param> parameters = Util.parseParams();
 		Util.match("CloseParenthesis", null);
+		Util.match("OpenCurlyBraket", null);
 		ArrayList<Statement> body = Util.parseStatements(curIndex, lexedInput);
 		return new Method(name, returnType, parameters, body);
 	}
@@ -306,11 +307,19 @@ public class Util {
 	public static Statement parseStatement() throws ParserException {
 		Symbol lookahead = lexedInput.get(curIndex);
 		Symbol lookahead2 = lexedInput.get(curIndex+1);
-
+		/* 
+		System.out.println(lookahead.getAttribute());
+		System.out.println(curIndex);
+		*/
 		if (lookahead.getToken().equals("Semicolon")) {
 			curIndex++;
 			lookahead = lexedInput.get(curIndex);
-			lookahead2 = lexedInput.get(curIndex+1);
+			if(curIndex > lexedInput.size()-2) {
+				return null;
+			}
+			else {
+				lookahead2 = lexedInput.get(curIndex+1);
+			}
 		}
 
 		if(isKeyword(lookahead.getAttribute(), keywords_variable) || lookahead.getAttribute().equals("final")) {
@@ -325,6 +334,10 @@ public class Util {
 			else if(lookahead2.getToken().equals("Identifier")) {
 				// Structure instance
 				return parseStructInstanciation();
+			}
+			else if(operators.contains(lookahead2.getAttribute())) {
+				// identifier operation
+				return parseOperation();
 			}
 			else {
 				// Variable assign
@@ -362,6 +375,10 @@ public class Util {
 		else if(lookahead.getAttribute().equals("struct")) {
 			// Structure 
 			return parseStructure();
+		}
+		else if(lookahead.getAttribute().equals("return")) {
+			// return 
+			return parseReturn();
 		}
 		else if(isKeyword(lookahead.getAttribute(), keywords_function_call)) {
 			// Function call

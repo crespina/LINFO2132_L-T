@@ -3,15 +3,19 @@ import static org.junit.Assert.fail;
 
 import org.junit.Test;
 
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.StringReader;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 
 import compiler.Lexer.Lexer;
 import compiler.Lexer.Symbol;
+import compiler.Parser.Statement;
+import compiler.Parser.Type;
+import compiler.Parser.Util;
+import compiler.Parser.Variable;
+import compiler.Parser.Method;
+import compiler.Parser.ParserException;
 
 public class TestLexer {
     
@@ -23,12 +27,16 @@ public class TestLexer {
         try {
 			lexer.lex();
 			List<Symbol> lexedInput = lexer.getLexedInput();
-			assertEquals(lexedInput.get(0).getToken(), "KeywordINT");
+			assertEquals(lexedInput.get(0).getToken(), "Keyword");
 	        assertEquals(lexedInput.get(1).getToken(), "Operation");
 	        assertEquals(lexedInput.get(1).getAttribute(), "=");
 	        assertEquals(lexedInput.get(2).getToken(), "Number");
 			
-		} catch (IOException e) {
+            ArrayList<Statement> statements = Util.parseStatements(0, lexedInput);
+            assertEquals(statements.get(0).getClass(), Variable.class);
+            Variable t = new Variable(false, new Type("int"), "a", null);
+            assertEquals(statements.get(0), t);
+		} catch (IOException | ParserException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -36,20 +44,37 @@ public class TestLexer {
     
     @Test
     public void test2() {
+        String input = "def int square(int v, String s) {return v*v;}";
+        StringReader reader = new StringReader(input);
+        Lexer lexer = new Lexer(reader);
+        try {
+			lexer.lex();
+			List<Symbol> lexedInput = lexer.getLexedInput();
+            ArrayList<Statement> statements = Util.parseStatements(0, lexedInput);
+            assertEquals(statements.get(0).getClass(), Method.class);
+		} catch (IOException | ParserException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    }
+
+    @Test
+    public void test3() {
 
         String input = "for string bool while * !=";
         StringReader reader = new StringReader(input);
         Lexer lexer = new Lexer(reader);
-        assertEquals(lexer.getNextSymbol().getToken(), "KeywordFOR");
-        assertEquals(lexer.getNextSymbol().getToken(), "KeywordSTRING");
-        assertEquals(lexer.getNextSymbol().getToken(), "KeywordBOOL");
-        assertEquals(lexer.getNextSymbol().getToken(), "KeywordWHILE");
+        assertEquals(lexer.getNextSymbol().getToken(), "Keyword");
+        assertEquals(lexer.getNextSymbol().getToken(), "Keyword");
+        assertEquals(lexer.getNextSymbol().getToken(), "Keyword");
+        assertEquals(lexer.getNextSymbol().getToken(), "Keyword");
         assertEquals(lexer.getNextSymbol().getAttribute(), "*");
         assertEquals(lexer.getNextSymbol().getAttribute(), "!=");
+
     }
     
     @Test
-    public void test3() throws IOException {
+    public void test4() throws IOException {
 
         String input = 
         		"\r\n"
