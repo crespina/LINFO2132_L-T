@@ -11,7 +11,7 @@ public class Method {
 	String identifier;
 	Type returnType;
 	ArrayList<Param> parameters;
-	Block body;
+	ArrayList<Statement> body;
 	
 	
 	/**
@@ -20,7 +20,7 @@ public class Method {
 	 * @param parameters
 	 * @param body
 	 */
-	public Method(String identifier, Type returnType, ArrayList<Param> parameters, Block body) {
+	public Method(String identifier, Type returnType, ArrayList<Param> parameters, ArrayList<Statement> body) {
 		super();
 		this.identifier = identifier;
 		this.returnType = returnType;

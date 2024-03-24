@@ -13,7 +13,6 @@ public class Type {
 	String identifier;
 	
 	/**
-	 * @param ps 
 	 * @param identifier
 	 */
 	public Type(String identifier) {
