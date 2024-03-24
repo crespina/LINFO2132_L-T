@@ -1,8 +1,5 @@
 package compiler.Parser;
 
-import java.util.List;
-
-import compiler.Lexer.Symbol;
 
 /**
  * @author A. Crespin & R. De Oliveira
@@ -20,5 +17,9 @@ public class Param {
 	public Param(Type type, String name) {
 		this.type = type;
 		this.name = name;
+	}
+
+	public String toString() {
+		return "Param : " + "type = " + type +  "name = " + name + "\n";
 	}
 }

@@ -1,8 +1,5 @@
 package compiler.Parser;
 
-import java.util.List;
-
-import compiler.Lexer.Symbol;
 
 /**
  * @author Crespin
@@ -17,5 +14,9 @@ public class Type {
 	 */
 	public Type(String identifier) {
 		this.identifier = identifier;
+	}
+
+	public String toString() {
+		return "Type : " + identifier + "\n";
 	}
 }

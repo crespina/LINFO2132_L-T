@@ -58,4 +58,8 @@ public class Operation {
 		this.op2 = op2;
 	}
 
+    public String toString() {
+		return "Operation : " + "Operand1 = " + operand1 + ", operation = " + operation + ", operand2 = " + operand2 + "\n";
+	}
+
 }

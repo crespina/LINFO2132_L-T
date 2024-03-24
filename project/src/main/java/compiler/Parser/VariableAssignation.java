@@ -1,6 +1,8 @@
 package compiler.Parser;
 
-public class VariableAssignation {
+import java.util.Objects;
+
+public class VariableAssignation extends Statement{
 	
 	String varName;
 	Object value;
@@ -16,6 +18,13 @@ public class VariableAssignation {
 		this.value = value;
 	}
 	
-	
+	public String toString() {
+		return "VarAssignation : " + "varName = " + varName + "type = " + value + "\n";
+	}
+
+	public boolean equals (Object o) {
+		VariableAssignation variable = (VariableAssignation) o;
+		return Objects.equals(this.varName, variable.varName) && Objects.equals(this.value, variable.value);
+	}
 
 }

@@ -15,5 +15,7 @@ public class Float {
 		this.denom = denom;
 	}
 	
-	
+	public String toString() {
+		return "Float : " + "nom = " + nom + ", denom = " + denom + "\n";
+	}
 }

@@ -1,6 +1,8 @@
 package compiler.Parser;
 
-public class ReturnStatement {
+import java.util.Objects;
+
+public class ReturnStatement extends Statement{
 	
 	Statement returnStmt;
 
@@ -9,4 +11,12 @@ public class ReturnStatement {
 		this.returnStmt = returnStmt;
 	}	
 
+	public String toString() {
+		return "ReturnStatement : " + "returnStmt = " + returnStmt + "\n";
+	}
+
+	public boolean equals (Object o) {
+		ReturnStatement returnStat = (ReturnStatement) o;
+		return Objects.equals(this.returnStmt, returnStat.returnStmt);
+	}
 }

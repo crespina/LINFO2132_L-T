@@ -1,12 +1,13 @@
 package compiler.Parser;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 /**
  * @author A. Crespin & R. De Oliveira
  *
  */
-public class StructureInstanciation {
+public class StructureInstanciation extends Statement{
 	
 	String structName;
 	String instanceName;
@@ -26,7 +27,15 @@ public class StructureInstanciation {
 	}
 	
 	
-	
+	public String toString() {
+		return "StructureInstanciation : " + "structName = " + structName + "instanceName = " + instanceName + ", statements = " + statements + "\n";
+	}
+
+	public boolean equals (Object o) {
+		StructureInstanciation structure = (StructureInstanciation) o;
+		return Objects.equals(this.structName, structure.structName) && Objects.equals(this.instanceName, structure.instanceName) 
+			&& Objects.equals(this.instanceName, structure.instanceName);
+	}
 	
 
 }

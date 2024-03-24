@@ -1,6 +1,8 @@
 package compiler.Parser;
 
-public class Variable {
+import java.util.Objects;
+
+public class Variable extends Statement{
 	
 	Boolean isFinal;
 	Type type; 
@@ -22,6 +24,14 @@ public class Variable {
 		this.statement = statement;
 	}
 	
-	
+	public String toString() {
+		return "VarCreation : " + "isFinal = " + isFinal + "type = " + type + ", identifier = " + identifier + ", statement = " + statement + "\n";
+	}
+
+	public boolean equals (Object o) {
+		Variable variable = (Variable) o;
+		return Objects.equals(this.isFinal, variable.isFinal) && Objects.equals(this.identifier, variable.identifier) 
+			&& Objects.equals(this.type, variable.type) && Objects.equals(this.statement, variable.statement);
+	}
 
 }

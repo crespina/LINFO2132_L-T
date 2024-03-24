@@ -16,5 +16,7 @@ public class ArrayAccess {
 		this.index = index;
 	}
 	
-	
+	public String toString() {
+		return "ArrayAccess : " + "array = " + array + ", index = " + index + "\n";
+	}
 }

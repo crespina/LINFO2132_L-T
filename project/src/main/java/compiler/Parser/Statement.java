@@ -1,5 +1,8 @@
 package compiler.Parser;
 
-public class Statement {
+public abstract class Statement {
 
+    public abstract String toString();
+
+    public abstract boolean equals(Object obj);
 }

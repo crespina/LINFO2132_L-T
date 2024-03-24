@@ -18,4 +18,7 @@ public class Operator{
 		this.operation = operation;
 	}
 	
+	public String toString() {
+		return "operation : " + operation + "\n";
+	}
 }

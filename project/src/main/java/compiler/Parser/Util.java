@@ -414,4 +414,67 @@ public class Util {
 		Util.match("CloseSquareBraket", null, curIndex, lexedInput);
 		return new ArrayAccess(arrayName, op);		
 	}
+
+	/**
+	 * @param curIndex
+	 * @param lexedInput
+	 * @return ForLoop
+	 * @throws ParserException
+	 */
+	public static ForLoop parseForLoop(int curIndex, List<Symbol> lexedInput) throws ParserException {
+		Util.match("Keyword", new ArrayList<>(List.of("for")), curIndex, lexedInput);
+		Util.match("OpenParenthesis", null, curIndex, lexedInput);
+		Operation initValue = Util.parseOperation(curIndex, lexedInput);
+		Util.match("Comma", null, curIndex, lexedInput);
+		Operation endValue = Util.parseOperation(curIndex, lexedInput);
+		Util.match("Comma", null, curIndex, lexedInput);
+		Operation increment = Util.parseOperations(curIndex, lexedInput);
+		Util.match("CloseParenthesis", null, curIndex, lexedInput);
+		Util.match("OpenCurlyBraket", null, curIndex, lexedInput);
+		ArrayList<Statement> body = Util.parseStatements(curIndex, lexedInput);
+		return new ForLoop(initValue, endValue, increment, body);
+	}
+
+	/**
+	 * @param curIndex
+	 * @param lexedInput
+	 * @return ForLoop
+	 * @throws ParserException
+	 */
+	public static WhileLoop parseWhileLoop(int curIndex, List<Symbol> lexedInput) throws ParserException {
+		Util.match("Keyword", new ArrayList<>(List.of("while")), curIndex, lexedInput);
+		Util.match("OpenParenthesis", null, curIndex, lexedInput);
+		Operation condition = Util.parseOperation(curIndex, lexedInput);
+		Util.match("CloseParenthesis", null, curIndex, lexedInput);
+		Util.match("OpenCurlyBraket", null, curIndex, lexedInput);
+		ArrayList<Statement> body = Util.parseStatements(curIndex, lexedInput);
+		return new WhileLoop(condition, body);
+	}
+
+	/**
+	 * @param curIndex
+	 * @param lexedInput
+	 * @return ForLoop
+	 * @throws ParserException
+	 */
+	public static IfCond parseIfCond(int curIndex, List<Symbol> lexedInput) throws ParserException {
+		Util.match("Keyword", new ArrayList<>(List.of("if")), curIndex, lexedInput);
+		Util.match("OpenParenthesis", null, curIndex, lexedInput);
+		Operation condition = Util.parseOperation(curIndex, lexedInput);
+		Util.match("CloseParenthesis", null, curIndex, lexedInput);
+		Util.match("OpenCurlyBraket", null, curIndex, lexedInput);
+		ArrayList<Statement> body = Util.parseStatements(curIndex, lexedInput);
+		Boolean isElse;
+		ArrayList<Statement> elseBody;
+		try {
+			Util.match("Keyword", new ArrayList<>(List.of("else")), curIndex, lexedInput);
+			Util.match("OpenCurlyBraket", null, curIndex, lexedInput);
+			isElse = true;
+			elseBody = Util.parseStatements(curIndex, lexedInput);
+		} catch (ParserException e1) {
+			isElse = false;
+			elseBody = null;
+		}
+		return new IfCond(condition, body, isElse, elseBody);
+	}
 }
