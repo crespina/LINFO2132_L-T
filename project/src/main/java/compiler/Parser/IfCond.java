@@ -3,11 +3,13 @@ package compiler.Parser;
 import java.util.ArrayList;
 import java.util.Objects;
 
+import javax.swing.plaf.nimbus.State;
+
 /**
  * @author A. Crespin & R. De Oliveira
  *
  */
-public class IfCond {
+public class IfCond extends Statement{
     
     Operation condition;
     ArrayList<Statement> body;

@@ -14,6 +14,9 @@ public class Util {
 	 * 
 	 */
 	public int curIndex = 0;
+
+	static String[] keywords_variable = new String[]{"int", "float", "string", "bool"};
+	static String[] keywords_function_call = new String[]{"readInt", "readString", "writeInt", "readFloat", "writeFloat", "write", "writeln", "chr", "len", "floor", "free"};
 	
 	/**
 	 * @param expectedToken
@@ -299,7 +302,63 @@ public class Util {
 	 * @throws ParserException
 	 */
 	public static Statement parseStatement(int curIndex, List<Symbol> lexedInput) throws ParserException {
-		return null;
+		Symbol lookahead = lexedInput.get(curIndex);
+		Symbol lookahead2 = lexedInput.get(curIndex+1);
+
+		if (lookahead.getToken().equals("Semicolon")) {
+			curIndex++;
+			lookahead = lexedInput.get(curIndex);
+			lookahead2 = lexedInput.get(curIndex+1);
+		}
+
+		if(isKeyword(lookahead.getAttribute(), keywords_variable) || lookahead.getAttribute().equals("final")) {
+			// Variable Creation
+			return parseVariable(curIndex, lexedInput);
+		}
+		else if(lookahead.getToken().equals("Identifier")) {
+			if (lookahead2.getToken().equals("OpenParenthesis")) {
+				// Function call
+				return parseFunctionCall(curIndex, lexedInput);
+			}
+			else if(lookahead2.getToken().equals("Identifier")) {
+				// Structure instance
+				return parseStructInstanciation(curIndex, lexedInput);
+			}
+			else {
+				// Variable assign
+				return parseVariableAssign(curIndex, lexedInput);
+			}
+		}
+		else if(lookahead.getAttribute().equals("def")) {
+			// Function creation
+			return parseMethod(curIndex, lexedInput);
+		}
+		else if(lookahead.getAttribute().equals("for")) {
+			// For Loop
+			return parseForLoop(curIndex, lexedInput);
+		}
+		else if(lookahead.getAttribute().equals("while")) {
+			//While Loop
+			return parseWhileLoop(curIndex, lexedInput);
+		}
+		else if(lookahead.getAttribute().equals("if")) {
+			// If Cond
+			return parseIfCond(curIndex, lexedInput);
+		}
+		else if(lookahead.getAttribute().equals("struct")) {
+			// Structure 
+			return parseStructure(curIndex, lexedInput);
+		}
+		else if(isKeyword(lookahead.getAttribute(), keywords_function_call)) {
+			// Function call
+			return parseFunctionCall(curIndex, lexedInput);
+		}
+		else if(lookahead.getToken().equals("CloseCurlyBraket")) {
+			// End of the body of a function/for/if/while/struct
+			return null;
+		}
+
+		throw new ParserException("Cannot begin statement with " + lookahead.toString());
 	}
 	
 	/**
@@ -309,7 +368,14 @@ public class Util {
 	 * @throws ParserException
 	 */
 	public static ArrayList<Statement> parseStatements(int curIndex, List<Symbol> lexedInput) throws ParserException {
-		return null;
+		ArrayList<Statement> statements = new ArrayList<Statement>();
+		while(true) {
+			Statement s = parseStatement(curIndex, lexedInput);
+			if(s==null || curIndex < lexedInput.size()-2){
+				return statements;
+			}
+			statements.add(s);
+		}
 	}
 	
 	/**
@@ -477,4 +543,18 @@ public class Util {
 		}
 		return new IfCond(condition, body, isElse, elseBody);
 	}
+
+	/**
+     * @param s : {@link String} to be compared to the keywords list
+	 * @param kerwords : keyword list to check
+     * @return {@link Boolean} true if s is a keyword (appear in the keywords list), false if not 
+     */
+    public static boolean isKeyword(String s, String[] keywords){
+        for (int i=0; i<keywords.length; i++){
+            if(keywords[i].equals(s)){
+                return true;
+            }
+        }
+        return false;
+    }
 }
