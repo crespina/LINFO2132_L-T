@@ -4,38 +4,31 @@ import java.util.Objects;
 
 /**
  * @author A. Crespin & R. De Oliveira
- * 
+ *
  */
 public class Variable extends Statement{
 	
-	Boolean isFinal;
-	Type type; 
-	String identifier;
-	Statement statement;
+	String varName;
+	Object value;
 	
 	
 	/**
-	 * @param isFinal 
-	 * @param type
-	 * @param identifier
-	 * @param statement
+	 * @param varName
+	 * @param value
 	 */
-	public Variable(Boolean isFinal, Type type, String identifier, Statement statement) {
+	public Variable(String varName, Object value) {
 		super();
-		this.isFinal = isFinal;
-		this.type = type;
-		this.identifier = identifier;
-		this.statement = statement;
+		this.varName = varName;
+		this.value = value;
 	}
 	
 	public String toString() {
-		return "VarCreation : " + "isFinal = " + isFinal + " " + type + ", identifier = " + identifier + ", statement = " + statement;
+		return "Variable : " + ", varName = " + varName + ", type = " + value;
 	}
 
 	public boolean equals (Object o) {
 		Variable variable = (Variable) o;
-		return Objects.equals(this.isFinal, variable.isFinal) && Objects.equals(this.identifier, variable.identifier) 
-			&& this.type.equals(variable.type) && this.statement.equals(variable.statement);
+		return Objects.equals(this.varName, variable.varName) && Objects.equals(this.value, variable.value);
 	}
 
 }

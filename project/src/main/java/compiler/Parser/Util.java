@@ -358,10 +358,15 @@ public class Util {
 	 */
 	public static Operation parseOperations() throws ParserException {
 		int startIndex = curIndex;
-		try {
+		try {//case (a*2)+2
 			Util.match("OpenParenthesis", null);
 			Operation o = parseOperations();
 			Util.match("CloseParenthesis", null);
+			while ((lexedInput.get(curIndex).getAttribute() != null) && (lexedInput.get(curIndex).getToken().equals("Operation"))) {
+				Operator newop = Util.parseOperator();
+				Operand newop2 = Util.parseOperand();
+				o = new Operation(o, newop, newop2);
+			}
 			return o;
 		} catch (ParserException e) {
 			try { //no parenthesis (ex : a + b + c + d)
@@ -463,7 +468,7 @@ public class Util {
 				}
 				else if(operators.contains(lookahead2.getAttribute())) {
 					// identifier operation
-					return parseOperation();
+					return parseOperations();
 				}
 				else {
 					// Variable assign
@@ -473,7 +478,7 @@ public class Util {
 			else if(lookahead.getToken().equals("Number")) {
 			 
 				try {
-					return parseOperation();
+					return parseOperations();
 				} catch (ParserException e) {
 					return parseNumber();
 				}
@@ -561,10 +566,10 @@ public class Util {
 	}
 	
 	/**
-	 * @return Variable
+	 * @return VariableCreation
 	 * @throws ParserException
 	 */
-	public static Variable parseVariable() throws ParserException {
+	public static VariableCreation parseVariable() throws ParserException {
 		int startIndex = curIndex;
 		Boolean isFinal = false;
 		try {
@@ -580,10 +585,10 @@ public class Util {
 			try {	
 				Util.match("Operation", new ArrayList<>(List.of("=")));
 				Statement statement = parseStatement();
-				return new Variable(isFinal, type, identifier, statement);
+				return new VariableCreation(isFinal, type, identifier, statement);
 			} catch (ParserException e2) {
 				curIndex = startIndex2;
-				return new Variable(isFinal, type, identifier, null);
+				return new VariableCreation(isFinal, type, identifier, null);
 			}
 		} catch (ParserException e) {
 			curIndex = startIndex;
@@ -596,21 +601,21 @@ public class Util {
 	 * @return VariableAssignation
 	 * @throws ParserException
 	 */
-	public static VariableAssignation parseVariableAssign() throws ParserException {
+	public static Variable parseVariableAssign() throws ParserException {
 		int startIndex = curIndex;
 		String identifier = Util.match("Identifier", null).getAttribute(); //can also be table access
 		try {
 			Util.match("Operation", new ArrayList<>(List.of("=")));
 			try {
 				Operation operation = parseOperations();
-				return new VariableAssignation(identifier, operation);
+				return new Variable(identifier, operation);
 			} catch (ParserException e) {
 				curIndex = startIndex ;
 				Operand operand = parseOperand();
-				return new VariableAssignation(identifier, operand);
+				return new Variable(identifier, operand);
 			}
 		} catch (ParserException e) {
-			return new VariableAssignation(identifier, null);
+			return new Variable(identifier, null);
 		}
 	}
 	
@@ -709,6 +714,7 @@ public class Util {
 			Util.match("CloseParenthesis", null);
 			Util.match("OpenCurlyBraket", null);
 			ArrayList<Statement> body = Util.parseStatements(curIndex, lexedInput);
+			Util.match("CloseCurlyBraket", null);
 			return new ForLoop(initValue, endValue, increment, body);
 		} catch (ParserException e) {
 			curIndex = startIndex;
@@ -729,6 +735,7 @@ public class Util {
 			Util.match("CloseParenthesis", null);
 			Util.match("OpenCurlyBraket", null);
 			ArrayList<Statement> body = Util.parseStatements(curIndex, lexedInput);
+			Util.match("CloseCurlyBraket", null);
 			return new WhileLoop(condition, body);
 		} catch (ParserException e) {
 			curIndex = startIndex;
@@ -766,6 +773,7 @@ public class Util {
 				Util.match("OpenCurlyBraket", null);
 				isElse = true;
 				elseBody = Util.parseStatements(curIndex, lexedInput);
+				Util.match("CloseCurlyBraket", null);
 			} catch (ParserException e1) {
 				curIndex = startIndex3;
 				isElse = false;

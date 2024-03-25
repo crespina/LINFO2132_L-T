@@ -33,9 +33,9 @@ public class TestLexer {
 	        assertEquals(lexedInput.get(3).getToken(), "Number");
 			
             ArrayList<Statement> statements = Util.parseStatements(0, lexedInput);
-            assertEquals(statements.get(0).getClass(), Variable.class);
+            assertEquals(statements.get(0).getClass(), VariableCreation.class);
             Number a = new Number("2", new Type("int"));
-            Variable t = new Variable(false, new Type("int"), "a", a);
+            VariableCreation t = new VariableCreation(false, new Type("int"), "a", a);
             statements.get(0).equals(t);
             assertEquals(statements.get(0), t);
 		} catch (IOException | ParserException e) {
@@ -159,32 +159,23 @@ public class TestLexer {
 
     @Test
     public void bigtest() {
-    	String file = "\r\n"
-    			+ "                                                                                              \r\n"
-    			+ "def int square(int v) {\r\n"
-    			+ "    return v*v;\r\n"
-    			+ "}\r\n"
-    			+ "\r\n"
-    			+ "def Point copyPoints(Point[] p) {\r\n"
-    			+ "    return Point(p[0].x+p[1].x, p[0].y+p[1].y);\r\n"
-    			+ "}\r\n"
-    			+ "                            \r\n"
-    			+ "def void main() {\r\n"
-    			+ "    int value = readInt();                             \r\n"
-    			+ "    writeln(square(value));\r\n"
+    	String file = "def void main() {\r\n"
+    			+ "    int value = readInt();\r\n"
+    			+ "    Point p = Point(a, a+value);\r\n"
+    			+ "    writeInt(square(value));\r\n"
+    			+ "    writeln();\r\n"
     			+ "    int i;\r\n"
-    			+ "    for (i=1, i<100, i = i+1) {\r\n"
-    			+ "        while (value!=3) {\r\n"
-    			+ "            if (i > 10){\r\n"
-    			+ "                // ....\r\n"
+    			+ "    for (i=1, i<a, i = i+1) {\r\n"
+    			+ "        while (value!=0) {\r\n"
+    			+ "            if (run){\r\n"
+    			+ "                value = value - 1;\r\n"
     			+ "            } else {\r\n"
-    			+ "                // ....\r\n"
+    			+ "                write(message);\r\n"
     			+ "            }\r\n"
     			+ "        }\r\n"
     			+ "    }\r\n"
-    			+ "    \r\n"
     			+ "    i = (i+2)*2;\r\n"
-    			+ "} "; 
+    			+ "}"; 
         try {
         	StringReader reader = new StringReader(file);
             Lexer lexer = new Lexer(reader);
