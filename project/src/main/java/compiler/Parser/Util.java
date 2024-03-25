@@ -295,8 +295,8 @@ public class Util {
 		Symbol lookahead = lexedInput.get(curIndex);
 		Symbol lookahead2 = lexedInput.get(curIndex+1);
 		
-		//System.out.println(lookahead.getAttribute());
-		//System.out.println(lookahead.getToken());
+		System.out.println(lookahead.getAttribute());
+		System.out.println(lookahead.getToken());
 		
 		//System.out.println(curIndex);
 
@@ -315,7 +315,7 @@ public class Util {
 				lookahead2 = lexedInput.get(curIndex+1);
 			}
 		}
-		//System.out.println(lookahead.getAttribute());
+		System.out.println(lookahead.getAttribute());
 
 		if(isKeyword(lookahead.getAttribute(), keywords_variable) || lookahead.getAttribute().equals("final")) {
 			// Variable Creation
@@ -329,6 +329,10 @@ public class Util {
 			else if(lookahead2.getToken().equals("Identifier")) {
 				// Structure instance
 				return parseStructInstanciation();
+			}
+			else if(lookahead2.getToken().equals("OpenSquareBraket")) {
+				// Structure instance
+				return parseArrayAccess();
 			}
 			else if(operators.contains(lookahead2.getAttribute())) {
 				// identifier operation
@@ -503,7 +507,7 @@ public class Util {
 	public static ArrayAccess parseArrayAccess() throws ParserException {
 		String arrayName = Util.match("Identifier", null).getAttribute();
 		Util.match("OpenSquareBraket", null);
-		Operation op = Util.parseOperation();
+		Statement op = Util.parseStatement();
 		Util.match("CloseSquareBraket", null);
 		return new ArrayAccess(arrayName, op);		
 	}

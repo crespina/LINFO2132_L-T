@@ -1,16 +1,18 @@
 package compiler.Parser;
 
-public class ArrayAccess {
+import java.util.Objects;
+
+public class ArrayAccess extends Statement{
 
 	String array;
-	Operation index;
+	Statement index;
 	
 	
 	/**
 	 * @param array
 	 * @param index
 	 */
-	public ArrayAccess(String array, Operation index) {
+	public ArrayAccess(String array, Statement index) {
 		super();
 		this.array = array;
 		this.index = index;
@@ -18,5 +20,10 @@ public class ArrayAccess {
 	
 	public String toString() {
 		return "ArrayAccess : " + "array = " + array + ", index = " + index + "\n";
+	}
+
+	public boolean equals (Object o) {
+		ArrayAccess array = (ArrayAccess) o;
+		return Objects.equals(this.array, array.array) && Objects.equals(this.index, array.index);
 	}
 }
