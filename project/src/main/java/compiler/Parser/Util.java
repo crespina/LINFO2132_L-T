@@ -207,28 +207,28 @@ public class Util {
 	 * @return Operator : accepted types: int float bool string ArrayAccess StructureAccess identifier
 	 * @throws ParserException
 	 */
-	public static Operand parseOperand() throws ParserException {
-		
-		try { //bool
-			Symbol bool = Util.match("Keyword", new ArrayList<>(List.of("true","false")));
-			return new Operand("bool", bool.getAttribute());
-		} catch (ParserException ebool) {
-			try { //Number
-				Number floa = Util.parseNumber();
-				return new Operand(floa.type.toString(), floa.value);
-			} catch (ParserException efloat) {
+	public static Operand parseOperand() throws ParserException {		
+	
+		try { //StructureAccess
+			StructureAccess sa = Util.parseStructAccess();
+			return new Operand("structureAccess", sa);
+		} catch (ParserException esa) {
+			try { //ArrayAccess
+				ArrayAccess aa = Util.parseArrayAccess();
+				return new Operand("arrayAccess", aa);
+			} catch (ParserException eaa) {
 				try { //Identifier
 					Symbol identifier = Util.match("Identifier", null);
 					return new Operand("identifier", identifier.getAttribute());
 				} catch (ParserException eidentifier) {
-					try { //ArrayAccess
-						ArrayAccess aa = Util.parseArrayAccess();
-						return new Operand("arrayAccess", aa);
-					} catch (ParserException eaa) {
-						try { //StructureAccess
-							StructureAccess sa = Util.parseStructAccess();
-							return new Operand("structureAccess", sa);
-						} catch (ParserException esa) {
+					try { //Number
+						Number floa = Util.parseNumber();
+						return new Operand(floa.type.toString(), floa.value);
+					} catch (ParserException efloat) {
+						try { //bool
+							Symbol bool = Util.match("Keyword", new ArrayList<>(List.of("true","false")));
+							return new Operand("bool", bool.getAttribute());
+						} catch (ParserException ebool) {
 							throw new ParserException("Not an operator");
 						}
 					}
