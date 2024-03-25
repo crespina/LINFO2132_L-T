@@ -15,7 +15,6 @@ import compiler.Parser.Type;
 import compiler.Parser.Util;
 import compiler.Parser.Variable;
 import compiler.Parser.Method;
-import compiler.Parser.Param;
 import compiler.Parser.ParserException;
 
 public class TestLexer {

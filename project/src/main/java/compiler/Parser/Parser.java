@@ -1,5 +1,6 @@
 package compiler.Parser;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import compiler.Lexer.Lexer;
@@ -35,8 +36,8 @@ public class Parser {
 	/**
 	 * 
 	 */
-	public void getAST() {
-		return;
+	public ArrayList<Statement> getAST() throws ParserException{
+		return Util.parseStatements(curIndex, lexedInput);
 	}
 	
 }

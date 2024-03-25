@@ -10,7 +10,6 @@ public class StringStmt extends Statement{
 
     String content;
 
-
     /**
 	 * @param content
 	 */
