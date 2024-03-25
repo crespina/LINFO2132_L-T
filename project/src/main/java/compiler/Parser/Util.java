@@ -71,7 +71,7 @@ public class Util {
 	public static Type parseType() throws ParserException {
 		int startIndex = curIndex;
 		try {
-			List<String> types = new ArrayList<>(List.of("int", "float", "string", "bool", "void")); // could also return an instance of a struct -> case not treated for the moment
+			List<String> types = new ArrayList<>(List.of("int", "float", "string", "bool", "void"));
 			Symbol identifier = Util.match("Keyword", types);
 			try {
 				Util.match("OpenSquareBraket", null);
@@ -137,7 +137,7 @@ public class Util {
 		int startIndex = curIndex;
 		try {
 			Util.match("Keyword", new ArrayList<>(List.of("def")));
-			Type returnType = Util.parseType();
+			Type returnType = Util.parseType(); // could also return an instance of a struct -> case not treated for the moment
 			String name = Util.match("Identifier", null).getAttribute();
 			Util.match("OpenParenthesis", null);
 			ArrayList<Param> parameters = Util.parseParams();
