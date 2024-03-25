@@ -19,4 +19,10 @@ public class Type {
 	public String toString() {
 		return "Type : " + identifier;
 	}
+	
+	@Override
+	public boolean equals(Object o) {
+		Type variable = (Type) o;
+		return this.identifier.equals(variable.identifier);
+	}
 }

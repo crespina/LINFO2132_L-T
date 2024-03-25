@@ -10,31 +10,33 @@ import java.util.List;
 
 import compiler.Lexer.Lexer;
 import compiler.Lexer.Symbol;
-import compiler.Parser.Statement;
-import compiler.Parser.Type;
-import compiler.Parser.Util;
-import compiler.Parser.Variable;
-import compiler.Parser.Method;
-import compiler.Parser.ParserException;
+import compiler.Parser.*;
+import compiler.Parser.Number;
 
 public class TestLexer {
     
+    /**
+     * 
+     */
     @Test
     public void test1() {
-        String input = "int = 2";
+        String input = "int a = 2";
         StringReader reader = new StringReader(input);
         Lexer lexer = new Lexer(reader);
         try {
 			lexer.lex();
 			List<Symbol> lexedInput = lexer.getLexedInput();
 			assertEquals(lexedInput.get(0).getToken(), "Keyword");
-	        assertEquals(lexedInput.get(1).getToken(), "Operation");
-	        assertEquals(lexedInput.get(1).getAttribute(), "=");
-	        assertEquals(lexedInput.get(2).getToken(), "Number");
+	        assertEquals(lexedInput.get(1).getToken(), "Identifier");
+	        assertEquals(lexedInput.get(2).getToken(), "Operation");
+	        assertEquals(lexedInput.get(2).getAttribute(), "=");
+	        assertEquals(lexedInput.get(3).getToken(), "Number");
 			
             ArrayList<Statement> statements = Util.parseStatements(0, lexedInput);
             assertEquals(statements.get(0).getClass(), Variable.class);
-            Variable t = new Variable(false, new Type("int"), "a", null);
+            Number a = new Number("2", new Type("int"));
+            Variable t = new Variable(false, new Type("int"), "a", a);
+            statements.get(0).equals(t);
             assertEquals(statements.get(0), t);
 		} catch (IOException | ParserException e) {
 			// TODO Auto-generated catch block
@@ -42,9 +44,10 @@ public class TestLexer {
 		}
     }
     
+
     @Test
     public void testParser_Method() {
-        String input = "def int square(int v, String s) {return v*v;}";
+        String input = "def int square(int v, string s) {return v*v;}";
         StringReader reader = new StringReader(input);
         Lexer lexer = new Lexer(reader);
         try {
@@ -67,12 +70,14 @@ public class TestLexer {
             lexer.lex();
             List<Symbol> lexedInput = lexer.getLexedInput();
             ArrayList<Statement> statements = Util.parseStatements(0, lexedInput);
-            assertEquals(statements.get(0).getClass(), Method.class);
+            assertEquals(statements.get(0).getClass(), Structure.class);
         } catch (IOException | ParserException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
+
+    
     @Test
     public void testParserHardStructure() {
         String input = "struct Person {\n string name;\n Point location;\n int[] history;\n }";
@@ -82,12 +87,13 @@ public class TestLexer {
             lexer.lex();
             List<Symbol> lexedInput = lexer.getLexedInput();
             ArrayList<Statement> statements = Util.parseStatements(0, lexedInput);
-            assertEquals(statements.get(0).getClass(), Method.class);
+            assertEquals(statements.get(0).getClass(), Structure.class);
         } catch (IOException | ParserException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
+
 
     @Test
     public void test3() {
@@ -103,7 +109,7 @@ public class TestLexer {
         assertEquals(lexer.getNextSymbol().getAttribute(), "!=");
 
     }
-    
+
     @Test
     public void test4() throws IOException {
 
@@ -118,10 +124,10 @@ public class TestLexer {
         StringReader reader = new StringReader(input);
         Lexer lexer = new Lexer(reader);		
         assertEquals(lexer.getNextSymbol().getToken(), "Comment");
-        assertEquals(lexer.getNextSymbol().getToken(), "KeywordINT");
+        assertEquals(lexer.getNextSymbol().getToken(), "Keyword");
         assertEquals(lexer.getNextSymbol().getAttribute(), "a");
         assertEquals(lexer.getNextSymbol().getAttribute(), "=");
-        assertEquals(lexer.getNextSymbol().getToken(), "KeywordINT");
+        assertEquals(lexer.getNextSymbol().getToken(), "Keyword");
         assertEquals(lexer.getNextSymbol().getAttribute(), "b");
         assertEquals(lexer.getNextSymbol().getAttribute(), "a");
         assertEquals(lexer.getNextSymbol().getAttribute(), "/");
@@ -142,15 +148,15 @@ public class TestLexer {
         assertEquals(lexer.getNextSymbol().getAttribute(), "&&");
         assertEquals(lexer.getNextSymbol().getAttribute(), "s");
         assertEquals(lexer.getNextSymbol().getToken(), "IllegalToken");
-        assertEquals(lexer.getNextSymbol().getToken(), "KeywordWRITE");
+        assertEquals(lexer.getNextSymbol().getToken(), "Keyword");
         assertEquals(lexer.getNextSymbol().getToken(), "OpenParenthesis");
         assertEquals(lexer.getNextSymbol().getAttribute(), "a");
-        assertEquals(lexer.getNextSymbol().getToken(), "Colon");
+        assertEquals(lexer.getNextSymbol().getToken(), "Comma");
         assertEquals(lexer.getNextSymbol().getAttribute(), "b");
         assertEquals(lexer.getNextSymbol().getToken(), "CloseParenthesis");
         assertEquals(lexer.getNextSymbol().getToken(), "Semicolon");
     }
-    
+
     @Test
     public void bigtest() {
     	String file = "\r\n"
@@ -159,9 +165,6 @@ public class TestLexer {
     			+ "    return v*v;\r\n"
     			+ "}\r\n"
     			+ "\r\n"
-    			+ "def Point copyPoints(Point[] p) {\r\n"
-    			+ "    return Point(p[0].x+p[1].x, p[0].y+p[1].y);\r\n"
-    			+ "}\r\n"
     			+ "                            \r\n"
     			+ "def void main() {\r\n"
     			+ "    int value = readInt();                             \r\n"
@@ -183,11 +186,14 @@ public class TestLexer {
         	StringReader reader = new StringReader(file);
             Lexer lexer = new Lexer(reader);
             lexer.lex();
-			
-		} catch (IOException e) {
+            List<Symbol> lexedInput = lexer.getLexedInput();
+            ArrayList<Statement> statements = Util.parseStatements(0, lexedInput);
+            		
+		} catch (IOException | ParserException e) {
 			e.printStackTrace();
 			fail("sould not fail");
 		}
         
     }
+    
 }

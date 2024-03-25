@@ -35,7 +35,7 @@ public class Variable extends Statement{
 	public boolean equals (Object o) {
 		Variable variable = (Variable) o;
 		return Objects.equals(this.isFinal, variable.isFinal) && Objects.equals(this.identifier, variable.identifier) 
-			&& Objects.equals(this.type, variable.type) && Objects.equals(this.statement, variable.statement);
+			&& this.type.equals(variable.type) && this.statement.equals(variable.statement);
 	}
 
 }
