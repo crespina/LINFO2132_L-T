@@ -61,7 +61,7 @@ public class Operation extends Statement{
 	}
 
     public String toString() {
-		return "Operation : " + "Operand1 = " + operand1.toString() + ", " + operation + ", operand2 = " + operand2.toString() + "\n";
+		return "Operation : " + "Operand1 = " + operand1.toString() + ", " + operation + ", operand2 = " + operand2.toString();
 	}
 
 	public boolean equals (Object o) {

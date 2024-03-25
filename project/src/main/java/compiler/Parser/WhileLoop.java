@@ -23,7 +23,7 @@ public class WhileLoop extends Statement{
 	}
 
     public String toString() {
-		return "WhileLoop : " + "condition = " + condition + ", body = " + body + "\n";
+		return "WhileLoop : " + "condition = " + condition + ", body = " + body;
 	}
 
 	public boolean equals (Object o) {

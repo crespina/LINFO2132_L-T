@@ -19,6 +19,6 @@ public class Operator{
 	}
 	
 	public String toString() {
-		return "operation : " + operation + "\n";
+		return "operation : " + operation;
 	}
 }

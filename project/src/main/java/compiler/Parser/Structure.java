@@ -23,7 +23,7 @@ public class Structure extends Statement{
 	}
 	
 	public String toString() {
-		return "Structure : " + "name = " + name + ", body = " + body + "\n";
+		return "Structure : " + "name = " + name + ", body = " + body;
 	}
 
 	public boolean equals (Object o) {

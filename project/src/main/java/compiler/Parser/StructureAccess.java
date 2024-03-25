@@ -21,7 +21,7 @@ public class StructureAccess extends Statement{
 	}
 
 	public String toString() {
-		return "StructureAccess : " + "instance = " + instance + "param = " + param + ", instanceInArray = " + instanceInArray + "\n";
+		return "StructureAccess : " + "instance = " + instance + "param = " + param + ", instanceInArray = " + instanceInArray;
 	}
 
 	public boolean equals (Object o) {

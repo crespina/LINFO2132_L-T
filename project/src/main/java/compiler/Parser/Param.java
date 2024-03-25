@@ -20,6 +20,6 @@ public class Param {
 	}
 
 	public String toString() {
-		return "Param : " + "type = " + type +  "name = " + name + "\n";
+		return "Param : " + "type = " + type +  "name = " + name;
 	}
 }

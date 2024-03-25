@@ -18,7 +18,7 @@ public class Number extends Statement{
 	}
 	
 	public String toString() {
-		return "Number : " + "value = " + value + ", type = " + type + "\n";
+		return "Number : " + "value = " + value + ", type = " + type;
 	}
 
 		public boolean equals (Object o) {

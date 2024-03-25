@@ -28,7 +28,7 @@ public class IfCond extends Statement{
 	}
 
     public String toString() {
-		return "IfCond : " + "condition = " + condition + ", body = " + body + ", isElse = " + isElse + ", elseBody = " + elseBody + "\n";
+		return "IfCond : " + "condition = " + condition + ", body = " + body + ", isElse = " + isElse + ", elseBody = " + elseBody;
 	}
 
 	public boolean equals (Object o) {

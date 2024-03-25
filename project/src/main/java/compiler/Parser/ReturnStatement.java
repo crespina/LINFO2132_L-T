@@ -12,7 +12,7 @@ public class ReturnStatement extends Statement{
 	}	
 
 	public String toString() {
-		return "ReturnStatement : " + "returnStmt = " + returnStmt + "\n";
+		return "ReturnStatement : " + "returnStmt = " + returnStmt;
 	}
 
 	public boolean equals (Object o) {

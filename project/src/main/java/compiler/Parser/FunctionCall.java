@@ -20,7 +20,7 @@ public class FunctionCall extends Statement{
 	}
 	
 	public String toString() {
-		return "FunctionCall : " + "functionName = " + functionName + "parameters = " + params + "\n";
+		return "FunctionCall : " + "functionName = " + functionName + "parameters = " + params;
 	}
 
 	public boolean equals (Object o) {

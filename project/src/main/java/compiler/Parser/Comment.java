@@ -19,7 +19,7 @@ public class Comment extends Statement{
 	}
 	
 	public String toString() {
-		return "Comment : "  + comment + "\n";
+		return "Comment : "  + comment ;
 	}
 
 	public boolean equals (Object o) {

@@ -29,7 +29,7 @@ public class ForLoop extends Statement{
 	}
 
     public String toString() {
-		return "ForLoop : " + "initValue = " + initValue + ", endValue = " + endValue + ", increment = " + increment + ", body = " + body + "\n";
+		return "ForLoop : " + "initValue = " + initValue + ", endValue = " + endValue + ", increment = " + increment + ", body = " + body;
 	}
 
 	public boolean equals (Object o) {
