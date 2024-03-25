@@ -2,6 +2,10 @@ package compiler.Parser;
 
 import java.util.Objects;
 
+/**
+ * @author A. Crespin & R. De Oliveira
+ *
+ */
 public class ArrayAccess extends Statement{
 
 	String array;
@@ -19,7 +23,7 @@ public class ArrayAccess extends Statement{
 	}
 	
 	public String toString() {
-		return "ArrayAccess : " + "array = " + array + ", index = " + index ;
+		return "ArrayAccess : " + " array = " + array + ", index = " + index ;
 	}
 
 	public boolean equals (Object o) {

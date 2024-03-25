@@ -2,6 +2,10 @@ package compiler.Parser;
 
 import java.util.Objects;
 
+/**
+ * @author A. Crespin & R. De Oliveira
+ * 
+ */
 public class Variable extends Statement{
 	
 	Boolean isFinal;

@@ -2,7 +2,7 @@ package compiler.Parser;
 
 
 /**
- * @author Crespin
+ * @author A. Crespin & R. De Oliveira
  *
  */
 public class Type {

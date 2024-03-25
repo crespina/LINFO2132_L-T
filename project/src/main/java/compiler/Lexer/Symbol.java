@@ -64,9 +64,9 @@ public class Symbol {
 	@Override
 	public String toString() {
 		if (this.attribute != null) {
-			return "token=" + token + ", attribute=" + attribute;
+			return "token= " + token + ", attribute= " + attribute;
 		} else {
-			return "token=" + token;
+			return "token= " + token;
 		}
 		
 	}

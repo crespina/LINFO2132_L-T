@@ -3,6 +3,10 @@ package compiler.Parser;
 import java.util.ArrayList;
 import java.util.Objects;
 
+/**
+ * @author A. Crespin & R. De Oliveira
+ *
+ */
 public class FunctionCall extends Statement{
 	
 	String functionName;
@@ -20,7 +24,7 @@ public class FunctionCall extends Statement{
 	}
 	
 	public String toString() {
-		return "FunctionCall : " + "functionName = " + functionName + "parameters = " + params;
+		return "FunctionCall : " + " functionName = " + functionName + ", parameters = " + params;
 	}
 
 	public boolean equals (Object o) {

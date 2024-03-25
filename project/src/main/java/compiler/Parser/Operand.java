@@ -24,7 +24,7 @@ public class Operand{
 
 	
 	public String toString() {
-		return "Operand : " + type + ", Value = " + value;
+		return "Operand : " + type + ", value = " + value;
 	}
 
 }

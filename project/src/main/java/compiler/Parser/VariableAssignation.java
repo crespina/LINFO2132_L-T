@@ -19,7 +19,7 @@ public class VariableAssignation extends Statement{
 	}
 	
 	public String toString() {
-		return "VarAssignation : " + "varName = " + varName + "type = " + value;
+		return "VarAssignation : " + ", varName = " + varName + ", type = " + value;
 	}
 
 	public boolean equals (Object o) {

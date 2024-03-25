@@ -2,6 +2,10 @@ package compiler.Parser;
 
 import java.util.Objects;
 
+/**
+ * @author A. Crespin & R. De Oliveira
+ *
+ */
 public class StructureAccess extends Statement{
 	
 	String instance;
@@ -20,9 +24,16 @@ public class StructureAccess extends Statement{
 		this.instanceInArray = instanceInArray;
 	}
 
+	
+
+	@Override
 	public String toString() {
-		return "StructureAccess : " + "instance = " + instance + "param = " + param + ", instanceInArray = " + instanceInArray;
+		return "StructureAccess [" + (instance != null ? "instance=" + instance + ", " : "")
+				+ (param != null ? "param=" + param + ", " : "")
+				+ (instanceInArray != null ? "instanceInArray=" + instanceInArray : "") + "]";
 	}
+
+
 
 	public boolean equals (Object o) {
 		StructureAccess structure = (StructureAccess) o;

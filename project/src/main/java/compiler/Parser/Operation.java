@@ -60,8 +60,13 @@ public class Operation extends Statement{
 		this.op2 = op2;
 	}
 
-    public String toString() {
-		return "Operation : " + "Operand1 = " + operand1.toString() + ", " + operation + ", operand2 = " + operand2.toString();
+
+	@Override
+	public String toString() {
+		return "Operation [" + (operand1 != null ? "operand1=" + operand1 + ", " : "")
+				+ (operation != null ? "operation=" + operation + ", " : "")
+				+ (operand2 != null ? "operand2=" + operand2 + ", " : "") + (op1 != null ? "op1=" + op1 + ", " : "")
+				+ (op2 != null ? "op2=" + op2 : "") + "]";
 	}
 
 	public boolean equals (Object o) {

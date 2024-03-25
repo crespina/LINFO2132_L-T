@@ -2,14 +2,18 @@ package compiler.Parser;
 
 import java.util.Objects;
 
+/**
+ * @author Crespin
+ *
+ */
 public class Number extends Statement{
 
 	String value;
 	Type type;
 
 	/**
-	 * @param nom 
-	 * @param denom 
+	 * @param value 
+	 * @param type 
 	 */
 	public Number(String value, Type type) {
 		super();

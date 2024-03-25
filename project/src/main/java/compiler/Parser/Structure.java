@@ -14,7 +14,7 @@ public class Structure extends Statement{
 	
 	/**
 	 * @param name
-	 * @param parameters
+	 * @param body 
 	 */
 	public Structure(String name, ArrayList<Statement> body) {
 		super();

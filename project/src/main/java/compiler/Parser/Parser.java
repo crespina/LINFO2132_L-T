@@ -34,6 +34,8 @@ public class Parser {
 	}
 	
 	/**
+	 * @return ArrayList<Statement>
+	 * @throws ParserException 
 	 * 
 	 */
 	public ArrayList<Statement> getAST() throws ParserException{

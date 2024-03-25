@@ -28,7 +28,7 @@ public class StructureInstanciation extends Statement{
 	
 	
 	public String toString() {
-		return "StructureInstanciation : " + "structName = " + structName + "instanceName = " + instanceName + ", params = " + statements;
+		return "StructureInstanciation : " + "structName = " + structName + ", instanceName = " + instanceName + ", parameters = " + statements;
 	}
 
 	public boolean equals (Object o) {

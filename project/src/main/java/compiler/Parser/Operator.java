@@ -1,7 +1,7 @@
 package compiler.Parser;
 
 /**
- * @author Crespin
+ * @author A. Crespin & R. De Oliveira
  *
  */
 
@@ -10,8 +10,7 @@ public class Operator{
 	String operation;
 	
 	/**
-	 * @param type
-	 * @param value
+	 * @param operation 
 	 */
 	public Operator(String operation) {
 		super();

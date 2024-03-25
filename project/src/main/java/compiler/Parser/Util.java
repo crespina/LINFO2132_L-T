@@ -40,14 +40,14 @@ public class Util {
 				System.out.println(lookahead.getAttribute());
 				System.out.println(expectedAttribute);
 				*/
-		        throw new ParserException("Doesnt match");
+		        throw new ParserException("token " + expectedToken +" doesnt match with lookahead token " + lookahead.getToken() + " or attribute " + expectedAttribute + " doesnt match with lookahead "+lookahead.getAttribute());
 		    } else {
 		        curIndex++;
 		        return lookahead;
 		    }
 	    } else {
 	    	if (!(lookahead.getToken().equals(expectedToken))) {
-		        throw new ParserException("Doesnt match");
+		        throw new ParserException("token " + expectedToken +" doesnt match with lookahead token " + lookahead.getToken());
 		    } else {
 		        curIndex++;
 		        return lookahead;
@@ -144,6 +144,7 @@ public class Util {
 			Util.match("CloseParenthesis", null);
 			Util.match("OpenCurlyBraket", null);
 			ArrayList<Statement> body = Util.parseStatements(curIndex, lexedInput);
+			Util.match("CloseCurlyBraket", null);
 			return new Method(name, returnType, parameters, body);
 		} catch (ParserException e) {
 			curIndex = startIndex;
@@ -295,7 +296,7 @@ public class Util {
 	public static Operator parseOperator() throws ParserException {
 		int startIndex = curIndex;
 		try {
-			Symbol op = Util.match("Operation", new ArrayList<>(List.of("+","-","*","/","==","!=","!","<",">",">=","<=","%","&&","||")));
+			Symbol op = Util.match("Operation", new ArrayList<>(List.of("+","-","*","/","==","=","!=","!","<",">",">=","<=","%","&&","||")));
 			return new Operator(op.getAttribute());
 		} catch (ParserException e) {
 			curIndex = startIndex;
@@ -334,11 +335,11 @@ public class Util {
 			return o;
 		} catch (ParserException e) {
 			try { //no parenthesis (ex : a + b + c + d)
-				Operation op1 = Util.parseOperation();
+				Operand op1 = Util.parseOperand();
 				Operator op = Util.parseOperator();
 				Operand op2 = Util.parseOperand();
 				Operation finalOperation = new Operation(op1, op, op2);
-				while (lexedInput.get(curIndex+1).getAttribute().equals("Operation")) {
+				while ((lexedInput.get(curIndex).getAttribute() != null) && (lexedInput.get(curIndex).getToken().equals("Operation"))) {
 					Operator newop = Util.parseOperator();
 					Operand newop2 = Util.parseOperand();
 					finalOperation = new Operation(finalOperation, newop, newop2);
@@ -526,12 +527,14 @@ public class Util {
 		} 
 		try {
 			Type type = parseType();
-			String identifier = Util.match("Identifier", null).getAttribute();
-			Util.match("Operation", new ArrayList<>(List.of("=")));
-			try {			
+			String identifier = Util.match("Identifier", null).getAttribute();	
+			int startIndex2 = curIndex;
+			try {	
+				Util.match("Operation", new ArrayList<>(List.of("=")));
 				Statement statement = parseStatement();
 				return new Variable(isFinal, type, identifier, statement);
 			} catch (ParserException e2) {
+				curIndex = startIndex2;
 				return new Variable(isFinal, type, identifier, null);
 			}
 		} catch (ParserException e) {
@@ -547,22 +550,19 @@ public class Util {
 	 */
 	public static VariableAssignation parseVariableAssign() throws ParserException {
 		int startIndex = curIndex;
+		String identifier = Util.match("Identifier", null).getAttribute(); //can also be table access
 		try {
+			Util.match("Operation", new ArrayList<>(List.of("=")));
 			try {
-				String identifier = Util.match("Identifier", null).getAttribute(); //can also be table access
-				Util.match("Operation", new ArrayList<>(List.of("=")));
 				Operation operation = parseOperations();
 				return new VariableAssignation(identifier, operation);
 			} catch (ParserException e) {
 				curIndex = startIndex ;
-				String identifier = Util.match("Identifier", null).getAttribute(); //can also be table access
-				Util.match("Operation", new ArrayList<>(List.of("=")));
 				Operand operand = parseOperand();
 				return new VariableAssignation(identifier, operand);
 			}
 		} catch (ParserException e) {
-			curIndex = startIndex;
-			throw e;
+			return new VariableAssignation(identifier, null);
 		}
 	}
 	
@@ -697,24 +697,40 @@ public class Util {
 		try {
 			Util.match("Keyword", new ArrayList<>(List.of("if")));
 			Util.match("OpenParenthesis", null);
-			Operation condition = Util.parseOperation();
+			int startIndex2 = curIndex;
+			Operation conditionop = null;
+			String conditionstr = null;
+			try {
+				conditionop = Util.parseOperations();
+			} catch (ParserException e) {
+				curIndex = startIndex2;
+				conditionstr = Util.match("Identifier", null).getAttribute();
+			}
 			Util.match("CloseParenthesis", null);
 			Util.match("OpenCurlyBraket", null);
 			ArrayList<Statement> body = Util.parseStatements(curIndex, lexedInput);
+			Util.match("CloseCurlyBraket", null);
 			Boolean isElse;
 			ArrayList<Statement> elseBody;
-			int startIndex2 = curIndex;
-			try {			
+			int startIndex3 = curIndex;
+			try {		
 				Util.match("Keyword", new ArrayList<>(List.of("else")));
 				Util.match("OpenCurlyBraket", null);
 				isElse = true;
 				elseBody = Util.parseStatements(curIndex, lexedInput);
 			} catch (ParserException e1) {
-				curIndex = startIndex2;
+				curIndex = startIndex3;
 				isElse = false;
 				elseBody = null;
+			}	
+			if (conditionop != null) {
+				return new IfCond(conditionop, body, isElse, elseBody);
+			} else if (conditionstr != null) {
+				return new IfCond(conditionstr, body, isElse, elseBody);
+			} else {
+				throw new ParserException("The condition is not an operation nor a identifer");
 			}
-			return new IfCond(condition, body, isElse, elseBody);
+			
 		} catch (ParserException e) {
 			curIndex = startIndex;
 			throw e;
