@@ -93,7 +93,21 @@ public class Util {
 	public static Param parseParam() throws ParserException {
 		int startIndex = curIndex;
 		try {
-			Type type = (Type) Util.parseType();			
+			Type type;
+			int startIndex2 = curIndex;
+			try {
+				type = (Type) Util.parseType();
+			} catch (ParserException e) {
+				curIndex = startIndex2;
+				Symbol typeSymbol = Util.match("Identifier", null);
+				try {
+					Util.match("OpenSquareBraket", null);
+					Util.match("CloseSquareBraket", null);
+					type = new Type(typeSymbol.getAttribute()+"[]");
+				} catch (ParserException e2) {
+					type = new Type(typeSymbol.getAttribute());
+				}				
+			}						
 			Symbol identifier = Util.match("Identifier", null);
 			return new Param(type, (String) identifier.attribute);
 		} catch (ParserException e) {
@@ -137,7 +151,23 @@ public class Util {
 		int startIndex = curIndex;
 		try {
 			Util.match("Keyword", new ArrayList<>(List.of("def")));
-			Type returnType = Util.parseType(); // could also return an instance of a struct -> case not treated for the moment
+			Type returnType;
+			int startIndex2 = curIndex;
+			try {
+				returnType = Util.parseType();
+			} catch (ParserException e) {
+				curIndex = startIndex2;
+				String rettype = Util.match("Identifier", null).getAttribute(); //can also return a structure instance
+				int startIndex3 = curIndex;
+				try {
+					Util.match("OpenSquareBraket", null);
+					Util.match("CloseSquareBraket", null);
+					returnType = new Type(rettype+"[]");
+				} catch (ParserException e2) {
+					curIndex = startIndex3;
+					returnType = new Type(rettype);
+				}				
+			}			 
 			String name = Util.match("Identifier", null).getAttribute();
 			Util.match("OpenParenthesis", null);
 			ArrayList<Param> parameters = Util.parseParams();
@@ -401,35 +431,52 @@ public class Util {
 				return parseVariable();
 			}
 		}
-		else if(lookahead.getToken().equals("Identifier")) {
-			if (lookahead2.getToken().equals("OpenParenthesis")) {
-				// Function call
-				return parseFunctionCall();
-			}
-			else if(lookahead2.getToken().equals("Identifier")) {
-				// Structure instance
-				return parseStructInstanciation();
-			}
-			else if(lookahead2.getToken().equals("OpenSquareBraket")) {
-				// Structure instance
-				return parseArrayAccess();
-			}
-			else if(operators.contains(lookahead2.getAttribute())) {
-				// identifier operation
-				return parseOperation();
-			}
-			else {
-				// Variable assign
-				return parseVariableAssign();
-			}
-		}
-		else if(lookahead.getToken().equals("Number")) {
-			 
+		else {
+			int index = curIndex;
 			try {
-				return parseOperation();
+				Statement s = parseOperations();
+				return s;
 			} catch (ParserException e) {
-				return parseNumber();
+				curIndex = index;
+			}		
+		
+			if(lookahead.getToken().equals("Identifier")) {
+				if (lookahead2.getToken().equals("OpenParenthesis")) {
+					// Function call
+					return parseFunctionCall();
+				}
+				else if(lookahead2.getToken().equals("Identifier")) {
+					// Structure instance
+					return parseStructInstanciation();
+				}
+				else if(lookahead2.getToken().equals("OpenSquareBraket")) {
+					int index2 = curIndex;
+					try {
+						//Structure Access
+						Statement s = parseStructAccess();
+						return s;
+					} catch (ParserException e) {
+						// Structure instance
+						curIndex = index2;
+						return parseArrayAccess();
+					}								
+				}
+				else if(operators.contains(lookahead2.getAttribute())) {
+					// identifier operation
+					return parseOperation();
+				}
+				else {
+					// Variable assign
+					return parseVariableAssign();
+				}
 			}
+			else if(lookahead.getToken().equals("Number")) {
+			 
+				try {
+					return parseOperation();
+				} catch (ParserException e) {
+					return parseNumber();
+				}
 			/* 
 			if(operators.contains(lookahead2.getAttribute())) {
 				//Number operation
@@ -441,52 +488,53 @@ public class Util {
 				// Single number
 				return parseNumber();
 			}*/
-		}
-		else if (lookahead.getToken().equals("Comment")) {
-			return parseComment();
-		}
-		else if (lookahead.getToken().equals("Comment")) {
-			return parseComment();
-		}
-		else if(lookahead.getToken().equals("String")) {
-			// String 
-			return parseString();
-		}
-		
-		else if (lookahead.getAttribute() != null) {
-			if(isKeyword(lookahead.getAttribute(), keywords_boolean)) {
+			}
+			else if (lookahead.getToken().equals("Comment")) {
+				return parseComment();
+			}
+			else if (lookahead.getToken().equals("Comment")) {
+				return parseComment();
+			}
+			else if(lookahead.getToken().equals("String")) {
 				// String 
-				return parseBool();
+				return parseString();
 			}
-			else if(lookahead.getAttribute().equals("def")) {
-				// Function creation
-				return parseMethod();
-			}
-			else if(lookahead.getAttribute().equals("for")) {
-				// For Loop
-				return parseForLoop();
-			}
-			else if(lookahead.getAttribute().equals("while")) {
-				//While Loop
-				return parseWhileLoop();
-			}
-			else if(lookahead.getAttribute().equals("if")) {
-				// If Cond
-				return parseIfCond();
-			}
-			else if(lookahead.getAttribute().equals("struct")) {
-				// Structure 
-				return parseStructure();
-			}
-			else if(lookahead.getAttribute().equals("return")) {
-				// return 
-				return parseReturn();
-			}
-			else if(isKeyword(lookahead.getAttribute(), keywords_function_call)) {
-				// Function call
-				return parseFunctionCall();
-			}
-		}		
+		
+			else if (lookahead.getAttribute() != null) {
+				if(isKeyword(lookahead.getAttribute(), keywords_boolean)) {
+					// String 
+					return parseBool();
+				}
+				else if(lookahead.getAttribute().equals("def")) {
+					// Function creation
+					return parseMethod();
+				}
+				else if(lookahead.getAttribute().equals("for")) {
+					// For Loop
+					return parseForLoop();
+				}
+				else if(lookahead.getAttribute().equals("while")) {
+					//While Loop
+					return parseWhileLoop();
+				}
+				else if(lookahead.getAttribute().equals("if")) {
+					// If Cond
+					return parseIfCond();
+				}
+				else if(lookahead.getAttribute().equals("struct")) {
+					// Structure 
+					return parseStructure();
+				}
+				else if(lookahead.getAttribute().equals("return")) {
+					// return 
+					return parseReturn();
+				}
+				else if(isKeyword(lookahead.getAttribute(), keywords_function_call)) {
+					// Function call
+					return parseFunctionCall();
+				}
+			}	
+		}
 		throw new ParserException("Cannot begin statement with " + lookahead.toString());
 	}
 	
