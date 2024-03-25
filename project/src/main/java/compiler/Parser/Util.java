@@ -33,7 +33,7 @@ public class Util {
 	    Symbol lookahead = lexedInput.get(curIndex);
 	    if(expectedAttribute != null) {
 	    	if (! (lookahead.getToken().equals(expectedToken) && expectedAttribute.contains(lookahead.getAttribute()))) {
-				 /* 
+				/* 
 				System.out.println(lookahead.getToken());
 				System.out.println(expectedToken);
 				System.out.println(lookahead.getAttribute());
@@ -68,26 +68,15 @@ public class Util {
 	 * @throws ParserException
 	 */
 	public static Type parseType() throws ParserException {
+		List<String> types = new ArrayList<>(List.of("int", "float", "string", "bool", "void"));
+		Symbol identifier = Util.match("Keyword", types);
 		try {
-			Type t = Util.parseArrayType();
-			return t;
+			Util.match("OpenSquareBraket", null);
+			Util.match("CloseSquareBraket", null);
+			return new Type((String) identifier.attribute + "[]");
 		} catch (ParserException e) {
-			List<String> types = new ArrayList<>(List.of("int", "float", "string", "bool", "void"));
-			Symbol identifier = Util.match("Keyword", types);
 			return new Type((String) identifier.attribute);
 		}		
-    }
-	
-	/**
-	 * @return Type
-	 * @throws ParserException
-	 */
-	public static Type parseArrayType() throws ParserException {
-		List<String> types = new ArrayList<>(List.of("int", "float", "string", "bool"));
-		Symbol identifier = Util.match("Keyword", types);
-		Util.match("OpenSquareBraket", null);
-		Util.match("CloseSquareBraket", null);
-        return new Type((String) identifier.attribute + "[]");
     }
 	
 	/**
@@ -109,9 +98,11 @@ public class Util {
 		Symbol lookahead = lexedInput.get(curIndex);
 		if(lookahead.getToken() != "CloseParenthesis") {
 			parameters.add(Util.parseParam());
+			lookahead = lexedInput.get(curIndex);
 			while(lookahead.getToken() == "Comma" || lookahead.getToken() == "SemiColon") {
 				Util.match("Comma", null);
 				parameters.add(parseParam());
+				lookahead = lexedInput.get(curIndex);
 			}
 		}
 		return parameters;
@@ -141,9 +132,9 @@ public class Util {
 		Util.match("Keyword", new ArrayList<>(List.of("struct")));
 		String name = Util.match("Identifier", null).getAttribute();
 		Util.match("OpenCurlyBraket", null);
-		ArrayList<Param> parameters = Util.parseParams();
+		ArrayList<Statement> body = Util.parseStatements(curIndex, lexedInput);
 		Util.match("CloseCurlyBraket", null);
-		return new Structure(name, parameters);
+		return new Structure(name, body);
 	}
 	
 	/**
@@ -153,12 +144,17 @@ public class Util {
 	public static StructureInstanciation parseStructInstanciation () throws ParserException {
 		String structName = Util.match("Identifier", null).getAttribute();
 		String instanceName = Util.match("Identifier", null).getAttribute();
-		Util.match("Operation", new ArrayList<>(List.of("=")));
-		Util.match("Identifier", null);
-		Util.match("OpenParenthesis", null);
-		ArrayList<Statement> statements = Util.parseStatements(curIndex, lexedInput); //identifier or operation
-		Util.match("CloseParenthesis", null);
-		return new StructureInstanciation(structName, instanceName, statements);
+		try {
+			Util.match("Operation", new ArrayList<>(List.of("=")));
+			Util.match("Identifier", null);
+			Util.match("OpenParenthesis", null);
+			ArrayList<Statement> statements = Util.parseStatements(curIndex, lexedInput); //identifier or operation
+			Util.match("CloseParenthesis", null);
+			return new StructureInstanciation(structName, instanceName, statements);
+		} catch (ParserException e) {
+			return new StructureInstanciation(structName, instanceName, null);
+		}
+
 	}
 	
 	/**
@@ -346,6 +342,10 @@ public class Util {
 				return parseNumber();
 			}
 		}
+		else if(lookahead.getToken().equals("String")) {
+			// String 
+			return parseString();
+		}
 		else if(lookahead.getAttribute().equals("def")) {
 			// Function creation
 			return parseMethod();
@@ -519,7 +519,7 @@ public class Util {
 	}
 
 	/**
-	 * @return ForLoop
+	 * @return WhileLoop
 	 * @throws ParserException
 	 */
 	public static WhileLoop parseWhileLoop() throws ParserException {
@@ -533,7 +533,7 @@ public class Util {
 	}
 
 	/**
-	 * @return ForLoop
+	 * @return IfCond
 	 * @throws ParserException
 	 */
 	public static IfCond parseIfCond() throws ParserException {
@@ -555,6 +555,11 @@ public class Util {
 			elseBody = null;
 		}
 		return new IfCond(condition, body, isElse, elseBody);
+	}
+
+	public static StringStmt parseString() throws ParserException {
+		String s = Util.match("String", null).getAttribute();
+		return new StringStmt(s);
 	}
 
 	/**

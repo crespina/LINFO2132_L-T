@@ -15,6 +15,7 @@ import compiler.Parser.Type;
 import compiler.Parser.Util;
 import compiler.Parser.Variable;
 import compiler.Parser.Method;
+import compiler.Parser.Param;
 import compiler.Parser.ParserException;
 
 public class TestLexer {
@@ -43,7 +44,7 @@ public class TestLexer {
     }
     
     @Test
-    public void test2() {
+    public void testParser_Method() {
         String input = "def int square(int v, String s) {return v*v;}";
         StringReader reader = new StringReader(input);
         Lexer lexer = new Lexer(reader);
@@ -56,6 +57,37 @@ public class TestLexer {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+    }
+
+    @Test
+    public void testParser_SimpleStructure() {
+        String input = "struct Point { int x; int y;}";
+        StringReader reader = new StringReader(input);
+        Lexer lexer = new Lexer(reader);
+        try {
+            lexer.lex();
+            List<Symbol> lexedInput = lexer.getLexedInput();
+            ArrayList<Statement> statements = Util.parseStatements(0, lexedInput);
+            assertEquals(statements.get(0).getClass(), Method.class);
+        } catch (IOException | ParserException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+    @Test
+    public void testParserHardStructure() {
+        String input = "struct Person {\n string name;\n Point location;\n int[] history;\n }";
+        StringReader reader = new StringReader(input);
+        Lexer lexer = new Lexer(reader);
+        try {
+            lexer.lex();
+            List<Symbol> lexedInput = lexer.getLexedInput();
+            ArrayList<Statement> statements = Util.parseStatements(0, lexedInput);
+            assertEquals(statements.get(0).getClass(), Method.class);
+        } catch (IOException | ParserException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 
     @Test

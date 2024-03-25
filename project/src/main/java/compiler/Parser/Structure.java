@@ -10,25 +10,25 @@ import java.util.Objects;
 public class Structure extends Statement{
 	
 	String name;
-	ArrayList<Param> parameters;
+	ArrayList<Statement> body;
 	
 	/**
 	 * @param name
 	 * @param parameters
 	 */
-	public Structure(String name, ArrayList<Param> parameters) {
+	public Structure(String name, ArrayList<Statement> body) {
 		super();
 		this.name = name;
-		this.parameters = parameters;
+		this.body = body;
 	}
 	
 	public String toString() {
-		return "Structure : " + "name = " + name + "parameters = " + parameters + "\n";
+		return "Structure : " + "name = " + name + ", body = " + body + "\n";
 	}
 
 	public boolean equals (Object o) {
 		Structure structure = (Structure) o;
-		return Objects.equals(this.name, structure.name) && Objects.equals(this.parameters, structure.parameters);
+		return Objects.equals(this.name, structure.name) && Objects.equals(this.body, structure.body);
 	}
 
 }
