@@ -15,7 +15,7 @@ public class Lexer {
     PushbackReader r; 
     String[] keywords = new String[]{"struct", "final", "int", "float", "string", "bool", "while", "if", "else",
                                     "for", "void", "def", "return", "free", "readInt", "readString", "writeInt",
-                                    "readFloat", "writeFloat", "write", "writeln","chr", "len", "floor"};
+                                    "readFloat", "writeFloat", "write", "writeln","chr", "len", "floor", "true", "false"};
     
     /**
      * @param input : {@link Reader} containing the String input that will be lexed character by character

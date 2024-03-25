@@ -20,6 +20,7 @@ public class Util {
 	public static List<Symbol> lexedInput;
 
 	static String[] keywords_variable = new String[]{"int", "float", "string", "bool"};
+	static String[] keywords_boolean = new String[]{"true", "false"};
 	static String[] keywords_function_call = new String[]{"readInt", "readString", "writeInt", "readFloat", "writeFloat", "write", "writeln", "chr", "len", "floor", "free"};
 	static List<String> operators = new ArrayList<>(List.of("+","-","*","/","==","!=","!","<",">",">=","<=","%","&&","||"));
 	
@@ -346,6 +347,10 @@ public class Util {
 			// String 
 			return parseString();
 		}
+		else if(isKeyword(lookahead.getAttribute(), keywords_boolean)) {
+			// String 
+			return parseBool();
+		}
 		else if(lookahead.getAttribute().equals("def")) {
 			// Function creation
 			return parseMethod();
@@ -560,6 +565,11 @@ public class Util {
 	public static StringStmt parseString() throws ParserException {
 		String s = Util.match("String", null).getAttribute();
 		return new StringStmt(s);
+	}
+
+	public static Bool parseBool() throws ParserException {
+		String b = Util.match("Keyword", new ArrayList<>(List.of("true", "false"))).getAttribute();
+		return new Bool(b);
 	}
 
 	/**
