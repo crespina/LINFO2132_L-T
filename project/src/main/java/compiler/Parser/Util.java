@@ -71,11 +71,15 @@ public class Util {
 	public static Type parseType() throws ParserException {
 		List<String> types = new ArrayList<>(List.of("int", "float", "string", "bool", "void"));
 		Symbol identifier = Util.match("Keyword", types);
+		int indexRead = 0;
 		try {
 			Util.match("OpenSquareBraket", null);
+			indexRead++;
 			Util.match("CloseSquareBraket", null);
+			indexRead++;
 			return new Type((String) identifier.attribute + "[]");
 		} catch (ParserException e) {
+			curIndex-=indexRead;
 			return new Type((String) identifier.attribute);
 		}		
     }
@@ -250,11 +254,17 @@ public class Util {
 	 * @throws ParserException
 	 */
 	public static Operation parseOperation() throws ParserException {
-		Operand op1 = Util.parseOperand();
-		Operator op = Util.parseOperator();
-		Operand op2 = Util.parseOperand();
-		
-		return new Operation(op1, op, op2);
+		int indexlu = 0;
+		try {
+			Operand op1 = Util.parseOperand();
+			indexlu = op1.value.toString().length();
+			Operator op = Util.parseOperator();
+			Operand op2 = Util.parseOperand();
+			return new Operation(op1, op, op2);
+		} catch (Exception e) {
+			curIndex -= indexlu;
+			throw new ParserException("Not an operator");
+		}
 	}
 	
 	/**
@@ -295,12 +305,12 @@ public class Util {
 		Symbol lookahead = lexedInput.get(curIndex);
 		Symbol lookahead2 = lexedInput.get(curIndex+1);
 		
-		System.out.println(lookahead.getAttribute());
-		System.out.println(lookahead.getToken());
+		//System.out.println(lookahead.getAttribute());
+		//System.out.println(lookahead.getToken());
 		
 		//System.out.println(curIndex);
 
-		if(lookahead.getToken().equals("CloseCurlyBraket") || lookahead.getToken().equals("CloseParenthesis")) {
+		if(lookahead.getToken().equals("CloseCurlyBraket") || lookahead.getToken().equals("CloseParenthesis") || lookahead.getToken().equals("CloseSquareBraket")) {
 			// End of the body of a function/for/if/while/struct
 			return null;
 		}
@@ -315,11 +325,23 @@ public class Util {
 				lookahead2 = lexedInput.get(curIndex+1);
 			}
 		}
-		System.out.println(lookahead.getAttribute());
+		//System.out.println(lookahead.getAttribute());
 
 		if(isKeyword(lookahead.getAttribute(), keywords_variable) || lookahead.getAttribute().equals("final")) {
-			// Variable Creation
-			return parseVariable();
+			if(lookahead2.getToken().equals("OpenSquareBraket")) {
+				Symbol lookahead3 = lexedInput.get(curIndex+2);
+				if(!lookahead3.getToken().equals("CloseSquareBraket")) {
+					return parseInitArray();
+				}
+				else {
+					// Variable Creation
+					return parseVariable();
+				}
+			}
+			else {
+				// Variable Creation
+				return parseVariable();
+			}
 		}
 		else if(lookahead.getToken().equals("Identifier")) {
 			if (lookahead2.getToken().equals("OpenParenthesis")) {
@@ -344,6 +366,13 @@ public class Util {
 			}
 		}
 		else if(lookahead.getToken().equals("Number")) {
+			 
+			try {
+				return parseOperation();
+			} catch (ParserException e) {
+				return parseNumber();
+			}
+			/* 
 			if(operators.contains(lookahead2.getAttribute())) {
 				//Number operation
 				System.out.println(lookahead.getToken());
@@ -353,7 +382,7 @@ public class Util {
 			else {
 				// Single number
 				return parseNumber();
-			}
+			}*/
 		}
 		else if(lookahead.getToken().equals("String")) {
 			// String 
@@ -577,6 +606,14 @@ public class Util {
 	public static Bool parseBool() throws ParserException {
 		String b = Util.match("Keyword", new ArrayList<>(List.of("true", "false"))).getAttribute();
 		return new Bool(b);
+	}
+
+	public static ArrayInit parseInitArray() throws ParserException {
+		Type type = parseType();
+		Util.match("OpenSquareBraket", null);
+		ArrayList<Statement> values = Util.parseStatements(curIndex, lexedInput);
+		Util.match("CloseSquareBraket", null);
+		return new ArrayInit(type.identifier, values);
 	}
 
 	/**

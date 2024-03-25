@@ -17,6 +17,6 @@ public class Type {
 	}
 
 	public String toString() {
-		return "Type : " + identifier + "\n";
+		return "Type : " + identifier;
 	}
 }

@@ -29,7 +29,7 @@ public class Method extends Statement{
 	}
 
 	public String toString() {
-		return "Method : " + "ReturnType = " + returnType + ", identifier = " + identifier + ", parameters = " + parameters + ", body = " + body + "\n";
+		return "Method : " + "ReturnType = " + returnType + ", identifier = " + identifier + ", parameters = " + parameters + ", body = " + body ;
 	}
 
 	public boolean equals (Object o) {
