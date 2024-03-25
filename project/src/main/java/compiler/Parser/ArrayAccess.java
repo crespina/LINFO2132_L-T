@@ -19,7 +19,7 @@ public class ArrayAccess extends Statement{
 	}
 	
 	public String toString() {
-		return "ArrayAccess : " + "array = " + array + ", index = " + index;
+		return "ArrayAccess : " + "array = " + array + ", index = " + index ;
 	}
 
 	public boolean equals (Object o) {
