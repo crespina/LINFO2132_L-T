@@ -294,11 +294,18 @@ public class Util {
 	public static Statement parseStatement() throws ParserException {
 		Symbol lookahead = lexedInput.get(curIndex);
 		Symbol lookahead2 = lexedInput.get(curIndex+1);
-		/* 
-		System.out.println(lookahead.getAttribute());
-		System.out.println(curIndex);
-		*/
-		if (lookahead.getToken().equals("Semicolon")) {
+		
+		//System.out.println(lookahead.getAttribute());
+		//System.out.println(lookahead.getToken());
+		
+		//System.out.println(curIndex);
+
+		if(lookahead.getToken().equals("CloseCurlyBraket") || lookahead.getToken().equals("CloseParenthesis")) {
+			// End of the body of a function/for/if/while/struct
+			return null;
+		}
+		
+		else if (lookahead.getToken().equals("Semicolon") || lookahead.getToken().equals("Comma")) {
 			curIndex++;
 			lookahead = lexedInput.get(curIndex);
 			if(curIndex > lexedInput.size()-2) {
@@ -308,6 +315,7 @@ public class Util {
 				lookahead2 = lexedInput.get(curIndex+1);
 			}
 		}
+		//System.out.println(lookahead.getAttribute());
 
 		if(isKeyword(lookahead.getAttribute(), keywords_variable) || lookahead.getAttribute().equals("final")) {
 			// Variable Creation
@@ -379,11 +387,6 @@ public class Util {
 			// Function call
 			return parseFunctionCall();
 		}
-		else if(lookahead.getToken().equals("CloseCurlyBraket")) {
-			// End of the body of a function/for/if/while/struct
-			return null;
-		}
-
 		throw new ParserException("Cannot begin statement with " + lookahead.toString());
 	}
 	
