@@ -14,6 +14,9 @@ public class Util {
 	 * 
 	 */
 	public static int curIndex = 0;
+	/**
+	 * 
+	 */
 	public static List<Symbol> lexedInput;
 
 	static String[] keywords_variable = new String[]{"int", "float", "string", "bool"};
@@ -23,8 +26,6 @@ public class Util {
 	/**
 	 * @param expectedToken
 	 * @param expectedAttribute 
-	 * @param curIndex
-	 * @param lexedInput
 	 * @return Symbol
 	 * @throws ParserException
 	 */
@@ -54,8 +55,6 @@ public class Util {
 	}	
 	
 	/**
-	 * @param curIndex
-	 * @param lexedInput
 	 * @return Comment
 	 * @throws ParserException
 	 */
@@ -65,20 +64,33 @@ public class Util {
 	}
 	
 	/**
-	 * @param curIndex
-	 * @param lexedInput
 	 * @return Type
 	 * @throws ParserException
 	 */
 	public static Type parseType() throws ParserException {
-		List<String> types = new ArrayList<>(List.of("int", "float", "string", "bool", "void"));
-		Symbol identifier = Util.match("Keyword", types);
-        return new Type((String) identifier.attribute);
+		try {
+			Type t = Util.parseArrayType();
+			return t;
+		} catch (ParserException e) {
+			List<String> types = new ArrayList<>(List.of("int", "float", "string", "bool", "void"));
+			Symbol identifier = Util.match("Keyword", types);
+			return new Type((String) identifier.attribute);
+		}		
     }
 	
 	/**
-	 * @param curIndex
-	 * @param lexedInput
+	 * @return Type
+	 * @throws ParserException
+	 */
+	public static Type parseArrayType() throws ParserException {
+		List<String> types = new ArrayList<>(List.of("int", "float", "string", "bool"));
+		Symbol identifier = Util.match("Keyword", types);
+		Util.match("OpenSquareBraket", null);
+		Util.match("CloseSquareBraket", null);
+        return new Type((String) identifier.attribute + "[]");
+    }
+	
+	/**
 	 * @return Param
 	 * @throws ParserException
 	 */
@@ -89,8 +101,6 @@ public class Util {
     }
 	
 	/**
-	 * @param curIndex
-	 * @param lexedInput
 	 * @return ArrayList<Param>
 	 * @throws ParserException
 	 */
@@ -99,7 +109,7 @@ public class Util {
 		Symbol lookahead = lexedInput.get(curIndex);
 		if(lookahead.getToken() != "CloseParenthesis") {
 			parameters.add(Util.parseParam());
-			while(lookahead.getToken() == "Comma") {
+			while(lookahead.getToken() == "Comma" || lookahead.getToken() == "SemiColon") {
 				Util.match("Comma", null);
 				parameters.add(parseParam());
 			}
@@ -108,8 +118,6 @@ public class Util {
 	}
 	
 	/**
-	 * @param curIndex 
-	 * @param lexedInput 
 	 * @return Method
 	 * @throws ParserException 
 	 */
@@ -126,8 +134,6 @@ public class Util {
 	}
 	
 	/**
-	 * @param curIndex
-	 * @param lexedInput
 	 * @return Structure
 	 * @throws ParserException
 	 */
@@ -141,8 +147,6 @@ public class Util {
 	}
 	
 	/**
-	 * @param curIndex
-	 * @param lexedInput
 	 * @return StructureInstanciation
 	 * @throws ParserException
 	 */
@@ -158,8 +162,6 @@ public class Util {
 	}
 	
 	/**
-	 * @param curIndex
-	 * @param lexedInput
 	 * @return StructureAccess
 	 * @throws ParserException
 	 */
@@ -186,8 +188,6 @@ public class Util {
 	}
 	
 	/**
-	 * @param curIndex
-	 * @param lexedInput
 	 * @return Float
 	 * @throws ParserException
 	 */
@@ -203,8 +203,6 @@ public class Util {
 	}
 	
 	/**
-	 * @param curIndex
-	 * @param lexedInput
 	 * @return Operator : accepted types: int float bool string ArrayAccess StructureAccess identifier
 	 * @throws ParserException
 	 */
@@ -241,8 +239,6 @@ public class Util {
 	
 	
 	/**
-	 * @param curIndex
-	 * @param lexedInput
 	 * @return Operator
 	 * @throws ParserException
 	 */
@@ -253,8 +249,6 @@ public class Util {
 	
 	
 	/**
-	 * @param curIndex
-	 * @param lexedInput
 	 * @return Operation
 	 * @throws ParserException
 	 */
@@ -267,8 +261,6 @@ public class Util {
 	}
 	
 	/**
-	 * @param curIndex
-	 * @param lexedInput
 	 * @return Operation
 	 * @throws ParserException
 	 */
@@ -292,15 +284,13 @@ public class Util {
 				}
 				return finalOperation;
 			} catch (ParserException e2) {
-				throw new ParserException("The operation is not valid");
+				throw new ParserException("The operation is not valid" + e2);
 			}
 		}
 		
 	}
 	
 	/**
-	 * @param curIndex
-	 * @param lexedInput
 	 * @return Statement
 	 * @throws ParserException
 	 */
@@ -393,8 +383,8 @@ public class Util {
 	}
 	
 	/**
-	 * @param curIndex
-	 * @param lexedInput
+	 * @param index 
+	 * @param input 
 	 * @return ArrayList<Statement>
 	 * @throws ParserException
 	 */
@@ -415,8 +405,6 @@ public class Util {
 	}
 	
 	/**
-	 * @param curIndex
-	 * @param lexedInput
 	 * @return Variable
 	 * @throws ParserException
 	 */
@@ -440,8 +428,6 @@ public class Util {
 	}
 	
 	/**
-	 * @param curIndex
-	 * @param lexedInput
 	 * @return VariableAssignation
 	 * @throws ParserException
 	 */
@@ -462,8 +448,6 @@ public class Util {
 	}
 	
 	/**
-	 * @param curIndex
-	 * @param lexedInput
 	 * @return ReturnStatement
 	 * @throws ParserException
 	 */
@@ -474,8 +458,6 @@ public class Util {
 	}
 	
 	/**
-	 * @param curIndex
-	 * @param lexedInput
 	 * @return String
 	 * @throws ParserException
 	 */
@@ -486,8 +468,6 @@ public class Util {
 	}
 	
 	/**
-	 * @param curIndex
-	 * @param lexedInput
 	 * @return FunctionCall
 	 * @throws ParserException
 	 */
@@ -496,19 +476,19 @@ public class Util {
 			String functionName = Util.parseFunctionName();
 			Util.match("OpenParenthesis", null);
 			ArrayList<Statement> params = parseStatements(curIndex, lexedInput);
+			Util.match("CloseParenthesis", null);
 			return new FunctionCall(functionName, params);
 		} catch (ParserException e) {
 			String functionName = Util.match("Identifier", null).getAttribute();
 			Util.match("OpenParenthesis", null);
 			ArrayList<Statement> params = parseStatements(curIndex, lexedInput);
+			Util.match("CloseParenthesis", null);
 			return new FunctionCall(functionName, params);
 		}
 		
 	}
 	
 	/**
-	 * @param curIndex
-	 * @param lexedInput
 	 * @return ArrayAccess
 	 * @throws ParserException
 	 */
@@ -521,8 +501,6 @@ public class Util {
 	}
 
 	/**
-	 * @param curIndex
-	 * @param lexedInput
 	 * @return ForLoop
 	 * @throws ParserException
 	 */
@@ -541,8 +519,6 @@ public class Util {
 	}
 
 	/**
-	 * @param curIndex
-	 * @param lexedInput
 	 * @return ForLoop
 	 * @throws ParserException
 	 */
@@ -557,8 +533,6 @@ public class Util {
 	}
 
 	/**
-	 * @param curIndex
-	 * @param lexedInput
 	 * @return ForLoop
 	 * @throws ParserException
 	 */
@@ -585,7 +559,7 @@ public class Util {
 
 	/**
      * @param s : {@link String} to be compared to the keywords list
-	 * @param kerwords : keyword list to check
+	 * @param keywords : keyword list to check
      * @return {@link Boolean} true if s is a keyword (appear in the keywords list), false if not 
      */
     public static boolean isKeyword(String s, String[] keywords){
