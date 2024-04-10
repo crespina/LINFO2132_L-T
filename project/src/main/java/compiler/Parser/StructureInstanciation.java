@@ -7,7 +7,7 @@ import java.util.Objects;
  * @author A. Crespin & R. De Oliveira
  *
  */
-public class StructureInstanciation extends Statement{
+public class StructureInstanciation extends Statement implements Visitable{
 	
 	String structName;
 	String instanceName;
@@ -35,6 +35,13 @@ public class StructureInstanciation extends Statement{
 		StructureInstanciation structure = (StructureInstanciation) o;
 		return Objects.equals(this.structName, structure.structName) && Objects.equals(this.instanceName, structure.instanceName) 
 			&& Objects.equals(this.instanceName, structure.instanceName);
+	}
+
+
+	@Override
+	public ArrayList<Type> accept(Visitor visitor) {
+		// TODO Auto-generated method stub
+		return visitor.visit(this);
 	}
 	
 

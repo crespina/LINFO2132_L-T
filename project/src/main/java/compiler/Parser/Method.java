@@ -7,7 +7,7 @@ import java.util.ArrayList;
  * @author A. Crespin & R. De Oliveira
  *
  */
-public class Method extends Statement{
+public class Method extends Statement implements Visitable{
 	
 	String identifier;
 	Type returnType;
@@ -36,6 +36,12 @@ public class Method extends Statement{
 		Method method = (Method) o;
 		return Objects.equals(this.identifier, method.identifier) && Objects.equals(this.returnType, method.returnType) 
 			&& Objects.equals(this.parameters, method.parameters) && Objects.equals(this.body, method.body);
+	}
+
+	@Override
+	public ArrayList<Type> accept(Visitor visitor) {
+		// TODO Auto-generated method stub
+		return visitor.visit(this);
 	}
 	
 }

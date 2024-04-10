@@ -1,12 +1,13 @@
 package compiler.Parser;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
 /**
  * @author Crespin
  *
  */
-public class Number extends Statement{
+public class Number extends Statement implements Visitable{
 
 	String value;
 	Type type;
@@ -29,4 +30,10 @@ public class Number extends Statement{
 		Number num = (Number) o;
 		return Objects.equals(this.value, num.value) && Objects.equals(this.type, num.type);
 	}
+
+		@Override
+		public ArrayList<Type> accept(Visitor visitor) {
+			// TODO Auto-generated method stub
+			return visitor.visit(this);
+		}
 }

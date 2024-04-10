@@ -7,7 +7,7 @@ import java.util.Objects;
  * @author A. Crespin & R. De Oliveira
  *
  */
-public class IfCond extends Statement{
+public class IfCond extends Statement implements Visitable{
     
     Operation conditionop;
     String conditionstr;
@@ -55,5 +55,11 @@ public class IfCond extends Statement{
 		IfCond ifCond = (IfCond) o;
 		return Objects.equals(this.conditionop, ifCond.conditionop) && Objects.equals(this.conditionstr, ifCond.conditionstr) && Objects.equals(this.body, ifCond.body)
             && Objects.equals(this.isElse, ifCond.isElse) && Objects.equals(this.elseBody, ifCond.elseBody);
+	}
+
+	@Override
+	public ArrayList<Type> accept(Visitor visitor) {
+		// TODO Auto-generated method stub
+		return visitor.visit(this);
 	}
 }

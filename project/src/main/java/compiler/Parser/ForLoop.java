@@ -7,7 +7,7 @@ import java.util.Objects;
  * @author A. Crespin & R. De Oliveira
  *
  */
-public class ForLoop extends Statement{
+public class ForLoop extends Statement implements Visitable{
 
     Operation initValue;
     Operation endValue;
@@ -37,4 +37,12 @@ public class ForLoop extends Statement{
 		return Objects.equals(this.initValue, forLoop.initValue) && Objects.equals(this.endValue, forLoop.endValue) 
 			&& Objects.equals(this.increment, forLoop.increment) && Objects.equals(this.body, forLoop.body);
 	}
+
+	@Override
+	public ArrayList<Type> accept(Visitor visitor) {
+		// TODO Auto-generated method stub
+		return visitor.visit(this);
+	}
+
+
 }

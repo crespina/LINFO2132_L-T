@@ -1,12 +1,13 @@
 package compiler.Parser;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
 /**
  * @author A. Crespin & R. De Oliveira
  * 
  */
-public class VariableCreation extends Statement{
+public class VariableCreation extends Statement implements Visitable{
 	
 	Boolean isFinal;
 	Type type; 
@@ -36,6 +37,12 @@ public class VariableCreation extends Statement{
 		VariableCreation variable = (VariableCreation) o;
 		return Objects.equals(this.isFinal, variable.isFinal) && Objects.equals(this.identifier, variable.identifier) 
 			&& this.type.equals(variable.type) && this.statement.equals(variable.statement);
+	}
+
+	@Override
+	public ArrayList<Type> accept(Visitor visitor) {
+		// TODO Auto-generated method stub
+		return visitor.visit(this);
 	}
 
 }

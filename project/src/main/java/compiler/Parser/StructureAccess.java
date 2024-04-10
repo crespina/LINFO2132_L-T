@@ -1,12 +1,13 @@
 package compiler.Parser;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
 /**
  * @author A. Crespin & R. De Oliveira
  *
  */
-public class StructureAccess extends Statement{
+public class StructureAccess extends Statement implements Visitable{
 	
 	String instance;
 	String param;
@@ -39,6 +40,14 @@ public class StructureAccess extends Statement{
 		StructureAccess structure = (StructureAccess) o;
 		return Objects.equals(this.instance, structure.instance) && Objects.equals(this.param, structure.param) 
 			&& Objects.equals(this.instanceInArray, structure.instanceInArray);
+	}
+
+
+
+	@Override
+	public ArrayList<Type> accept(Visitor visitor) {
+		// TODO Auto-generated method stub
+		return visitor.visit(this);
 	}
 	
 

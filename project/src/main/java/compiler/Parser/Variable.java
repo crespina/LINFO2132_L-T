@@ -1,12 +1,13 @@
 package compiler.Parser;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
 /**
  * @author A. Crespin & R. De Oliveira
  *
  */
-public class Variable extends Statement{
+public class Variable extends Statement implements Visitable{
 	
 	String varName;
 	Object value;
@@ -29,6 +30,12 @@ public class Variable extends Statement{
 	public boolean equals (Object o) {
 		Variable variable = (Variable) o;
 		return Objects.equals(this.varName, variable.varName) && Objects.equals(this.value, variable.value);
+	}
+
+	@Override
+	public ArrayList<Type> accept(Visitor visitor) {
+		// TODO Auto-generated method stub
+		return visitor.visit(this);
 	}
 
 }

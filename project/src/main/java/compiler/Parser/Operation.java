@@ -1,12 +1,13 @@
 package compiler.Parser;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
 /**
  * @author Crespin
  *
  */
-public class Operation extends Statement{
+public class Operation extends Statement implements Visitable{
 
 	
 	Operand operand1;
@@ -78,6 +79,12 @@ public class Operation extends Statement{
 		Operation oper = (Operation) o;
 		return Objects.equals(this.operand1, oper.operand1) && Objects.equals(this.operand2, oper.operand2) 
 			&& Objects.equals(this.operation, oper.operation) && Objects.equals(this.op1, oper.op1) && Objects.equals(this.op2, oper.op2);
+	}
+
+	@Override
+	public ArrayList<Type> accept(Visitor visitor) {
+		// TODO Auto-generated method stub
+		return visitor.visit(this);
 	}
 
 }

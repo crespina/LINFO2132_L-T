@@ -1,11 +1,12 @@
 package compiler.Parser;
 
+import java.util.ArrayList;
 
 /**
  * @author A. Crespin & R. De Oliveira
  *
  */
-public class Type {
+public class Type extends Statement implements Visitable {
 	
 	String identifier;
 	
@@ -24,5 +25,11 @@ public class Type {
 	public boolean equals(Object o) {
 		Type variable = (Type) o;
 		return this.identifier.equals(variable.identifier);
+	}
+
+	@Override
+	public ArrayList<Type> accept(Visitor visitor) {
+		// TODO Auto-generated method stub
+		return visitor.visit(this);
 	}
 }

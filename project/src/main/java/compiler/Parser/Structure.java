@@ -7,7 +7,7 @@ import java.util.Objects;
  * @author A. Crespin & R. De Oliveira
  *
  */
-public class Structure extends Statement{
+public class Structure extends Statement implements Visitable{
 	
 	String name;
 	ArrayList<Statement> body;
@@ -29,6 +29,11 @@ public class Structure extends Statement{
 	public boolean equals (Object o) {
 		Structure structure = (Structure) o;
 		return Objects.equals(this.name, structure.name) && Objects.equals(this.body, structure.body);
+	}
+
+	@Override
+	public ArrayList<Type> accept(Visitor visitor) {
+		return visitor.visit(this);
 	}
 
 }

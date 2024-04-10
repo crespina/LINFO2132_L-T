@@ -1,11 +1,14 @@
 package compiler.Parser;
 
+import java.util.ArrayList;
+import java.util.Objects;
+
 /**
  * @author Crespin
  *
  */
 
-public class Operand{
+public class Operand extends Statement implements Visitable{
 	
 	//accepted types: int float bool string ArrayAccess StructureAccess identifier
 	String type;
@@ -25,6 +28,26 @@ public class Operand{
 	
 	public String toString() {
 		return "Operand : " + type + ", value = " + value;
+	}
+
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Operand other = (Operand) obj;
+		return Objects.equals(type, other.type) && Objects.equals(value, other.value);
+	}
+
+
+	@Override
+	public ArrayList<Type> accept(Visitor visitor) {
+		// TODO Auto-generated method stub
+		return visitor.visit(this);
 	}
 
 }
