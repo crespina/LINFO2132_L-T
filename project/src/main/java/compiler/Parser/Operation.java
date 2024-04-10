@@ -53,6 +53,11 @@ public class Operation extends Statement{
 	}
 	
 	
+	/**
+	 * @param op1
+	 * @param operation
+	 * @param op2
+	 */
 	public Operation(Operation op1, Operator operation, Operation op2) {
 		super();
 		this.op1 = op1;
@@ -63,10 +68,10 @@ public class Operation extends Statement{
 
 	@Override
 	public String toString() {
-		return "Operation [" + (operand1 != null ? "operand1=" + operand1 + ", " : "")
+		return "Operation [" + (operand2 != null ? "operand2=" + operand2 + ", " : "")
 				+ (operation != null ? "operation=" + operation + ", " : "")
-				+ (operand2 != null ? "operand2=" + operand2 + ", " : "") + (op1 != null ? "op1=" + op1 + ", " : "")
-				+ (op2 != null ? "op2=" + op2 : "") + "]";
+				+ (operand1 != null ? "operand1=" + operand1 + ", " : "") + (op2 != null ? "op1=" + op2 + ", " : "")
+				+ (op1 != null ? "op2=" + op1 : "") + "]";
 	}
 
 	public boolean equals (Object o) {
