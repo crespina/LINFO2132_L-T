@@ -1,6 +1,7 @@
 package compiler.Parser;
 
 import java.util.ArrayList;
+import compiler.Semantic.*;
 
 /**
  * @author A. Crespin & R. De Oliveira

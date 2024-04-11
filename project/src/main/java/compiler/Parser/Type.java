@@ -1,5 +1,6 @@
 package compiler.Parser;
 
+import compiler.Semantic.*;
 import java.util.ArrayList;
 
 /**
