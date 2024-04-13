@@ -12,7 +12,7 @@ public class StructureAccess extends Statement implements Visitable{
 	
 	String instance;
 	String param;
-	ArrayAccess instanceInArray;
+	ArrayAccess instanceInArray; //if it's in an array, i.e. e.g. a[3].x with a = Array(struct)
 	
 	/**
 	 * @param instance
@@ -46,9 +46,9 @@ public class StructureAccess extends Statement implements Visitable{
 
 
 	@Override
-	public ArrayList<Type> accept(Visitor visitor) {
+	public void accept(Visitor visitor, SymbolTable ST) {
 		// TODO Auto-generated method stub
-		return visitor.visit(this);
+		visitor.visit(this, ST);
 	}
 	
 

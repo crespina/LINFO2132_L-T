@@ -9,9 +9,12 @@ import java.util.Objects;
  *
  */
 public class IfCond extends Statement implements Visitable{
+	
+	// e.g. if (op) {} else {}
+	//      if (op) {}
     
     Operation conditionop;
-    String conditionstr;
+    String conditionstr; //bool
     ArrayList<Statement> body;
 	Boolean isElse;
     ArrayList<Statement> elseBody;
@@ -43,7 +46,49 @@ public class IfCond extends Statement implements Visitable{
         this.elseBody = elseBody;
 	}
 
-    public String toString() {
+	
+	
+    public Operation getConditionop() {
+		return conditionop;
+	}
+
+	public void setConditionop(Operation conditionop) {
+		this.conditionop = conditionop;
+	}
+
+	public String getConditionstr() {
+		return conditionstr;
+	}
+
+	public void setConditionstr(String conditionstr) {
+		this.conditionstr = conditionstr;
+	}
+
+	public ArrayList<Statement> getBody() {
+		return body;
+	}
+
+	public void setBody(ArrayList<Statement> body) {
+		this.body = body;
+	}
+
+	public Boolean getIsElse() {
+		return isElse;
+	}
+
+	public void setIsElse(Boolean isElse) {
+		this.isElse = isElse;
+	}
+
+	public ArrayList<Statement> getElseBody() {
+		return elseBody;
+	}
+
+	public void setElseBody(ArrayList<Statement> elseBody) {
+		this.elseBody = elseBody;
+	}
+
+	public String toString() {
     	if (conditionop != null) {
     		return "IfCond : " + "condition = " + conditionop + ", body = " + body + ", isElse = " + isElse + ", elseBody = " + elseBody;
     	}
@@ -59,8 +104,8 @@ public class IfCond extends Statement implements Visitable{
 	}
 
 	@Override
-	public ArrayList<Type> accept(Visitor visitor) {
+	public void accept(Visitor visitor, SymbolTable ST) {
 		// TODO Auto-generated method stub
-		return visitor.visit(this);
+		visitor.visit(this, ST);
 	}
 }

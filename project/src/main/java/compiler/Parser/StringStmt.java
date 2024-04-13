@@ -32,9 +32,9 @@ public class StringStmt extends Statement implements Visitable{
 
 
 	@Override
-	public ArrayList<Type> accept(Visitor visitor) {
+	public void accept(Visitor visitor, SymbolTable ST) {
 		// TODO Auto-generated method stub
-		return visitor.visit(this);
+		visitor.visit(this, ST);
 	}
 
 

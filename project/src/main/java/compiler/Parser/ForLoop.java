@@ -29,7 +29,66 @@ public class ForLoop extends Statement implements Visitable{
         this.body = body;
 	}
 
-    public String toString() {
+	
+	
+	
+    public Operation getInitValue() {
+		return initValue;
+	}
+
+
+
+
+	public void setInitValue(Operation initValue) {
+		this.initValue = initValue;
+	}
+
+
+
+
+	public Operation getEndValue() {
+		return endValue;
+	}
+
+
+
+
+	public void setEndValue(Operation endValue) {
+		this.endValue = endValue;
+	}
+
+
+
+
+	public Operation getIncrement() {
+		return increment;
+	}
+
+
+
+
+	public void setIncrement(Operation increment) {
+		this.increment = increment;
+	}
+
+
+
+
+	public ArrayList<Statement> getBody() {
+		return body;
+	}
+
+
+
+
+	public void setBody(ArrayList<Statement> body) {
+		this.body = body;
+	}
+
+
+
+
+	public String toString() {
 		return "ForLoop : " + "initValue = " + initValue + ", endValue = " + endValue + ", increment = " + increment + ", body = " + body;
 	}
 
@@ -40,9 +99,9 @@ public class ForLoop extends Statement implements Visitable{
 	}
 
 	@Override
-	public ArrayList<Type> accept(Visitor visitor) {
+	public void accept(Visitor visitor, SymbolTable ST) {
 		// TODO Auto-generated method stub
-		return visitor.visit(this);
+		visitor.visit(this, ST);
 	}
 
 

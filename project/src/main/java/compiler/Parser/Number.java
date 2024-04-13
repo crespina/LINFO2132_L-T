@@ -23,6 +23,32 @@ public class Number extends Statement implements Visitable{
 		this.type = type;
 	}
 	
+	
+	
+	public String getValue() {
+		return value;
+	}
+
+
+
+	public void setValue(String value) {
+		this.value = value;
+	}
+
+
+
+	public Type getType() {
+		return type;
+	}
+
+
+
+	public void setType(Type type) {
+		this.type = type;
+	}
+
+
+
 	public String toString() {
 		return "Number : " + "value = " + value + ", type = " + type;
 	}
@@ -33,8 +59,8 @@ public class Number extends Statement implements Visitable{
 	}
 
 		@Override
-		public ArrayList<Type> accept(Visitor visitor) {
+		public void accept(Visitor visitor, SymbolTable ST) {
 			// TODO Auto-generated method stub
-			return visitor.visit(this);
+			visitor.visit(this, ST);
 		}
 }

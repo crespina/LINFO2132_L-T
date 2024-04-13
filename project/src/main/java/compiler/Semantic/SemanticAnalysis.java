@@ -9,8 +9,9 @@ public class SemanticAnalysis {
 
     Parser parser;
     ArrayList<Statement> statements;
-    SymbolTableVisitor symbolVisitor = new SymbolTableVisitor();
-    SemanticVisitor semanticVisitor = new SemanticVisitor();
+    Visitor symbolVisitor = new SymbolTableVisitor();
+    Visitor semanticVisitor = new SemanticVisitor();
+    SymbolTable st = new SymbolTable(null);
 
     public SemanticAnalysis(Parser parser) throws ParserException{
         this.parser = parser;
@@ -23,11 +24,20 @@ public class SemanticAnalysis {
 
     public void setSymbolTable() {
         for (Statement s : statements) {
-            s.accept(symbolVisitor);
+            try {
+				s.accept(symbolVisitor, st);
+			} catch (SemanticException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
         }
     }
+    
+    public SymbolTable getSt() {
+		return st;
+	}
 
-    public void doSemanticAnalysis() {
+	public void doSemanticAnalysis() {
 
     }
 }

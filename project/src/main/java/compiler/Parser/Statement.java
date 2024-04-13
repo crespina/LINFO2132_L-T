@@ -12,6 +12,4 @@ public abstract class Statement implements Visitable {
     public abstract String toString();
 
     public abstract boolean equals(Object obj);
-    
-    public abstract ArrayList<Type> accept(Visitor visitor);
 }

@@ -26,6 +26,23 @@ public class Param extends Statement implements Visitable{
 		return "Param : " + "type = " + type +  ", name = " + name;
 	}
 	
+	
+	public Type getType() {
+		return type;
+	}
+
+	public void setType(Type type) {
+		this.type = type;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -39,9 +56,9 @@ public class Param extends Statement implements Visitable{
 	}
 
 	@Override
-	public ArrayList<Type> accept(Visitor visitor) {
+	public void accept(Visitor visitor, SymbolTable ST) {
 		// TODO Auto-generated method stub
-		return visitor.visit(this);
+		visitor.visit(this, ST);
 	}
 	
 	

@@ -22,8 +22,34 @@ public class WhileLoop extends Statement implements Visitable{
 		this.condition = condition;
         this.body = body;
 	}
+	
+	
 
-    public String toString() {
+    public Operation getCondition() {
+		return condition;
+	}
+
+
+
+	public void setCondition(Operation condition) {
+		this.condition = condition;
+	}
+
+
+
+	public ArrayList<Statement> getBody() {
+		return body;
+	}
+
+
+
+	public void setBody(ArrayList<Statement> body) {
+		this.body = body;
+	}
+
+
+
+	public String toString() {
 		return "WhileLoop : " + "condition = " + condition + ", body = " + body;
 	}
 
@@ -33,8 +59,8 @@ public class WhileLoop extends Statement implements Visitable{
 	}
 
 	@Override
-	public ArrayList<Type> accept(Visitor visitor) {
+	public void accept(Visitor visitor, SymbolTable ST) {
 		// TODO Auto-generated method stub
-		return visitor.visit(this);
+		visitor.visit(this, ST);
 	}
 }

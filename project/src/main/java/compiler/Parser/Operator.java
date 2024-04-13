@@ -21,6 +21,20 @@ public class Operator extends Statement implements Visitable{
 		this.operation = operation;
 	}
 	
+	
+	
+	public String getOperation() {
+		return operation;
+	}
+
+
+
+	public void setOperation(String operation) {
+		this.operation = operation;
+	}
+
+
+
 	public String toString() {
 		return "operation : " + operation;
 	}
@@ -38,9 +52,9 @@ public class Operator extends Statement implements Visitable{
 	}
 
 	@Override
-	public ArrayList<Type> accept(Visitor visitor) {
+	public void accept(Visitor visitor, SymbolTable ST) {
 		// TODO Auto-generated method stub
-		return visitor.visit(this);
+		visitor.visit(this, ST);
 	}
 
 	

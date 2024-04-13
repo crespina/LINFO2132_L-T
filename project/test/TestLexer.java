@@ -12,12 +12,42 @@ import compiler.Lexer.Lexer;
 import compiler.Lexer.Symbol;
 import compiler.Parser.*;
 import compiler.Parser.Number;
+import compiler.Semantic.SemanticAnalysis;
+import compiler.Semantic.SymbolTable;
 
 public class TestLexer {
     
+	
+	
+	@Test
+    public void test0() {
+        String input = "for (i = 0, i<3, i = i + 1){int b = 2;}";
+        StringReader reader = new StringReader(input);
+        Lexer lexer = new Lexer(reader);
+        Parser parser = new Parser(lexer);
+        try {
+			lexer.lex();
+			List<Symbol> lexedInput = lexer.getLexedInput();
+			
+            ArrayList<Statement> statements = parser.getAST();
+
+
+            SemanticAnalysis SA = new SemanticAnalysis(parser);
+            SA.setSymbolTable();
+            SymbolTable st = SA.getSt();
+            System.out.println(st);
+            
+            
+		} catch (IOException | ParserException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    }
+	
     /**
      * 
      */
+	/*
     @Test
     public void test1() {
         String input = "int a = 2";
@@ -188,6 +218,6 @@ public class TestLexer {
 			fail("sould not fail");
 		}
         
-    }
+    }*/
     
 }

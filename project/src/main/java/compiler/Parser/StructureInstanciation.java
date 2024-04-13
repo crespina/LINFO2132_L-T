@@ -28,6 +28,43 @@ public class StructureInstanciation extends Statement implements Visitable{
 	}
 	
 	
+	
+	public String getStructName() {
+		return structName;
+	}
+
+
+
+	public void setStructName(String structName) {
+		this.structName = structName;
+	}
+
+
+
+	public String getInstanceName() {
+		return instanceName;
+	}
+
+
+
+	public void setInstanceName(String instanceName) {
+		this.instanceName = instanceName;
+	}
+
+
+
+	public ArrayList<Statement> getStatements() {
+		return statements;
+	}
+
+
+
+	public void setStatements(ArrayList<Statement> statements) {
+		this.statements = statements;
+	}
+
+
+
 	public String toString() {
 		return "StructureInstanciation : " + "structName = " + structName + ", instanceName = " + instanceName + ", parameters = " + statements;
 	}
@@ -40,9 +77,9 @@ public class StructureInstanciation extends Statement implements Visitable{
 
 
 	@Override
-	public ArrayList<Type> accept(Visitor visitor) {
+	public void accept(Visitor visitor, SymbolTable ST) {
 		// TODO Auto-generated method stub
-		return visitor.visit(this);
+		visitor.visit(this, ST);
 	}
 	
 

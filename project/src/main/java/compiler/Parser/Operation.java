@@ -67,13 +67,55 @@ public class Operation extends Statement implements Visitable{
 		this.op2 = op2;
 	}
 
+	
+	
+
+	public Operand getOperand1() {
+		return operand1;
+	}
+
+	public void setOperand1(Operand operand1) {
+		this.operand1 = operand1;
+	}
+
+	public Operator getOperation() {
+		return operation;
+	}
+
+	public void setOperation(Operator operation) {
+		this.operation = operation;
+	}
+
+	public Operand getOperand2() {
+		return operand2;
+	}
+
+	public void setOperand2(Operand operand2) {
+		this.operand2 = operand2;
+	}
+
+	public Operation getOp1() {
+		return op1;
+	}
+
+	public void setOp1(Operation op1) {
+		this.op1 = op1;
+	}
+
+	public Operation getOp2() {
+		return op2;
+	}
+
+	public void setOp2(Operation op2) {
+		this.op2 = op2;
+	}
 
 	@Override
 	public String toString() {
-		return "Operation [" + (operand2 != null ? "operand2=" + operand2 + ", " : "")
-				+ (operation != null ? "operation=" + operation + ", " : "")
-				+ (operand1 != null ? "operand1=" + operand1 + ", " : "") + (op2 != null ? "op1=" + op2 + ", " : "")
-				+ (op1 != null ? "op2=" + op1 : "") + "]";
+		return "Operation [" + (operand1 != null ? "operand1=" + operand1 + ", " : "")
+				+ (operation != null ? " operation= " + operation + ", " : "")
+				+ (operand2 != null ? " operand2= " + operand2 + ", " : "") + (op2 != null ? "op1=" + op1 + ", " : "")
+				+ (op1 != null ? "op2=" + op2 : "") + "]";
 	}
 
 	public boolean equals (Object o) {
@@ -83,9 +125,9 @@ public class Operation extends Statement implements Visitable{
 	}
 
 	@Override
-	public ArrayList<Type> accept(Visitor visitor) {
+	public void accept(Visitor visitor, SymbolTable ST) {
 		// TODO Auto-generated method stub
-		return visitor.visit(this);
+		visitor.visit(this, ST);
 	}
 
 }

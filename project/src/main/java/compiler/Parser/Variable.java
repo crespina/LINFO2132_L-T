@@ -24,6 +24,32 @@ public class Variable extends Statement implements Visitable{
 		this.value = value;
 	}
 	
+	
+	
+	public String getVarName() {
+		return varName;
+	}
+
+
+
+	public void setVarName(String varName) {
+		this.varName = varName;
+	}
+
+
+
+	public Object getValue() {
+		return value;
+	}
+
+
+
+	public void setValue(Object value) {
+		this.value = value;
+	}
+
+
+
 	public String toString() {
 		return "Variable : " + ", varName = " + varName + ", type = " + value;
 	}
@@ -34,9 +60,9 @@ public class Variable extends Statement implements Visitable{
 	}
 
 	@Override
-	public ArrayList<Type> accept(Visitor visitor) {
+	public void accept(Visitor visitor, SymbolTable ST) {
 		// TODO Auto-generated method stub
-		return visitor.visit(this);
+		visitor.visit(this, ST);
 	}
 
 }

@@ -27,6 +27,31 @@ public class Operand extends Statement implements Visitable{
 	}
 
 	
+	
+	public String getType() {
+		return type;
+	}
+
+
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
+
+
+	public Object getValue() {
+		return value;
+	}
+
+
+
+	public void setValue(Object value) {
+		this.value = value;
+	}
+
+
+
 	public String toString() {
 		return "Operand : " + type + ", value = " + value;
 	}
@@ -46,9 +71,9 @@ public class Operand extends Statement implements Visitable{
 
 
 	@Override
-	public ArrayList<Type> accept(Visitor visitor) {
+	public void accept(Visitor visitor, SymbolTable ST) {
 		// TODO Auto-generated method stub
-		return visitor.visit(this);
+		visitor.visit(this, ST);
 	}
 
 }

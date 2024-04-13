@@ -9,6 +9,8 @@ import java.util.Objects;
  *
  */
 public class ArrayAccess extends Statement implements Visitable{
+	
+	//e.g a[4]
 
 	String array;
 	Statement index;
@@ -34,9 +36,8 @@ public class ArrayAccess extends Statement implements Visitable{
 	}
 
 	@Override
-	public ArrayList<Type> accept(Visitor visitor) {
-		return visitor.visit(this);	
-		//array.accept(visitor);
-		//index.accept(visitor);
+	public void accept(Visitor visitor, SymbolTable ST) {
+		// TODO Auto-generated method stub
+		visitor.visit(this, ST);
 	}
 }

@@ -28,6 +28,56 @@ public class Method extends Statement implements Visitable{
 		this.parameters = parameters;
 		this.body = body;
 	}
+	
+	
+
+	public String getIdentifier() {
+		return identifier;
+	}
+
+
+
+	public void setIdentifier(String identifier) {
+		this.identifier = identifier;
+	}
+
+
+
+	public Type getReturnType() {
+		return returnType;
+	}
+
+
+
+	public void setReturnType(Type returnType) {
+		this.returnType = returnType;
+	}
+
+
+
+	public ArrayList<Param> getParameters() {
+		return parameters;
+	}
+
+
+
+	public void setParameters(ArrayList<Param> parameters) {
+		this.parameters = parameters;
+	}
+
+
+
+	public ArrayList<Statement> getBody() {
+		return body;
+	}
+
+
+
+	public void setBody(ArrayList<Statement> body) {
+		this.body = body;
+	}
+
+
 
 	public String toString() {
 		return "Method : " + "ReturnType = " + returnType + ", identifier = " + identifier + ", parameters = " + parameters + ", body = " + body;
@@ -40,9 +90,9 @@ public class Method extends Statement implements Visitable{
 	}
 
 	@Override
-	public ArrayList<Type> accept(Visitor visitor) {
+	public void accept(Visitor visitor, SymbolTable ST) {
 		// TODO Auto-generated method stub
-		return visitor.visit(this);
+		visitor.visit(this, ST);
 	}
 	
 }

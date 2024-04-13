@@ -23,6 +23,32 @@ public class Structure extends Statement implements Visitable{
 		this.body = body;
 	}
 	
+	
+	
+	public String getName() {
+		return name;
+	}
+
+
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+
+
+	public ArrayList<Statement> getBody() {
+		return body;
+	}
+
+
+
+	public void setBody(ArrayList<Statement> body) {
+		this.body = body;
+	}
+
+
+
 	public String toString() {
 		return "Structure : " + "name = " + name + ", body = " + body;
 	}
@@ -33,8 +59,9 @@ public class Structure extends Statement implements Visitable{
 	}
 
 	@Override
-	public ArrayList<Type> accept(Visitor visitor) {
-		return visitor.visit(this);
+	public void accept(Visitor visitor, SymbolTable ST) {
+		// TODO Auto-generated method stub
+		visitor.visit(this, ST);
 	}
 
 }

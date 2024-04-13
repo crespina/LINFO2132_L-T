@@ -30,6 +30,56 @@ public class VariableCreation extends Statement implements Visitable{
 		this.statement = statement;
 	}
 	
+	
+	
+	public Boolean getIsFinal() {
+		return isFinal;
+	}
+
+
+
+	public void setIsFinal(Boolean isFinal) {
+		this.isFinal = isFinal;
+	}
+
+
+
+	public Type getType() {
+		return type;
+	}
+
+
+
+	public void setType(Type type) {
+		this.type = type;
+	}
+
+
+
+	public String getIdentifier() {
+		return identifier;
+	}
+
+
+
+	public void setIdentifier(String identifier) {
+		this.identifier = identifier;
+	}
+
+
+
+	public Statement getStatement() {
+		return statement;
+	}
+
+
+
+	public void setStatement(Statement statement) {
+		this.statement = statement;
+	}
+
+
+
 	public String toString() {
 		return "VarCreation : " + "isFinal = " + isFinal + " " + type + ", identifier = " + identifier + ", statement = " + statement;
 	}
@@ -41,9 +91,9 @@ public class VariableCreation extends Statement implements Visitable{
 	}
 
 	@Override
-	public ArrayList<Type> accept(Visitor visitor) {
+	public void accept(Visitor visitor, SymbolTable ST) {
 		// TODO Auto-generated method stub
-		return visitor.visit(this);
+		visitor.visit(this, ST);
 	}
 
 }

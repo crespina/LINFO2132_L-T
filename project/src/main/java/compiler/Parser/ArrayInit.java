@@ -9,11 +9,14 @@ import java.util.Objects;
  *
  */
 public class ArrayInit extends Statement implements Visitable{
+	
+	// e.g. : int[] c = int[5];
+	//the arrayInit is the left part
     
     String keyword;
     ArrayList<Statement> values;
 
-    /**
+	/**
 	 * @param keyword 
 	 * @param values
 	 */
@@ -21,6 +24,22 @@ public class ArrayInit extends Statement implements Visitable{
 		super();
         this.keyword = keyword;
         this.values = values;
+	}
+    
+    public String getKeyword() {
+		return keyword;
+	}
+
+    public void setKeyword(String keyword) {
+		this.keyword = keyword;
+	}
+
+    public ArrayList<Statement> getValues() {
+		return values;
+	}
+
+    public void setValues(ArrayList<Statement> values) {
+		this.values = values;
 	}
 
     public String toString() {
@@ -33,8 +52,8 @@ public class ArrayInit extends Statement implements Visitable{
 	}
 
 	@Override
-	public ArrayList<Type> accept(Visitor visitor) {
+	public void accept(Visitor visitor, SymbolTable ST) {
 		// TODO Auto-generated method stub
-		return visitor.visit(this);
+		visitor.visit(this, ST);
 	}
 }
