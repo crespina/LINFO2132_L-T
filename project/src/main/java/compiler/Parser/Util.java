@@ -396,9 +396,9 @@ public class Util {
 		Symbol lookahead = lexedInput.get(curIndex);
 		Symbol lookahead2 = lexedInput.get(curIndex+1);
 		
-		//System.out.println(lookahead.getAttribute());
+	    //System.out.println(lookahead.getAttribute());
 		//System.out.println(lookahead.getToken());
-		
+		//System.out.println();
 		//System.out.println(curIndex);
 		
 		if (lookahead.getToken().equals("Semicolon") || lookahead.getToken().equals("Comma")) {
@@ -438,6 +438,13 @@ public class Util {
 		}
 		else {
 			int index = curIndex;
+			if(lookahead2.getAttribute() != null) {
+				if( (lookahead.getToken().equals("Identifier")) & (lookahead2.getAttribute().equals("=")) ) {
+					// Variable assign
+					return parseVariableAssign();
+				}
+			}
+			
 			try {
 				Statement s = parseOperations();
 				return s;
@@ -466,14 +473,14 @@ public class Util {
 						return parseArrayAccess();
 					}								
 				}
-				else if(operators.contains(lookahead2.getAttribute()) && !lookahead2.getAttribute().equals("=")) {
+				else if((operators.contains(lookahead2.getAttribute())) && (lookahead2.getAttribute() != null) && (!lookahead2.getAttribute().equals("="))) {
 					// identifier operation
 					return parseOperations();
-				}
+				} 
 				else {
-					// Variable assign
-					return parseVariableAssign();
+					return parseOperand();
 				}
+				
 			}
 			else if(lookahead.getToken().equals("Number")) {
 			 
@@ -602,15 +609,16 @@ public class Util {
 	 * @throws ParserException
 	 */
 	public static Variable parseVariableAssign() throws ParserException {
-		int startIndex = curIndex;
+		
 		String identifier = Util.match("Identifier", null).getAttribute(); //can also be table access
+		int startIndex = curIndex;
 		try {
 			Util.match("Operation", new ArrayList<>(List.of("=")));
 			try {
 				Operation operation = parseOperations();
 				return new Variable(identifier, operation);
 			} catch (ParserException e) {
-				curIndex = startIndex ;
+				curIndex = startIndex +1 ;
 				Operand operand = parseOperand();
 				return new Variable(identifier, operand);
 			}

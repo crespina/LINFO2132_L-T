@@ -12,7 +12,7 @@ import java.util.HashMap;
 public class Variable extends Statement implements TableVisitable{
 	
 	String varName;
-	Object value;
+	Statement value;
 	
 	//e.g. a = 3
 	
@@ -20,7 +20,7 @@ public class Variable extends Statement implements TableVisitable{
 	 * @param varName
 	 * @param value
 	 */
-	public Variable(String varName, Object value) {
+	public Variable(String varName, Statement value) {
 		super();
 		this.varName = varName;
 		this.value = value;
@@ -46,7 +46,7 @@ public class Variable extends Statement implements TableVisitable{
 
 
 
-	public void setValue(Object value) {
+	public void setValue(Statement value) {
 		this.value = value;
 	}
 

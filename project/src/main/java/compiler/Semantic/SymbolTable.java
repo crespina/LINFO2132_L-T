@@ -46,6 +46,10 @@ public class SymbolTable {
     public void addScope(String identifier, SymbolTable st) {
     	scopes.put(identifier,st);
     }
+    
+    public void addAll(SymbolTable other) {
+    	this.entries.putAll(other.entries); //this will contain all from other
+    }
 
 	@Override
 	public String toString() {

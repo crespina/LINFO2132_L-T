@@ -62,6 +62,7 @@ public class SymbolTableVisitor implements TableVisitor {
 		ArrayList<Statement> elseBody = ic.getElseBody();
 		
 		SymbolTable newst = new SymbolTable();
+		newst.addAll(st);
 		
 		
 		for (Statement stmt : body) {
@@ -108,7 +109,7 @@ public class SymbolTableVisitor implements TableVisitor {
 		ArrayList<Statement> body = m.getBody();
 
 		SymbolTable newst = new SymbolTable();
-		
+		newst.addAll(st);
 		
 		for (Statement stmt : body) {
 			try {
@@ -208,6 +209,7 @@ public class SymbolTableVisitor implements TableVisitor {
 	public void visit(Variable v, SymbolTable st) {
 		// TODO Auto-generated method stub
 		if (!st.contains(v.getVarName())) {
+			System.out.println(v.getVarName());
 			System.out.println("exit");
 			System.exit(6);
 		}

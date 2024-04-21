@@ -16,12 +16,25 @@ import compiler.Semantic.SemanticAnalysis;
 import compiler.Semantic.SymbolTable;
 
 public class TestLexer {
-    
-	
 	
 	@Test
     public void test0() {
-        String input = "a = 3";
+        String input = 
+        		" int value = 3" +
+        		 "    writeln(square(value));"
+        		+ "    int i;"
+        		+ "    for (i=1, i<100, i = i+1) {"
+        		+ "        while (value!=3) {"
+        		+ "            if (i > 10){"
+        		+ "                i = 2;"
+        		+ "            } else {"
+        		+ "                 i = 3; "
+        		+ "            }"
+        		+ "        }"
+        		+ "    }"
+        		+ "    "
+        		+ "    i = (i+2)*2;"
+        		+ "} ";
         StringReader reader = new StringReader(input);
         Lexer lexer = new Lexer(reader);
         Parser parser = new Parser(lexer);
@@ -30,10 +43,6 @@ public class TestLexer {
 			List<Symbol> lexedInput = lexer.getLexedInput();
 			
             ArrayList<Statement> statements = parser.getAST();
-            for (Statement stm : statements) {
-            	System.out.println(stm);
-            }
-
 
             SemanticAnalysis SA = new SemanticAnalysis(parser);
             SA.setSymbolTable();
