@@ -38,6 +38,22 @@ public class SemanticVisitor implements TypeCheckVisitor{
 	@Override
 	public Type TypeCheck(ArrayInit ai, SymbolTable st) throws SemanticException{
 		// TODO Auto-generated method stub
+		//int[] a = int[3] -> right part
+		
+		String keyword = ai.getKeyword();
+		ArrayList<Statement> values = ai.getValues();
+		Type t = null;
+		for (Statement s : values) {
+			t = s.acceptTypeCheck(this, st);
+		}
+		
+		if ((t == null) || (!t.equals(new Type("int")))) {
+			System.out.println("the length of the array isnt an int");
+			System.exit(1); //to be modified with correct number
+		}
+		
+		return new Type(keyword);
+		
 		
 	}
 
