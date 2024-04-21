@@ -6,22 +6,17 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class SymbolTable {
-    SymbolTable previous;
     HashMap<String, ArrayList<Type>> entries = new HashMap<>();
     HashMap<String, ArrayList<Type>> structures = new HashMap<String, ArrayList<Type>>();
+    HashMap<String,SymbolTable> scopes = new HashMap<String,SymbolTable>();
 
-    public SymbolTable(SymbolTable previous) {
-        this.previous = previous;
+    public SymbolTable() {
     }
 
     public HashMap<String, ArrayList<Type>> getTable() {
         return entries;
     }
 
-    public SymbolTable getPrevious() {
-        return previous;
-    }
-    
     public void addEntry(String id, ArrayList<Type> types) {
     	entries.put(id, types);   
     }
@@ -47,16 +42,16 @@ public class SymbolTable {
             return false;
         }
     }
-
+    
+    public void addScope(String identifier, SymbolTable st) {
+    	scopes.put(identifier,st);
+    }
 
 	@Override
 	public String toString() {
-		return "SymbolTable [" + (previous != null ? "previous=" + previous + ", " : "")
-				+ (entries != null ? "entries=" + entries + ", " : "")
-				+ (structures != null ? "structures=" + structures : "") + "]";
+		return "SymbolTable [" + (entries != null ? "entries=" + entries + ", " : "")
+				+ (structures != null ? "structures=" + structures + ", " : "")
+				+ (scopes != null ? "scopes=" + scopes : "") + "]";
 	}
 
-	
-    
-    
 }

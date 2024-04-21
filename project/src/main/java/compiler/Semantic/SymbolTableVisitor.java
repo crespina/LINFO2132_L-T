@@ -61,25 +61,32 @@ public class SymbolTableVisitor implements Visitor {
 		Boolean isElse = ic.getIsElse();
 		ArrayList<Statement> elseBody = ic.getElseBody();
 		
+		SymbolTable newst = new SymbolTable();
+		
+		
 		for (Statement stmt : body) {
 			try {
-				stmt.accept(this, st);
+				stmt.accept(this, newst);
 			} catch (SemanticException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
 		
+		st.addScope("if",newst);
+		
 		if (isElse) {
 			for (Statement stmt : elseBody) {
 				try {
-					stmt.accept(this, st);
+					stmt.accept(this, newst);
 				} catch (SemanticException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
 		}
+		
+		st.addScope("else",newst);
 
 	}
 
@@ -99,15 +106,19 @@ public class SymbolTableVisitor implements Visitor {
 		st.addEntry(identifier, paramsTypes);
 		
 		ArrayList<Statement> body = m.getBody();
+
+		SymbolTable newst = new SymbolTable();
+		
 		
 		for (Statement stmt : body) {
 			try {
-				stmt.accept(this, st);
+				stmt.accept(this, newst);
 			} catch (SemanticException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
+		st.addScope(identifier,newst);
 	}
 
 	@Override
@@ -158,6 +169,9 @@ public class SymbolTableVisitor implements Visitor {
 		
 		String identifier = s.getName();
 		ArrayList <Type> params = new ArrayList<>();
+		
+		
+		
 		
 		for (Statement stmt : s.getBody()) {
 			VariableCreation vc = (VariableCreation) stmt;
@@ -212,10 +226,9 @@ public class SymbolTableVisitor implements Visitor {
 	public void visit(WhileLoop wl, SymbolTable st) {
 		
 		ArrayList<Statement> body = wl.getBody();
-		SymbolTable newst = new SymbolTable(st);
 		for (Statement stmt : body) {
 			try {
-				stmt.accept(this, newst);
+				stmt.accept(this, st);
 			} catch (SemanticException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

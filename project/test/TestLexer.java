@@ -22,12 +22,14 @@ public class TestLexer {
 	@Test
     public void test0() {
         String input = "int i;"
-        		+ "for (i=0,i<10,i=i+1){"
-        		+ "int b = 1"
+        		+ "def void test(int b){"
+        		+ "int a = 3;"
+        		+ "if(a>3){"
+        		+ "int j=1"
         		+ "}"
-        		+ "struct Person {"
-        		+ "int h;"
-        		+ "int w;"
+        		+ "else {"
+        		+ "int x=1"
+        		+ "}"
         		+ "}";
         StringReader reader = new StringReader(input);
         Lexer lexer = new Lexer(reader);

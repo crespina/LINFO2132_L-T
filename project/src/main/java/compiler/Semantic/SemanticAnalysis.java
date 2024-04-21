@@ -13,7 +13,7 @@ public class SemanticAnalysis {
     ArrayList<Statement> statements;
     Visitor symbolVisitor = new SymbolTableVisitor();
     Visitor semanticVisitor = new SemanticVisitor();
-    SymbolTable st = new SymbolTable(null);
+    SymbolTable st = new SymbolTable();
 
     /**
      * @param parser
