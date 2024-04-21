@@ -14,6 +14,7 @@ public class SemanticVisitor implements TypeCheckVisitor{
 	@Override
 	public Type TypeCheck(ArrayAccess arrayAccess, SymbolTable st) throws SemanticException{
 		// TODO Auto-generated method stub
+		//e.g. a[3]
 		Statement index = arrayAccess.getIndex();
 		Type index_type = index.acceptTypeCheck(this, st);
 		if (!index_type.equals(new Type("int"))) {
@@ -27,6 +28,9 @@ public class SemanticVisitor implements TypeCheckVisitor{
 			System.out.println("the array we want to access is not in the ST");
 			System.exit(1); //to be modified with correct number
 		}
+		
+		Type typeOfArray = types.get(0);
+		return typeOfArray;
 		
 		
 	}

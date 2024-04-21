@@ -29,6 +29,10 @@ public class TestLexer {
 			List<Symbol> lexedInput = lexer.getLexedInput();
 			
             ArrayList<Statement> statements = parser.getAST();
+            
+            for (Statement stm : statements) {
+            	System.out.println(stm);
+            }
 
             SemanticAnalysis SA = new SemanticAnalysis(parser);
             SA.setSymbolTable();
