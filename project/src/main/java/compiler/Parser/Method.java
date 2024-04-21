@@ -3,7 +3,7 @@ package compiler.Parser;
 import compiler.Semantic.*;
 import java.util.Objects;
 import java.util.ArrayList;
-
+import java.util.HashMap;
 /**
  * @author A. Crespin & R. De Oliveira
  *
@@ -89,10 +89,14 @@ public class Method extends Statement implements Visitable{
 			&& Objects.equals(this.parameters, method.parameters) && Objects.equals(this.body, method.body);
 	}
 
+	public Type getType() {
+		return new Type("Method");
+	}
+
 	@Override
-	public void accept(Visitor visitor, SymbolTable ST) {
+	public void accept(Visitor visitor, SymbolTable ST, HashMap <String, ArrayList<Param>> funcT) throws SemanticException{
 		// TODO Auto-generated method stub
-		visitor.visit(this, ST);
+		visitor.visit(this, new SymbolTable(ST), funcT);
 	}
 	
 }

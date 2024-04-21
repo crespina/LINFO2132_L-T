@@ -3,6 +3,7 @@ package compiler.Parser;
 import compiler.Semantic.*;
 import java.util.ArrayList;
 import java.util.Objects;
+import java.util.HashMap;
 
 /**
  * @author A. Crespin & R. De Oliveira
@@ -23,6 +24,10 @@ public class FunctionCall extends Statement implements Visitable{
 		this.functionName = functionName;
 		this.params = params;
 	}
+
+	public String getFunctionName() {
+		return functionName;
+	}
 	
 	public String toString() {
 		return "FunctionCall : " + " functionName = " + functionName + ", parameters = " + params;
@@ -33,10 +38,14 @@ public class FunctionCall extends Statement implements Visitable{
 		return Objects.equals(this.functionName, function.functionName) && Objects.equals(this.params, function.params);
 	}
 
+	public Type getType() {
+		return new Type("FunctionCall");
+	}
+
 	@Override
-	public void accept(Visitor visitor, SymbolTable ST) {
+	public void accept(Visitor visitor, SymbolTable ST, HashMap <String, ArrayList<Param>> funcT) throws SemanticException{
 		// TODO Auto-generated method stub
-		visitor.visit(this, ST);
+		visitor.visit(this, ST, funcT);
 	}
 
 }

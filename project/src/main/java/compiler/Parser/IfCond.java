@@ -2,6 +2,7 @@ package compiler.Parser;
 
 import compiler.Semantic.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Objects;
 
 /**
@@ -103,9 +104,13 @@ public class IfCond extends Statement implements Visitable{
             && Objects.equals(this.isElse, ifCond.isElse) && Objects.equals(this.elseBody, ifCond.elseBody);
 	}
 
+	public Type getType() {
+		return new Type("IfCond");
+	}
+
 	@Override
-	public void accept(Visitor visitor, SymbolTable ST) {
+	public void accept(Visitor visitor, SymbolTable ST, HashMap <String, ArrayList<Param>> funcT) throws SemanticException{
 		// TODO Auto-generated method stub
-		visitor.visit(this, ST);
+		visitor.visit(this, ST, funcT);
 	}
 }

@@ -1,8 +1,9 @@
 package compiler.Parser;
 
 import compiler.Semantic.*;
-import java.util.ArrayList;
 import java.util.Objects;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * @author Crespin
@@ -16,6 +17,7 @@ public class Operation extends Statement implements Visitable{
 	Operand operand2; 
 	Operation op1;
 	Operation op2;
+	Type valueType = null;
 	
 	/**
 	 * @param operand1
@@ -124,10 +126,22 @@ public class Operation extends Statement implements Visitable{
 			&& Objects.equals(this.operation, oper.operation) && Objects.equals(this.op1, oper.op1) && Objects.equals(this.op2, oper.op2);
 	}
 
+	public void setVType(Type t) {
+		this.valueType = t;
+	}
+
+	public Type getVType() {
+		return valueType;
+	}
+
+	public Type getType() {
+		return new Type("Operation");
+	}
+
 	@Override
-	public void accept(Visitor visitor, SymbolTable ST) {
+	public void accept(Visitor visitor, SymbolTable ST, HashMap <String, ArrayList<Param>> funcT) throws SemanticException{
 		// TODO Auto-generated method stub
-		visitor.visit(this, ST);
+		visitor.visit(this, ST, funcT);
 	}
 
 }

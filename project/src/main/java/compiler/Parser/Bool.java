@@ -1,8 +1,9 @@
 package compiler.Parser;
 
 import compiler.Semantic.*;
-import java.util.ArrayList;
 import java.util.Objects;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * @author A. Crespin & R. De Oliveira
@@ -31,11 +32,14 @@ public class Bool extends Statement implements Visitable{
 		return Objects.equals(this.content, b.content);
     }
 
+    public Type getType() {
+		return new Type("Bool");
+	}
 
 	@Override
-	public void accept(Visitor visitor, SymbolTable ST) {
+	public void accept(Visitor visitor, SymbolTable ST, HashMap <String, ArrayList<Param>> funcT) throws SemanticException{
 		// TODO Auto-generated method stub
-		visitor.visit(this, ST);
+		visitor.visit(this, ST, funcT);
 	}
 
 

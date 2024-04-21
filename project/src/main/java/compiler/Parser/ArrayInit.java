@@ -3,6 +3,7 @@ package compiler.Parser;
 import compiler.Semantic.*;
 import java.util.ArrayList;
 import java.util.Objects;
+import java.util.HashMap;
 
 /**
  * @author A. Crespin & R. De Oliveira
@@ -51,9 +52,13 @@ public class ArrayInit extends Statement implements Visitable{
 		return Objects.equals(this.keyword, arr.keyword) && Objects.equals(this.values, arr.values);
 	}
 
+	public Type getType() {
+		return new Type("ArrayInit");
+	}
+
 	@Override
-	public void accept(Visitor visitor, SymbolTable ST) {
+	public void accept(Visitor visitor, SymbolTable ST, HashMap <String, ArrayList<Param>> funcT) throws SemanticException{
 		// TODO Auto-generated method stub
-		visitor.visit(this, ST);
+		visitor.visit(this, ST, funcT);
 	}
 }

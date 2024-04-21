@@ -7,14 +7,14 @@ import java.util.HashMap;
 
 public class SymbolTable {
     SymbolTable previous;
-    HashMap<String, Tuple> entries = new HashMap<>();
+    HashMap<String, Type> entries = new HashMap<>();
     ArrayList<String> structures = new ArrayList<String>();
 
     public SymbolTable(SymbolTable previous) {
         this.previous = previous;
     }
 
-    public HashMap<String, Tuple> getTable() {
+    public HashMap<String, Type> getTable() {
         return entries;
     }
 
@@ -22,13 +22,32 @@ public class SymbolTable {
         return previous;
     }
     
-    public void addEntry(String id, Tuple types) {
-    	entries.put(id, types);   
+    public void addEntry(String id, Type type) {
+    	entries.put(id, type);   
     }
     
     public void addStructure(String name) {
     	structures.add(name);
     }
+
+    public Type get(String identifier) {
+        if(entries.containsKey(identifier)) {
+            return entries.get(identifier);
+        }
+        else {
+            return new Type(null);
+        }
+    }
+
+    public Boolean contains(String identifier) {
+        if(entries.containsKey(identifier)) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
 
 	@Override
 	public String toString() {

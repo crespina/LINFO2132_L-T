@@ -2,6 +2,7 @@ package compiler.Parser;
 
 import compiler.Semantic.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Objects;
 
 /**
@@ -58,9 +59,13 @@ public class WhileLoop extends Statement implements Visitable{
 		return Objects.equals(this.condition, whileLoop.condition) && Objects.equals(this.body, whileLoop.body);
 	}
 
+	public Type getType() {
+		return new Type("WhileLoop");
+	}
+
 	@Override
-	public void accept(Visitor visitor, SymbolTable ST) {
+	public void accept(Visitor visitor, SymbolTable ST, HashMap <String, ArrayList<Param>> funcT) throws SemanticException{
 		// TODO Auto-generated method stub
-		visitor.visit(this, ST);
+		visitor.visit(this, ST, funcT);
 	}
 }

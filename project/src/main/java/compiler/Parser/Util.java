@@ -301,7 +301,7 @@ public class Util {
 					try { //Number
 						curIndex = startIndex;
 						Number floa = Util.parseNumber();
-						return new Operand(floa.type.toString(), floa.value);
+						return new Operand(floa.type.getIdentifier(), floa.value);
 					} catch (ParserException efloat) {
 						try { //bool
 							curIndex = startIndex;

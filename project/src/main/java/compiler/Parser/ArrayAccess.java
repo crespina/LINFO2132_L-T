@@ -1,8 +1,9 @@
 package compiler.Parser;
 
 import compiler.Semantic.*;
-import java.util.ArrayList;
 import java.util.Objects;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * @author A. Crespin & R. De Oliveira
@@ -25,6 +26,10 @@ public class ArrayAccess extends Statement implements Visitable{
 		this.array = array;
 		this.index = index;
 	}
+
+	public String getArray() {
+		return array;
+	}
 	
 	public String toString() {
 		return "ArrayAccess : " + " array = " + array + ", index = " + index ;
@@ -35,9 +40,13 @@ public class ArrayAccess extends Statement implements Visitable{
 		return Objects.equals(this.array, array.array) && Objects.equals(this.index, array.index);
 	}
 
+	public Type getType() {
+		return new Type("ArrayAccess");
+	}
+
 	@Override
-	public void accept(Visitor visitor, SymbolTable ST) {
+	public void accept(Visitor visitor, SymbolTable ST, HashMap <String, ArrayList<Param>> funcT) throws SemanticException{
 		// TODO Auto-generated method stub
-		visitor.visit(this, ST);
+		visitor.visit(this, ST, funcT);
 	}
 }

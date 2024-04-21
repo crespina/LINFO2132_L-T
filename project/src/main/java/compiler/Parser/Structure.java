@@ -2,6 +2,7 @@ package compiler.Parser;
 
 import compiler.Semantic.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Objects;
 
 /**
@@ -58,10 +59,14 @@ public class Structure extends Statement implements Visitable{
 		return Objects.equals(this.name, structure.name) && Objects.equals(this.body, structure.body);
 	}
 
+	public Type getType() {
+		return new Type("Structure");
+	}
+
 	@Override
-	public void accept(Visitor visitor, SymbolTable ST) {
+	public void accept(Visitor visitor, SymbolTable ST, HashMap <String, ArrayList<Param>> funcT) throws SemanticException{
 		// TODO Auto-generated method stub
-		visitor.visit(this, ST);
+		visitor.visit(this, ST, funcT);
 	}
 
 }
