@@ -466,7 +466,7 @@ public class Util {
 						return parseArrayAccess();
 					}								
 				}
-				else if(operators.contains(lookahead2.getAttribute())) {
+				else if(operators.contains(lookahead2.getAttribute()) && !lookahead2.getAttribute().equals("=")) {
 					// identifier operation
 					return parseOperations();
 				}
