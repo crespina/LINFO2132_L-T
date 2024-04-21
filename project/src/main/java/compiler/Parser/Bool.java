@@ -20,6 +20,10 @@ public class Bool extends Statement implements TableVisitable, TypeCheckVisitabl
     public Bool(String content) {
         this.content = content;
     }
+    
+    public String getContent() {
+    	return content;
+    }
 
 
     public String toString() {
@@ -33,7 +37,7 @@ public class Bool extends Statement implements TableVisitable, TypeCheckVisitabl
     }
 
     public Type getType() {
-		return new Type("Bool");
+		return new Type("bool");
 	}
 
 	@Override

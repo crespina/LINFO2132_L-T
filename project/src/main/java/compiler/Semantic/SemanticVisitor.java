@@ -61,12 +61,18 @@ public class SemanticVisitor implements TypeCheckVisitor{
 	public Type TypeCheck(Bool b, SymbolTable st) throws SemanticException{
 		// TODO Auto-generated method stub
 		
+		if (!b.getContent().equals("true") || !b.getContent().equals("false") ) {
+			System.out.println("a boolean must be true or false");
+			System.exit(1);//to be modified with correct number
+		}
+		
+		return b.getType();
 	}
 
 	@Override
 	public Type TypeCheck(Comment c, SymbolTable st) throws SemanticException{
 		// TODO Auto-generated method stub
-		
+		return c.getType();
 	}
 
 	@Override
