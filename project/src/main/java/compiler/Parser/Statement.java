@@ -15,7 +15,7 @@ public abstract class Statement {
 
     public abstract boolean equals(Object obj);
 
-    public abstract Type getType();
-
     public abstract void accept(TableVisitor visitor, SymbolTable symbolTable) throws SemanticException;
+    
+    public abstract Type acceptTypeCheck(TypeCheckVisitor visitor, SymbolTable st) throws SemanticException;
 }

@@ -31,6 +31,10 @@ public class ArrayAccess extends Statement implements TableVisitable, TypeCheckV
 		return array;
 	}
 	
+	public Statement getIndex() {
+		return index;
+	}
+	
 	public String toString() {
 		return "ArrayAccess : " + " array = " + array + ", index = " + index ;
 	}
@@ -51,9 +55,9 @@ public class ArrayAccess extends Statement implements TableVisitable, TypeCheckV
 	}
 
 	@Override
-	public void acceptTypeCheck(TypeCheckVisitor visitor, SymbolTable ST) throws SemanticException {
+	public Type acceptTypeCheck(TypeCheckVisitor visitor, SymbolTable ST) throws SemanticException {
 		// TODO Auto-generated method stub
-		visitor.TypeCheck(this, ST);
+		return visitor.TypeCheck(this, ST);
 	}
 
 }

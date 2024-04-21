@@ -78,6 +78,7 @@ public class Util {
 				Util.match("CloseSquareBraket", null);
 				return new Type((String) identifier.attribute + "[]");
 			} catch (ParserException e) {
+				curIndex--;
 				return new Type((String) identifier.attribute);
 			}	
 		} catch (ParserException e2) {

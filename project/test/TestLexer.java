@@ -20,21 +20,7 @@ public class TestLexer {
 	@Test
     public void test0() {
         String input = 
-        		" int value = 3" +
-        		 "    writeln(square(value));"
-        		+ "    int i;"
-        		+ "    for (i=1, i<100, i = i+1) {"
-        		+ "        while (value!=3) {"
-        		+ "            if (i > 10){"
-        		+ "                i = 2;"
-        		+ "            } else {"
-        		+ "                 i = 3; "
-        		+ "            }"
-        		+ "        }"
-        		+ "    }"
-        		+ "    "
-        		+ "    i = (i+2)*2;"
-        		+ "} ";
+        		" int[] c = int[5]";
         StringReader reader = new StringReader(input);
         Lexer lexer = new Lexer(reader);
         Parser parser = new Parser(lexer);

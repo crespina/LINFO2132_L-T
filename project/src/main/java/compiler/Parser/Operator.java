@@ -65,9 +65,9 @@ public class Operator extends Statement implements TableVisitable, TypeCheckVisi
 
 
 	@Override
-	public void acceptTypeCheck(TypeCheckVisitor visitor, SymbolTable ST) throws SemanticException {
+	public Type acceptTypeCheck(TypeCheckVisitor visitor, SymbolTable ST) throws SemanticException {
 		// TODO Auto-generated method stub
-		visitor.TypeCheck(this, ST);
+		return visitor.TypeCheck(this, ST);
 	}
 
 	
