@@ -9,7 +9,7 @@ import java.util.Objects;
  * @author A. Crespin & R. De Oliveira
  *
  */
-public class Structure extends Statement implements TableVisitable{
+public class Structure extends Statement implements TableVisitable, TypeCheckVisitable{
 	
 	String name;
 	ArrayList<Statement> body;
@@ -67,6 +67,14 @@ public class Structure extends Statement implements TableVisitable{
 	public void accept(TableVisitor visitor, SymbolTable ST) throws SemanticException{
 		// TODO Auto-generated method stub
 		visitor.visit(this, ST);
+	}
+
+
+
+	@Override
+	public void acceptTypeCheck(TypeCheckVisitor visitor, SymbolTable ST) throws SemanticException {
+		// TODO Auto-generated method stub
+		visitor.TypeCheck(this, ST);
 	}
 
 }

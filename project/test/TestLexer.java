@@ -56,6 +56,31 @@ public class TestLexer {
 		}
     }
 	
+	
+	@Test
+    public void test1() {
+        String input = 
+        		 "i = (i+2)*2;";
+        StringReader reader = new StringReader(input);
+        Lexer lexer = new Lexer(reader);
+        Parser parser = new Parser(lexer);
+        try {
+			lexer.lex();
+			List<Symbol> lexedInput = lexer.getLexedInput();
+			
+            ArrayList<Statement> statements = parser.getAST();
+
+            SemanticAnalysis SA = new SemanticAnalysis(parser);
+            SA.setSymbolTable();
+            SymbolTable st = SA.getSt();
+            
+            
+		} catch (IOException | ParserException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    }
+	
     /**
      * 
      */

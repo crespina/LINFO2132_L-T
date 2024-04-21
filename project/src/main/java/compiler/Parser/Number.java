@@ -9,7 +9,7 @@ import java.util.HashMap;
  * @author Crespin
  *
  */
-public class Number extends Statement implements TableVisitable{
+public class Number extends Statement implements TableVisitable, TypeCheckVisitable{
 
 	String value;
 	Type type;
@@ -64,4 +64,12 @@ public class Number extends Statement implements TableVisitable{
 			// TODO Auto-generated method stub
 			visitor.visit(this, ST);
 		}
+
+
+
+	@Override
+	public void acceptTypeCheck(TypeCheckVisitor visitor, SymbolTable ST) throws SemanticException {
+		// TODO Auto-generated method stub
+		visitor.TypeCheck(this, ST);
+	}
 }

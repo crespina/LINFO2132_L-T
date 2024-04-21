@@ -7,42 +7,42 @@ import java.util.List;
 import compiler.Parser.*;
 import compiler.Parser.Number;
 
-public class SemanticVisitor implements Visitor{
+public class SemanticVisitor implements TypeCheckVisitor{
 
 	static String[] comp_operators = new String[]{"==","!=","<",">",">=","<="};
 
 	@Override
-	public void visit(ArrayAccess arrayAccess, SymbolTable st, HashMap <String, ArrayList<Param>> funcT) throws SemanticException{
+	public void TypeCheck(ArrayAccess arrayAccess, SymbolTable st) throws SemanticException{
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void visit(ArrayInit ai, SymbolTable st, HashMap <String, ArrayList<Param>> funcT) throws SemanticException{
+	public void TypeCheck(ArrayInit ai, SymbolTable st) throws SemanticException{
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void visit(Bool b, SymbolTable st, HashMap <String, ArrayList<Param>> funcT) throws SemanticException{
+	public void TypeCheck(Bool b, SymbolTable st) throws SemanticException{
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void visit(Comment c, SymbolTable st, HashMap <String, ArrayList<Param>> funcT) throws SemanticException{
+	public void TypeCheck(Comment c, SymbolTable st) throws SemanticException{
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void visit(ForLoop fl, SymbolTable st, HashMap <String, ArrayList<Param>> funcT) throws SemanticException{
+	public void TypeCheck(ForLoop fl, SymbolTable st) throws SemanticException{
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void visit(FunctionCall fc, SymbolTable st, HashMap <String, ArrayList<Param>> funcT) throws SemanticException{
+	public void TypeCheck(FunctionCall fc, SymbolTable st) throws SemanticException{
 		// TODO Auto-generated method stub
 		if(st.contains(fc.getFunctionName())) {
 			for (Param p : funcT.get(fc.getFunctionName())) {
@@ -53,13 +53,13 @@ public class SemanticVisitor implements Visitor{
 	}
 
 	@Override
-	public void visit(IfCond ic, SymbolTable st, HashMap <String, ArrayList<Param>> funcT) throws SemanticException{
+	public void TypeCheck(IfCond ic, SymbolTable st) throws SemanticException{
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void visit(Method m, SymbolTable st, HashMap <String, ArrayList<Param>> funcT) throws SemanticException{
+	public void TypeCheck(Method m, SymbolTable st) throws SemanticException{
 		for (Param p : m.getParameters()) {
 			st.addEntry(p.getName(), p.getType());
 		}
@@ -91,19 +91,19 @@ public class SemanticVisitor implements Visitor{
 	}
 
 	@Override
-	public void visit(Number n, SymbolTable st, HashMap <String, ArrayList<Param>> funcT) throws SemanticException {
+	public void TypeCheck(Number n, SymbolTable st) throws SemanticException {
 		// Rien a faire
 		
 	}
 
 	@Override
-	public void visit(Operand od, SymbolTable st, HashMap <String, ArrayList<Param>> funcT) throws SemanticException{
+	public void TypeCheck(Operand od, SymbolTable st) throws SemanticException{
 		// Rien a faire
 		
 	}
 
 	@Override
-	public void visit(Operation op, SymbolTable st, HashMap <String, ArrayList<Param>> funcT) throws SemanticException{
+	public void TypeCheck(Operation op, SymbolTable st) throws SemanticException{
 		String type1;
 		Operand ope1;
 		String type2;
@@ -199,43 +199,43 @@ public class SemanticVisitor implements Visitor{
 	}
 
 	@Override
-	public void visit(Operator or, SymbolTable st, HashMap <String, ArrayList<Param>> funcT) throws SemanticException{
+	public void TypeCheck(Operator or, SymbolTable st) throws SemanticException{
 		// Rien a faire 
 		
 	}
 
 	@Override
-	public void visit(Param p, SymbolTable st, HashMap <String, ArrayList<Param>> funcT) throws SemanticException{
+	public void TypeCheck(Param p, SymbolTable st) throws SemanticException{
 		// Rien a faire 
 		
 	}
 
 	@Override
-	public void visit(ReturnStatement rs, SymbolTable st, HashMap <String, ArrayList<Param>> funcT) throws SemanticException{
+	public void TypeCheck(ReturnStatement rs, SymbolTable st) throws SemanticException{
 		// Peut etre check que le type du return est le meme que celui de la methode
 		// JSP trop comment
 		
 	}
 
 	@Override
-	public void visit(StringStmt ss, SymbolTable st, HashMap <String, ArrayList<Param>> funcT) throws SemanticException{
+	public void TypeCheck(StringStmt ss, SymbolTable st) throws SemanticException{
 		// Rien a faire
 	}
 
 	@Override
-	public void visit(Structure s, SymbolTable st, HashMap <String, ArrayList<Param>> funcT) throws SemanticException{
+	public void TypeCheck(Structure s, SymbolTable st) throws SemanticException{
 		
 	}
 
 	@Override
-	public void visit(StructureAccess sa, SymbolTable st, HashMap <String, ArrayList<Param>> funcT) throws SemanticException{
+	public void TypeCheck(StructureAccess sa, SymbolTable st) throws SemanticException{
 		// Check that instance already in the symbol table
 		// Check that param is a param of the structure in the ST
 		
 	}
 
 	@Override
-	public void visit(StructureInstanciation si, SymbolTable st, HashMap <String, ArrayList<Param>> funcT) throws SemanticException{
+	public void TypeCheck(StructureInstanciation si, SymbolTable st) throws SemanticException{
 		// Check that structure name exists in the SymbolTable
 		ArrayList <Statement> statements = si.getStatements();
 		for (Statement s : statements) {
@@ -249,19 +249,19 @@ public class SemanticVisitor implements Visitor{
 	}
 
 	@Override
-	public void visit(Type t, SymbolTable st, HashMap <String, ArrayList<Param>> funcT) throws SemanticException{
+	public void TypeCheck(Type t, SymbolTable st) throws SemanticException{
 		// Rien a faire
 		
 	}
 
 	@Override
-	public void visit(Variable v, SymbolTable st, HashMap <String, ArrayList<Param>> funcT) throws SemanticException{
+	public void TypeCheck(Variable v, SymbolTable st) throws SemanticException{
 		// Check if v.getVarName() is already in the ST
 		
 	}
 
 	@Override
-	public void visit(VariableCreation vc, SymbolTable st, HashMap <String, ArrayList<Param>> funcT) throws SemanticException{
+	public void TypeCheck(VariableCreation vc, SymbolTable st) throws SemanticException{
 		String identifier = vc.getIdentifier();
 		Type type = vc.getType();
 		// Ajout de la variable dans la ST et check si final ou pas
@@ -318,7 +318,7 @@ public class SemanticVisitor implements Visitor{
 	}
 
 	@Override
-	public void visit(WhileLoop wl, SymbolTable st, HashMap <String, ArrayList<Param>> funcT) throws SemanticException{
+	public void TypeCheck(WhileLoop wl, SymbolTable st) throws SemanticException{
 		wl.getCondition().accept(this, st, funcT);
 		ArrayList <Statement> statements = wl.getBody();
 		for (Statement s : statements) {

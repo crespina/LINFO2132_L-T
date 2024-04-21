@@ -10,7 +10,7 @@ import java.util.HashMap;
  *
  */
 
-public class Operand extends Statement implements TableVisitable{
+public class Operand extends Statement implements TableVisitable, TypeCheckVisitable{
 	
 	//accepted types: int float bool string ArrayAccess StructureAccess identifier
 	String type;
@@ -75,6 +75,14 @@ public class Operand extends Statement implements TableVisitable{
 	public void accept(TableVisitor visitor, SymbolTable ST) throws SemanticException{
 		// TODO Auto-generated method stub
 		visitor.visit(this, ST);
+	}
+
+
+
+	@Override
+	public void acceptTypeCheck(TypeCheckVisitor visitor, SymbolTable ST) throws SemanticException {
+		// TODO Auto-generated method stub
+		visitor.TypeCheck(this, ST);
 	}
 
 }

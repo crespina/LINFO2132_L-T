@@ -9,7 +9,7 @@ import java.util.HashMap;
  * @author A. Crespin & R. De Oliveira
  *
  */
-public class FunctionCall extends Statement implements TableVisitable{
+public class FunctionCall extends Statement implements TableVisitable, TypeCheckVisitable{
 	
 	String functionName;
 	ArrayList<Statement> params;
@@ -46,6 +46,12 @@ public class FunctionCall extends Statement implements TableVisitable{
 	public void accept(TableVisitor visitor, SymbolTable ST) throws SemanticException{
 		// TODO Auto-generated method stub
 		visitor.visit(this, ST);
+	}
+
+	@Override
+	public void acceptTypeCheck(TypeCheckVisitor visitor, SymbolTable ST) throws SemanticException {
+		// TODO Auto-generated method stub
+		visitor.TypeCheck(this, ST);
 	}
 
 }
