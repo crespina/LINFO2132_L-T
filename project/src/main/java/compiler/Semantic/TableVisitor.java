@@ -6,7 +6,7 @@ import java.util.HashMap;
 import compiler.Parser.*;
 import compiler.Parser.Number;
 
-public interface Visitor {
+public interface TableVisitor {
 
 	void visit(ArrayAccess arrayAccess, SymbolTable st) throws SemanticException;
 

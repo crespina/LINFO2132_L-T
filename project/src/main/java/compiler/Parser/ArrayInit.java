@@ -9,7 +9,7 @@ import java.util.HashMap;
  * @author A. Crespin & R. De Oliveira
  *
  */
-public class ArrayInit extends Statement implements Visitable{
+public class ArrayInit extends Statement implements TableVisitable{
 	
 	// e.g. : int[] c = int[5];
 	//the arrayInit is the left part
@@ -57,7 +57,7 @@ public class ArrayInit extends Statement implements Visitable{
 	}
 
 	@Override
-	public void accept(Visitor visitor, SymbolTable ST) throws SemanticException{
+	public void accept(TableVisitor visitor, SymbolTable ST) throws SemanticException{
 		// TODO Auto-generated method stub
 		visitor.visit(this, ST);
 	}

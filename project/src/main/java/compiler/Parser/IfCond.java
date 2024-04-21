@@ -9,7 +9,7 @@ import java.util.Objects;
  * @author A. Crespin & R. De Oliveira
  *
  */
-public class IfCond extends Statement implements Visitable{
+public class IfCond extends Statement implements TableVisitable{
 	
 	// e.g. if (op) {} else {}
 	//      if (op) {}
@@ -109,7 +109,7 @@ public class IfCond extends Statement implements Visitable{
 	}
 
 	@Override
-	public void accept(Visitor visitor, SymbolTable ST) throws SemanticException{
+	public void accept(TableVisitor visitor, SymbolTable ST) throws SemanticException{
 		// TODO Auto-generated method stub
 		visitor.visit(this, ST);
 	}

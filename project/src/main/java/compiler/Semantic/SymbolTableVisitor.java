@@ -7,7 +7,7 @@ import compiler.Parser.*;
 import compiler.Parser.Number;
 
 
-public class SymbolTableVisitor implements Visitor {
+public class SymbolTableVisitor implements TableVisitor {
 
 	@Override
 	public void visit(ArrayAccess aa, SymbolTable st) {

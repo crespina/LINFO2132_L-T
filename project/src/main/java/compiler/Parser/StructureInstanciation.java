@@ -9,7 +9,7 @@ import java.util.Objects;
  * @author A. Crespin & R. De Oliveira
  *
  */
-public class StructureInstanciation extends Statement implements Visitable{
+public class StructureInstanciation extends Statement implements TableVisitable{
 	
 	String structName;
 	String instanceName;
@@ -82,7 +82,7 @@ public class StructureInstanciation extends Statement implements Visitable{
 	}
 
 	@Override
-	public void accept(Visitor visitor, SymbolTable ST) throws SemanticException{
+	public void accept(TableVisitor visitor, SymbolTable ST) throws SemanticException{
 		// TODO Auto-generated method stub
 		visitor.visit(this, ST);
 	}

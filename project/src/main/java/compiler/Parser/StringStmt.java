@@ -9,7 +9,7 @@ import java.util.HashMap;
  * @author A. Crespin & R. De Oliveira
  *
  */
-public class StringStmt extends Statement implements Visitable{
+public class StringStmt extends Statement implements TableVisitable{
 
     String content;
 
@@ -36,7 +36,7 @@ public class StringStmt extends Statement implements Visitable{
 		return new Type("String");
 	}
 	@Override
-	public void accept(Visitor visitor, SymbolTable ST) throws SemanticException{
+	public void accept(TableVisitor visitor, SymbolTable ST) throws SemanticException{
 		// TODO Auto-generated method stub
 		visitor.visit(this, ST);
 	}

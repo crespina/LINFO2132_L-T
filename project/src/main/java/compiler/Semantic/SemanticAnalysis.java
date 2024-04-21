@@ -11,7 +11,7 @@ public class SemanticAnalysis {
 
     Parser parser;
     ArrayList<Statement> statements;
-    Visitor symbolVisitor = new SymbolTableVisitor();
+    TableVisitor symbolVisitor = new SymbolTableVisitor();
     Visitor semanticVisitor = new SemanticVisitor();
     SymbolTable st = new SymbolTable();
 
