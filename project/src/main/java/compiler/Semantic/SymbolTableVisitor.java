@@ -207,6 +207,11 @@ public class SymbolTableVisitor implements TableVisitor {
 	@Override
 	public void visit(Variable v, SymbolTable st) {
 		// TODO Auto-generated method stub
+		if (!st.contains(v.getVarName())) {
+			System.out.println("exit");
+			System.exit(6);
+		}
+		
 		
 	}
 

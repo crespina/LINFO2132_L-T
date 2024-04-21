@@ -21,16 +21,7 @@ public class TestLexer {
 	
 	@Test
     public void test0() {
-        String input = "int i;"
-        		+ "def void test(int b){"
-        		+ "int a = 3;"
-        		+ "if(a>3){"
-        		+ "int j=1"
-        		+ "}"
-        		+ "else {"
-        		+ "int x=1"
-        		+ "}"
-        		+ "}";
+        String input = "a = 3";
         StringReader reader = new StringReader(input);
         Lexer lexer = new Lexer(reader);
         Parser parser = new Parser(lexer);
@@ -39,6 +30,9 @@ public class TestLexer {
 			List<Symbol> lexedInput = lexer.getLexedInput();
 			
             ArrayList<Statement> statements = parser.getAST();
+            for (Statement stm : statements) {
+            	System.out.println(stm);
+            }
 
 
             SemanticAnalysis SA = new SemanticAnalysis(parser);

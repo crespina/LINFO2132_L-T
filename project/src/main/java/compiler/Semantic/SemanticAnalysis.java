@@ -12,7 +12,7 @@ public class SemanticAnalysis {
     Parser parser;
     ArrayList<Statement> statements;
     TableVisitor symbolVisitor = new SymbolTableVisitor();
-    Visitor semanticVisitor = new SemanticVisitor();
+    //Visitor semanticVisitor = new SemanticVisitor();
     SymbolTable st = new SymbolTable();
 
     /**
@@ -43,7 +43,7 @@ public class SemanticAnalysis {
 		return st;
 	}
 
-
+/*
 	public void doSemanticAnalysis() {
         for (Statement s : statements) {
             try {
@@ -53,5 +53,5 @@ public class SemanticAnalysis {
 				e.printStackTrace();
 			}
         }
-    }
+    }*/
 }
