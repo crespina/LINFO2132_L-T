@@ -21,7 +21,14 @@ public class TestLexer {
 	
 	@Test
     public void test0() {
-        String input = "for (i = 0, i<3, i = i + 1){int b = 2;}";
+        String input = "int i;"
+        		+ "for (i=0,i<10,i=i+1){"
+        		+ "int b = 1"
+        		+ "}"
+        		+ "struct Person {"
+        		+ "int h;"
+        		+ "int w;"
+        		+ "}";
         StringReader reader = new StringReader(input);
         Lexer lexer = new Lexer(reader);
         Parser parser = new Parser(lexer);

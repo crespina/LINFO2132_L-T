@@ -7,14 +7,14 @@ import java.util.HashMap;
 
 public class SymbolTable {
     SymbolTable previous;
-    HashMap<String, Type> entries = new HashMap<>();
-    ArrayList<String> structures = new ArrayList<String>();
+    HashMap<String, ArrayList<Type>> entries = new HashMap<>();
+    HashMap<String, ArrayList<Type>> structures = new HashMap<String, ArrayList<Type>>();
 
     public SymbolTable(SymbolTable previous) {
         this.previous = previous;
     }
 
-    public HashMap<String, Type> getTable() {
+    public HashMap<String, ArrayList<Type>> getTable() {
         return entries;
     }
 
@@ -22,20 +22,20 @@ public class SymbolTable {
         return previous;
     }
     
-    public void addEntry(String id, Type type) {
-    	entries.put(id, type);   
+    public void addEntry(String id, ArrayList<Type> types) {
+    	entries.put(id, types);   
     }
     
-    public void addStructure(String name) {
-    	structures.add(name);
+    public void addStructure(String name, ArrayList<Type> types) {
+    	structures.put(name, types);
     }
 
-    public Type get(String identifier) {
+    public ArrayList<Type> get(String identifier) {
         if(entries.containsKey(identifier)) {
             return entries.get(identifier);
         }
         else {
-            return new Type(null);
+            return null;
         }
     }
 

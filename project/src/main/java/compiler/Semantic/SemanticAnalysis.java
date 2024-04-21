@@ -14,8 +14,11 @@ public class SemanticAnalysis {
     Visitor symbolVisitor = new SymbolTableVisitor();
     Visitor semanticVisitor = new SemanticVisitor();
     SymbolTable st = new SymbolTable(null);
-    HashMap <String, ArrayList<Param>> function = new HashMap<>();
 
+    /**
+     * @param parser
+     * @throws ParserException
+     */
     public SemanticAnalysis(Parser parser) throws ParserException{
         this.parser = parser;
 		try {
@@ -28,7 +31,7 @@ public class SemanticAnalysis {
     public void setSymbolTable() {
         for (Statement s : statements) {
             try {
-				s.accept(symbolVisitor, st, function);
+				s.accept(symbolVisitor, st);
 			} catch (SemanticException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -40,14 +43,11 @@ public class SemanticAnalysis {
 		return st;
 	}
 
-    public HashMap <String, ArrayList<Param>> getFT() {
-        return function;
-    }
 
 	public void doSemanticAnalysis() {
         for (Statement s : statements) {
             try {
-				s.accept(semanticVisitor, st, function);
+				s.accept(semanticVisitor, st);
 			} catch (SemanticException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

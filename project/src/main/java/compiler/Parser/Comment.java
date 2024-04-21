@@ -35,9 +35,9 @@ public class Comment extends Statement implements Visitable{
 	}
 
 	@Override
-	public void accept(Visitor visitor, SymbolTable ST, HashMap <String, ArrayList<Param>> funcT) throws SemanticException{
+	public void accept(Visitor visitor, SymbolTable ST) throws SemanticException{
 		// TODO Auto-generated method stub
-		visitor.visit(this, ST, funcT);
+		visitor.visit(this, ST);
 	}
 
 }

@@ -17,5 +17,5 @@ public abstract class Statement {
 
     public abstract Type getType();
 
-    public abstract void accept(Visitor visitor, SymbolTable symbolTable, HashMap <String, ArrayList<Param>> func) throws SemanticException;
+    public abstract void accept(Visitor visitor, SymbolTable symbolTable) throws SemanticException;
 }
