@@ -28,6 +28,35 @@ public class StructureAccess extends Statement implements TableVisitable, TypeCh
 	}
 
 	
+	public String getInstance() {
+		return instance;
+	}
+
+
+	public void setInstance(String instance) {
+		this.instance = instance;
+	}
+
+
+	public String getParam() {
+		return param;
+	}
+
+
+	public void setParam(String param) {
+		this.param = param;
+	}
+
+
+	public ArrayAccess getInstanceInArray() {
+		return instanceInArray;
+	}
+
+
+	public void setInstanceInArray(ArrayAccess instanceInArray) {
+		this.instanceInArray = instanceInArray;
+	}
+
 
 	@Override
 	public String toString() {

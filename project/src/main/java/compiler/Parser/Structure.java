@@ -12,13 +12,13 @@ import java.util.Objects;
 public class Structure extends Statement implements TableVisitable, TypeCheckVisitable{
 	
 	String name;
-	ArrayList<Statement> body;
+	ArrayList<Param> body;
 	
 	/**
 	 * @param name
 	 * @param body 
 	 */
-	public Structure(String name, ArrayList<Statement> body) {
+	public Structure(String name, ArrayList<Param> body) {
 		super();
 		this.name = name;
 		this.body = body;
@@ -38,13 +38,13 @@ public class Structure extends Statement implements TableVisitable, TypeCheckVis
 
 
 
-	public ArrayList<Statement> getBody() {
+	public ArrayList<Param> getBody() {
 		return body;
 	}
 
 
 
-	public void setBody(ArrayList<Statement> body) {
+	public void setBody(ArrayList<Param> body) {
 		this.body = body;
 	}
 

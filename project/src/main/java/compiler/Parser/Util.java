@@ -108,7 +108,8 @@ public class Util {
 				} catch (ParserException e2) {
 					type = new Type(typeSymbol.getAttribute());
 				}				
-			}						
+			}	
+			curIndex++;
 			Symbol identifier = Util.match("Identifier", null);
 			return new Param(type, (String) identifier.attribute);
 		} catch (ParserException e) {
@@ -193,9 +194,14 @@ public class Util {
 			Util.match("Keyword", new ArrayList<>(List.of("struct")));
 			String name = Util.match("Identifier", null).getAttribute();
 			Util.match("OpenCurlyBraket", null);
-			ArrayList<Statement> body = Util.parseStatements(curIndex, lexedInput);
-			Util.match("CloseCurlyBraket", null);
-			return new Structure(name, body);
+			Symbol lookahead = lexedInput.get(curIndex);
+			ArrayList<Param> parameters = new ArrayList<Param>();
+			while(lookahead.getToken() != "CloseCurlyBraket") {
+				parameters.add(parseParam());
+				Util.match("Semicolon",null);
+				lookahead = lexedInput.get(curIndex);
+			}
+			return new Structure(name, parameters);
 		} catch (ParserException e) {
 			curIndex = startIndex;
 			throw e;
@@ -501,9 +507,6 @@ public class Util {
 				// Single number
 				return parseNumber();
 			}*/
-			}
-			else if (lookahead.getToken().equals("Comment")) {
-				return parseComment();
 			}
 			else if (lookahead.getToken().equals("Comment")) {
 				return parseComment();

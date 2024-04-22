@@ -169,15 +169,13 @@ public class SymbolTableVisitor implements TableVisitor {
 		// TODO Auto-generated method stub
 		
 		String identifier = s.getName();
-		ArrayList <Type> params = new ArrayList<>();
-		
-		
+		ArrayList <Param> params = new ArrayList<>();
 		
 		
 		for (Statement stmt : s.getBody()) {
 			VariableCreation vc = (VariableCreation) stmt;
 			Type type_p = vc.getType();
-			params.add(type_p);
+			params.add(new Param(type_p, vc.getIdentifier()));
 		}
 		
 		st.addStructure(identifier, params);

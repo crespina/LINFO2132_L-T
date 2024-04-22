@@ -349,14 +349,48 @@ public class SemanticVisitor implements TypeCheckVisitor{
 
 	@Override
 	public Type TypeCheck(Structure s, SymbolTable st) throws SemanticException{
-		return new Type("structure");
+		String struct_name = s.getName();
+		if (!st.contains(struct_name)) {
+			System.out.println("the structure is not in the ST");
+			System.exit(1);
+		}
+		return null;
 	}
 
 	@Override
 	public Type TypeCheck(StructureAccess sa, SymbolTable st) throws SemanticException{
 		// Check that instance already in the symbol table
 		// Check that param is a param of the structure in the ST
-		return new Type("structAcc");
+		String instance = sa.getInstance();
+		String param = sa.getParam();
+		ArrayAccess instanceInArray = sa.getInstanceInArray(); //if it's in an array, i.e. e.g. a[3].x with a = Array(struct)
+		Param correctParam = null;
+		
+		if (instance != null) { //a.y
+			ArrayList<Param> params_ST = st.structures.get(instance);
+			for (Param param_ST : params_ST) {
+				if (param_ST.getName().equals(param)) {
+					correctParam = param_ST;
+				}
+			}			
+		}
+		
+		else if (instanceInArray != null) {
+			String array = instanceInArray.getArray();
+			
+		}
+		
+		if (correctParam == null) {
+			System.out.println("the parameter tried to be accessed" + param +" is not in the structure" + instance);
+			System.exit(1);
+		} else {
+			return correctParam.getType();
+		}
+		
+		
+		
+		return null;	
+	
 	}
 
 	@Override

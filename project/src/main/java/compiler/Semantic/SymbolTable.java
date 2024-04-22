@@ -1,13 +1,13 @@
 package compiler.Semantic;
 
 import compiler.Parser.Type;
-
+import compiler.Parser.Param;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class SymbolTable {
     HashMap<String, ArrayList<Type>> entries = new HashMap<>();
-    HashMap<String, ArrayList<Type>> structures = new HashMap<String, ArrayList<Type>>();
+    HashMap<String, ArrayList<Param>> structures = new HashMap<String, ArrayList<Param>>();
     HashMap<String,SymbolTable> scopes = new HashMap<String,SymbolTable>();
 
     public SymbolTable() {
@@ -21,7 +21,7 @@ public class SymbolTable {
     	entries.put(id, types);   
     }
     
-    public void addStructure(String name, ArrayList<Type> types) {
+    public void addStructure(String name, ArrayList<Param> types) {
     	structures.put(name, types);
     }
 
