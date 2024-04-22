@@ -107,7 +107,22 @@ public class SemanticVisitor implements TypeCheckVisitor{
 	@Override
 	public Type TypeCheck(IfCond ic, SymbolTable st) throws SemanticException{
 		// TODO Auto-generated method stub
-		return new Type("ifCOnd");
+		// e.g. if (op) {} else {}
+		//      if (op) {}
+	    
+	    Operation conditionop = ic.getConditionop();
+	    String conditionstr = ic.getConditionstr(); //bool
+	    ArrayList<Statement> body = ic.getBody();
+		Boolean isElse = ic.getIsElse(); //bool
+	    ArrayList<Statement> elseBody = ic.getElseBody();
+	    
+	    SymbolTable newst = st.getScopes("if");
+	    if (newst == null) {
+	    	System.out.println("there is not if statement in the symbol table");
+	    	System.exit(1);
+	    }
+	    
+	    
 	}
 
 	@Override

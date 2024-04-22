@@ -43,6 +43,19 @@ public class SymbolTable {
         }
     }
     
+    public Boolean scopeContains(String identifier) {
+    	return scopes.containsKey(identifier);
+    }
+    
+    public SymbolTable getScopes(String identifier) {
+    	if(scopes.containsKey(identifier)) {
+            return scopes.get(identifier);
+        }
+        else {
+            return null;
+        }
+    }
+    
     public void addScope(String identifier, SymbolTable st) {
     	scopes.put(identifier,st);
     }
