@@ -98,8 +98,35 @@ public class SemanticVisitor implements TypeCheckVisitor{
 
 	@Override
 	public Type TypeCheck(Method m, SymbolTable st) throws SemanticException{
-		ArrayList <Statement> body = m.getBody();
-		return new Type("method");
+		ArrayList<Type> types_ST = st.get(m.getIdentifier());
+		ArrayList<Param> params = m.getParameters();
+		
+		for (int i = 0; i < types_ST.size()-1; i++) {
+			if (!params.get(i).equals(types_ST.get(i))) {
+				System.out.println("the parameters at position " + i + "doesnt have the right type : expected type " + types_ST.get(i) + " received type " + params.get(i));
+				System.exit(1);
+			}
+		}
+		
+		Type expected_returnType = types_ST.get(types_ST.size()-1);
+		Type actual_returnType = m.getReturnType();
+		
+		if (!expected_returnType.equals(actual_returnType)) {
+			System.out.println("the return type is not correct : expected type " + expected_returnType + " received type " + actual_returnType);
+			System.exit(1);
+		}
+		
+		SymbolTable newst = st.scopes.get(m.getIdentifier());
+		
+		if (newst == null) {
+			System.out.println("the method is not in the symbolTable");
+			System.exit(1);
+		}
+		
+		for (Statement s : m.getBody()) {
+			s.acceptTypeCheck(this, newst);
+		}
+		
 	}
 
 	@Override
@@ -237,9 +264,9 @@ public class SemanticVisitor implements TypeCheckVisitor{
 
 	@Override
 	public Type TypeCheck(ReturnStatement rs, SymbolTable st) throws SemanticException{
-		// Peut etre check que le type du return est le meme que celui de la methode
-		// JSP trop comment
-		return new Type("return");
+		Statement s = rs.getReturnStatement();
+		Type return_type = s.acceptTypeCheck(this, st);
+		return return_type;
 	}
 
 	@Override
