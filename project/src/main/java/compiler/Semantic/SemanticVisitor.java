@@ -148,7 +148,7 @@ public class SemanticVisitor implements TypeCheckVisitor{
 		Type type2 = ope2.acceptTypeCheck(this, st);
 
 		// 2 float
-		if(type1.equals("float") && type1.equals(type2)) {
+		if(type1.getIdentifier().equals("float") && type1.equals(type2)) {
 			// si comparaison alors Boolean
 			if(isSpecialStr(operator.getOperation(), comp_operators)) {
 				return new Type("bool");
@@ -162,7 +162,8 @@ public class SemanticVisitor implements TypeCheckVisitor{
 			}
 		}
 		// float int && int float
-		else if(type1.equals("float") && type2.equals("int") || type1.equals("int") && type2.equals("float")) {
+		else if(type1.getIdentifier().equals("float") && type2.getIdentifier().equals("int") 
+				|| type1.getIdentifier().equals("int") && type2.getIdentifier().equals("float")) {
 			// si comparaison alors Boolean
 			if(isSpecialStr(operator.getOperation(), comp_operators)) {
 				return new Type("bool");
@@ -176,7 +177,7 @@ public class SemanticVisitor implements TypeCheckVisitor{
 			}
 		}
 		// 2 int
-		else if(type1.equals("int") && type1.equals(type2)) {
+		else if(type1.getIdentifier().equals("int") && type1.equals(type2)) {
 			// si / ou % alors float
 			if(operator.getOperation().equals("/") || operator.getOperation().equals("%")) {
 				return new Type("float");
@@ -194,7 +195,7 @@ public class SemanticVisitor implements TypeCheckVisitor{
 			}
 		}
 		// 2 bool
-		else if(type1.equals("bool") && type1.equals(type2)) {
+		else if(type1.getIdentifier().equals("bool") && type1.equals(type2)) {
 			// si operation ok
 			if(isSpecialStr(operator.getOperation(), boolean_operators)) {
 				return new Type("bool");
@@ -204,7 +205,7 @@ public class SemanticVisitor implements TypeCheckVisitor{
 			}
 		}
 		// 2 string
-		else if(type1.equals("string") && type1.equals(type2)) {
+		else if(type1.getIdentifier().equals("string") && type1.equals(type2)) {
 			if(operator.getOperation().equals("+") || operator.getOperation().equals("==") || operator.getOperation().equals("!=")) {
 				return new Type("string");
 			}
