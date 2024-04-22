@@ -144,7 +144,7 @@ public class SemanticVisitor implements TypeCheckVisitor{
 
 		} catch (Exception e) {
 			Operand ope1 = op.getOperand1();
-			type1 = ope1.acceptTypeCheck(null, st);
+			type1 = ope1.acceptTypeCheck(this, st);
 		}
 
 		Operator operator = op.getOperation();
@@ -291,7 +291,7 @@ public class SemanticVisitor implements TypeCheckVisitor{
 		Type rightType = righStatement.acceptTypeCheck(this, st);
 		Type leftType = types.get(0);
 		if(!leftType.equals(rightType)) {
-			throw new SemanticException("TypeError : tried to assign " + rightType.getIdentifier() + " to " + leftType.getIdentifier()+ ", variable " + vc.getIdentifier());
+			throw new SemanticException("TypeError : tried to assign " + rightType.getIdentifier() + " to " + leftType.getIdentifier()+ ", variable " + v.getVarName());
 		}
 		return leftType;
 	}
