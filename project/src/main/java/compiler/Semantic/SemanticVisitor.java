@@ -86,7 +86,21 @@ public class SemanticVisitor implements TypeCheckVisitor{
 	@Override
 	public Type TypeCheck(FunctionCall fc, SymbolTable st) throws SemanticException{
 		// TODO Auto-generated method stub
-		return new Type("functionCall");
+		ArrayList<Type> types_ST = st.get(fc.getFunctionName());
+		ArrayList<Type> types = new ArrayList<Type>();
+		
+		for (Statement s : fc.getParams()){
+			types.add(s.acceptTypeCheck(this, st));
+		}
+		
+		for (int i = 0; i<types_ST.size()-1; i++) {
+			if (!types.get(i).equals(types_ST.get(i))) {
+				System.out.println("the parameters at position " + i + "doesnt have the right type : expected type " + types_ST.get(i) + " received type " + types.get(i));
+				System.exit(1);
+			}
+		}
+		
+		return types_ST.get(types_ST.size()-1);
 		
 	}
 
@@ -122,6 +136,8 @@ public class SemanticVisitor implements TypeCheckVisitor{
 			System.out.println("the method is not in the symbolTable");
 			System.exit(1);
 		}
+		
+		//check return type with returnStatement
 		
 		for (Statement s : m.getBody()) {
 			s.acceptTypeCheck(this, newst);

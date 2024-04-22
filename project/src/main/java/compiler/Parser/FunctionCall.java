@@ -29,6 +29,10 @@ public class FunctionCall extends Statement implements TableVisitable, TypeCheck
 		return functionName;
 	}
 	
+	public ArrayList<Statement> getParams(){
+		return params;
+	}
+	
 	public String toString() {
 		return "FunctionCall : " + " functionName = " + functionName + ", parameters = " + params;
 	}
