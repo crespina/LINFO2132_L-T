@@ -67,7 +67,7 @@ public class TestLexer {
 
             SA.doSemanticAnalysis();
             
-            System.out.println("end");
+            System.out.println("end test 0");
             
             
 		} catch (IOException | ParserException e) {

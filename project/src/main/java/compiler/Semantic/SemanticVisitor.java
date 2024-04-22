@@ -226,31 +226,30 @@ public class SemanticVisitor implements TypeCheckVisitor{
 			}
 		}
 		String typeName = type.getIdentifier();
-		switch (typeName) {
-			case "int":
+		if(typeName == "int") {
 				return new Type("int");
-			case "float":
-				Number n = (Number) od.getValue();
-				return n.acceptTypeCheck(this, st);
-			case "identifier":
-				String identifier = (String) od.getValue();
-				ArrayList<Param> types = st.get(identifier);
-				if (types == null) {
+		} else if (typeName == "float") {		
+			Number n = (Number) od.getValue();
+			return n.acceptTypeCheck(this, st); 
+		} else if (typeName == "identifier") {
+			String identifier = (String) od.getValue();
+			ArrayList<Param> types = st.get(identifier);
+			if (types == null) {
 					System.err.println("ScopeError : " + "Variable "+ identifier + " is not defined");
 					System.exit(7);
 				}
-				return types.get(0).getType();
-			case "arrayAccess":
-				ArrayAccess aa = (ArrayAccess) od.getValue();
-				return aa.acceptTypeCheck(this, st);
-			case "structureAccess":
-				StructureAccess sa = (StructureAccess) od.getValue();
-				return sa.acceptTypeCheck(this, st);
-			case "string":
-				return new Type("String");
-			default:
-				System.err.println("TypeError : Operand not recognized");
-				System.exit(1);
+			return types.get(0).getType(); 
+		} else if (typeName == "arrayAccess") {
+			ArrayAccess aa = (ArrayAccess) od.getValue();
+			return aa.acceptTypeCheck(this, st);
+		} else if (typeName == "structureAccess") {
+			StructureAccess sa = (StructureAccess) od.getValue();
+			return sa.acceptTypeCheck(this, st);
+		} else if (typeName == "string") {
+			return new Type("String");
+		} else {
+			System.err.println("TypeError : Operand not recognized");
+			System.exit(1);
 		}
 		return null;
 	}

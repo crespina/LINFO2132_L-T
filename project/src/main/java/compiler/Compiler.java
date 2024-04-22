@@ -46,7 +46,6 @@ public static int main(String ... argv) throws IOException, ParserException {
 			SemanticAnalysis SA = new SemanticAnalysis(parser);
             SA.setSymbolTable();
             SA.doSemanticAnalysis();
-            System.exit(0);
             return 0;
 		}
 	}
