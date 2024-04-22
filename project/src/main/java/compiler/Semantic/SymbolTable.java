@@ -44,6 +44,15 @@ public class SymbolTable {
         }
     }
     
+    public Boolean structContains(String identifier) {
+        if(structures.containsKey(identifier)) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+    
     public Boolean scopeContains(String identifier) {
     	return scopes.containsKey(identifier);
     }

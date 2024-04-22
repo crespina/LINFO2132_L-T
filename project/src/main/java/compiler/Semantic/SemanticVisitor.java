@@ -381,7 +381,7 @@ public class SemanticVisitor implements TypeCheckVisitor{
 			System.exit(2);
 		}
 		
-		if (!st.contains(struct_name)) {
+		if (!st.structContains(struct_name)) {
 			System.err.println("ScopeError : the structure is not in the ST");
 			System.exit(7);
 		}

@@ -205,9 +205,16 @@ public class Util {
 		int startIndex = curIndex;
 		try {
 			Util.match("Keyword", new ArrayList<>(List.of("struct")));
-			String name = Util.match("Identifier", null).getAttribute();
-			Util.match("OpenCurlyBraket", null);
 			Symbol lookahead = lexedInput.get(curIndex);
+			String name = null;
+			if (isKeyword(lookahead.getAttribute(), keywords_variable) || isKeyword(lookahead.getAttribute(), keywords_boolean) || isKeyword(lookahead.getAttribute(), keywords_function_call)) {
+				name = lookahead.getAttribute(); //only to throw the correct error later on
+				curIndex++;
+			} else {
+				name = Util.match("Identifier", null).getAttribute();
+			}			
+			Util.match("OpenCurlyBraket", null);
+			lookahead = lexedInput.get(curIndex);
 			ArrayList<Param> parameters = new ArrayList<Param>();
 			while(lookahead.getToken() != "CloseCurlyBraket") {
 				parameters.add(parseParam());

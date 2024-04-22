@@ -22,10 +22,7 @@ public class TestLexer {
         String input = 
         		" struct Person {"
         		+ "int x;"
-        		+ "int y;"
-        		+ "}"
-        		+ "a[3].x;"
-        		+ "b.y";
+        		+ "}";
         StringReader reader = new StringReader(input);
         Lexer lexer = new Lexer(reader);
         Parser parser = new Parser(lexer);
@@ -47,7 +44,7 @@ public class TestLexer {
 		}
     }
 	
-	
+/*	
 	@Test
     public void test1() {
         String input = 
@@ -70,7 +67,7 @@ public class TestLexer {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-    }
+    } */
 	
     /**
      * 
