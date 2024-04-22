@@ -12,7 +12,8 @@ public class SemanticVisitor implements TypeCheckVisitor{
 	static String[] comp_operators = new String[]{"==","!=","<",">",">=","<="};
 	static String[] arith_operators = new String[]{"+","-","*","/"};
 	static String[] boolean_operators = new String[]{"&&","||","==","!="};
-
+	static String[] reserved_names = new String[] {"readInt", "readString", "writeInt", "readFloat", "writeFloat", "write", "writeln", "chr", "len", "floor", "free", "true", "false", "int", "float", "string", "bool"};
+	
 	@Override
 	public Type TypeCheck(ArrayAccess arrayAccess, SymbolTable st) throws SemanticException{
 		// TODO Auto-generated method stub
@@ -20,15 +21,15 @@ public class SemanticVisitor implements TypeCheckVisitor{
 		Statement index = arrayAccess.getIndex();
 		Type index_type = index.acceptTypeCheck(this, st);
 		if (!index_type.equals(new Type("int"))) {
-			System.out.println("exit : the index to enter an array access is not an int");
+			System.err.println("TypeError : the index to enter an array access is not an int");
 			System.exit(1); //to be modified with correct number
 		}
 		
 		String array_name = arrayAccess.getArray();
 		ArrayList<Type> types = st.get(array_name);
 		if (types == null) {
-			System.out.println("the array we want to access is not in the ST");
-			System.exit(1); //to be modified with correct number
+			System.err.println("ScopeError : the array we want to access is not in the ST");
+			System.exit(7); //to be modified with correct number
 		}
 		
 		Type typeOfArray = types.get(0);
@@ -50,7 +51,7 @@ public class SemanticVisitor implements TypeCheckVisitor{
 		}
 		
 		if ((t == null) || (!t.equals(new Type("int")))) {
-			System.out.println("the length of the array isnt an int");
+			System.err.println("TypeError : the length of the array isnt an int");
 			System.exit(1); //to be modified with correct number
 		}
 		
@@ -64,7 +65,7 @@ public class SemanticVisitor implements TypeCheckVisitor{
 		// TODO Auto-generated method stub
 		
 		if (!b.getContent().equals("true") || !b.getContent().equals("false") ) {
-			System.out.println("a boolean must be true or false");
+			System.err.println("TypeError : a boolean must be true or false");
 			System.exit(1);//to be modified with correct number
 		}
 		
@@ -84,7 +85,8 @@ public class SemanticVisitor implements TypeCheckVisitor{
 		Operation endValue = fl.getEndValue();
 		Type endValueType = endValue.acceptTypeCheck(this, st);
 		if(!endValueType.getIdentifier().equals("bool")) {
-			throw new SemanticException("MissingConditionError : " + "Condition "+ endValue.toString() + " is not a boolean"); 
+			System.err.println("MissingConditionError : " + "Condition "+ endValue.toString() + " is not a boolean");
+			System.exit(5);
 		}
 		Variable increment = fl.getIncrement();
 		Type incrementType = increment.acceptTypeCheck(this, st);
@@ -103,8 +105,8 @@ public class SemanticVisitor implements TypeCheckVisitor{
 		
 		for (int i = 0; i<types_ST.size()-1; i++) {
 			if (!types.get(i).equals(types_ST.get(i))) {
-				System.out.println("the parameters at position " + i + "doesnt have the right type : expected type " + types_ST.get(i) + " received type " + types.get(i));
-				System.exit(1);
+				System.err.println("ArgumentError : the parameters at position " + i + "doesnt have the right type : expected type " + types_ST.get(i) + " received type " + types.get(i));
+				System.exit(4);
 			}
 		}
 		
@@ -126,14 +128,15 @@ public class SemanticVisitor implements TypeCheckVisitor{
 	    
 	    SymbolTable ifst = st.getScopes("if");
 	    if (ifst == null) {
-	    	System.out.println("there is no if statement in the symbol table");
-	    	System.exit(1);
+	    	System.err.println("ScopeError : there is no if statement in the symbol table");
+	    	System.exit(7);
 	    }
 	    
 	    if(conditionstr == null & conditionop != null) {
 	    	Type conditionop_type = conditionop.acceptTypeCheck(this, st);
 	    	if (!conditionop_type.equals(new Type("bool"))) {
-	    		System.out.println("the condition doesnt resolve to a bool but to " + conditionop_type);
+	    		System.err.println("MissingConditionError : the condition doesnt resolve to a bool but to " + conditionop_type);
+	    		System.exit(5);
 	    	}
 	    } else {
 	    	Type cond = null;
@@ -141,8 +144,9 @@ public class SemanticVisitor implements TypeCheckVisitor{
 	    		cond = st.get(conditionstr).get(0);
 	    	}
 			if(conditionstr != "true" || conditionstr != "false" || !cond.equals(new Type("bool"))) {
-	    		System.out.println("the condition doesnt resolve to a bool but to " + conditionstr);
-	    	}
+	    		System.err.println("MissingConditionError : the condition doesnt resolve to a bool but to " + conditionstr);
+	    		System.exit(5);
+			}
 	    }
 	    
 	    for (Statement s : body) {
@@ -153,8 +157,8 @@ public class SemanticVisitor implements TypeCheckVisitor{
 	    	
 	    	SymbolTable elsest = st.getScopes("else");
 		    if (elsest == null) {
-		    	System.out.println("there is no else statement in the symbol table");
-		    	System.exit(1);
+		    	System.err.println("ScopeError : there is no else statement in the symbol table");
+		    	System.exit(7);
 		    }
 		    
 	    	for (Statement s : elseBody) {
@@ -173,8 +177,8 @@ public class SemanticVisitor implements TypeCheckVisitor{
 		
 		for (int i = 0; i < types_ST.size()-1; i++) {
 			if (!params.get(i).equals(types_ST.get(i))) {
-				System.out.println("the parameters at position " + i + "doesnt have the right type : expected type " + types_ST.get(i) + " received type " + params.get(i));
-				System.exit(1);
+				System.err.println("ArgumentError : the parameters at position " + i + "doesnt have the right type : expected type " + types_ST.get(i) + " received type " + params.get(i));
+				System.exit(4);
 			}
 		}
 		
@@ -182,15 +186,15 @@ public class SemanticVisitor implements TypeCheckVisitor{
 		Type actual_returnType = m.getReturnType();
 		
 		if (!expected_returnType.equals(actual_returnType)) {
-			System.out.println("the return type is not correct : expected type " + expected_returnType + " received type " + actual_returnType);
-			System.exit(1);
+			System.err.println("ReturnError : the return type is not correct : expected type " + expected_returnType + " received type " + actual_returnType);
+			System.exit(6);
 		}
 		
 		SymbolTable newst = st.scopes.get(m.getIdentifier());
 		
 		if (newst == null) {
-			System.out.println("the method is not in the symbolTable");
-			System.exit(1);
+			System.err.println("ScopeError : the method is not in the symbolTable");
+			System.exit(7);
 		}
 		
 		//check return type with returnStatement
@@ -221,7 +225,8 @@ public class SemanticVisitor implements TypeCheckVisitor{
 				String identifier = (String) od.getValue();
 				ArrayList<Type> types = st.get(identifier);
 				if (types == null) {
-					throw new SemanticException("ScopeError : " + "Variable "+ identifier + " is not defined");
+					System.err.println("ScopeError : " + "Variable "+ identifier + " is not defined");
+					System.exit(7);
 				}
 				return types.get(0);
 			case "arrayAccess":
@@ -231,8 +236,10 @@ public class SemanticVisitor implements TypeCheckVisitor{
 				StructureAccess sa = (StructureAccess) od.getValue();
 				return sa.acceptTypeCheck(this, st);
 			default:
-				throw new SemanticException("Operand not recognized");
+				System.err.println("TypeError : Operand not recognized");
+				System.exit(1);
 		}
+		return null;
 	}
 
 	@Override
@@ -262,7 +269,8 @@ public class SemanticVisitor implements TypeCheckVisitor{
 				return new Type("float");
 			}
 			else {
-				throw new SemanticException("OperatorError : " + "tried to do  "+ type1.getIdentifier() + " " + operator.getOperation() + " " + type2.getIdentifier());
+				System.err.println("OperatorError : " + "tried to do  "+ type1.getIdentifier() + " " + operator.getOperation() + " " + type2.getIdentifier());
+				System.exit(3);
 			}
 		}
 		// float int && int float
@@ -277,7 +285,8 @@ public class SemanticVisitor implements TypeCheckVisitor{
 				return new Type("float");
 			}
 			else {
-				throw new SemanticException("OperatorError : " + "tried to do  "+ type1.getIdentifier() + " " + operator.getOperation() + " " + type2.getIdentifier());
+				System.err.println("OperatorError : " + "tried to do  "+ type1.getIdentifier() + " " + operator.getOperation() + " " + type2.getIdentifier());
+				System.exit(3);
 			}
 		}
 		// 2 int
@@ -295,7 +304,8 @@ public class SemanticVisitor implements TypeCheckVisitor{
 				return new Type("bool");
 			}
 			else {
-				throw new SemanticException("OperatorError : " + "tried to do  "+ type1.getIdentifier() + " " + operator.getOperation() + " " + type2.getIdentifier());
+				System.err.println("OperatorError : " + "tried to do  "+ type1.getIdentifier() + " " + operator.getOperation() + " " + type2.getIdentifier());
+				System.exit(3);
 			}
 		}
 		// 2 bool
@@ -305,7 +315,8 @@ public class SemanticVisitor implements TypeCheckVisitor{
 				return new Type("bool");
 			}
 			else {
-				throw new SemanticException("OperatorError : " + "tried to do  "+ type1.getIdentifier() + " " + operator.getOperation() + " " + type2.getIdentifier());
+				System.err.println("OperatorError : " + "tried to do  "+ type1.getIdentifier() + " " + operator.getOperation() + " " + type2.getIdentifier());
+				System.exit(3);
 			}
 		}
 		// 2 string
@@ -314,12 +325,16 @@ public class SemanticVisitor implements TypeCheckVisitor{
 				return new Type("string");
 			}
 			else {
-				throw new SemanticException("OperatorError : " + "tried to do  "+ type1.getIdentifier() + " " + operator.getOperation() + " " + type2.getIdentifier());
+				System.err.println("OperatorError : " + "tried to do  "+ type1.getIdentifier() + " " + operator.getOperation() + " " + type2.getIdentifier());
+				System.exit(3);
 			}
 		}
 		else {
-			throw new SemanticException("OperatorError : " + "tried to do  "+ type1.getIdentifier() + " " + operator.getOperation() + " " + type2.getIdentifier());
+			System.err.println("OperatorError : " + "tried to do  "+ type1.getIdentifier() + " " + operator.getOperation() + " " + type2.getIdentifier());
+			System.exit(1);
 		}
+		
+		return null;
 	
 	}
 
@@ -350,9 +365,15 @@ public class SemanticVisitor implements TypeCheckVisitor{
 	@Override
 	public Type TypeCheck(Structure s, SymbolTable st) throws SemanticException{
 		String struct_name = s.getName();
+		
+		if (isSpecialStr(struct_name, reserved_names)) {
+			System.err.println("StructError : the structure name is not valid " + struct_name);
+			System.exit(2);
+		}
+		
 		if (!st.contains(struct_name)) {
-			System.out.println("the structure is not in the ST");
-			System.exit(1);
+			System.err.println("ScopeError : the structure is not in the ST");
+			System.exit(7);
 		}
 		return null;
 	}
@@ -388,8 +409,8 @@ public class SemanticVisitor implements TypeCheckVisitor{
 		}*/ //Doesnt work because the parser doesnt allow yet to create an array of struct
 		
 		if (correctParam == null) {
-			System.out.println("the parameter tried to be accessed" + param +" is not in the structure" + instance);
-			System.exit(1);
+			System.err.println("ArgumentError : the parameter tried to be accessed" + param +" is not in the structure" + instance);
+			System.exit(4);
 		} else {
 			return correctParam.getType();
 		}
@@ -407,18 +428,23 @@ public class SemanticVisitor implements TypeCheckVisitor{
 		String instanceName = si.getInstanceName();
 		ArrayList<Statement> parameters = si.getStatements();
 		
+		if (isSpecialStr(structName, reserved_names)) {
+			System.err.println("StructError : the structure name is not valid " + structName);
+			System.exit(2);
+		}
+		
 		Type type_of_instance = st.get(instanceName).get(0);
 		
 		if (type_of_instance.equals(new Type(structName))) {
-			System.out.println("the struct you're trying to instanciate is not in the ST");
-			System.exit(1);
+			System.err.println("ScopeError : the struct you're trying to instanciate is not in the ST");
+			System.exit(7);
 		}
 		Type t = null;
 		ArrayList<Param> params_ST = st.structures.get(structName);
 		for (int i = 0; i < parameters.size(); i++) {
 			t = parameters.get(i).acceptTypeCheck(this, st);
 			if (t.equals(params_ST.get(i).getType())) {
-				System.out.println("the parameters at position " + i + "doesnt have the right type : expected type " +  params_ST.get(i).getType() + " actual type :" + t);
+				System.err.println("TypeError : the parameters at position " + i + "doesnt have the right type : expected type " +  params_ST.get(i).getType() + " actual type :" + t);
 				System.exit(1);
 			}
 		}
@@ -439,13 +465,15 @@ public class SemanticVisitor implements TypeCheckVisitor{
 		String name = v.getVarName();
 		ArrayList<Type> types = st.get(name);
 		if (types == null) {
-			throw new SemanticException("ScopeError : " + "Variable "+ name + " is not defined");
+			System.err.println("ScopeError : " + "Variable "+ name + " is not defined");
+			System.exit(7);
 		}
 		Statement righStatement = v.getValue();
 		Type rightType = righStatement.acceptTypeCheck(this, st);
 		Type leftType = types.get(0);
 		if(!leftType.equals(rightType)) {
-			throw new SemanticException("TypeError : tried to assign " + rightType.getIdentifier() + " to " + leftType.getIdentifier()+ ", variable " + v.getVarName());
+			System.err.println("TypeError : tried to assign " + rightType.getIdentifier() + " to " + leftType.getIdentifier()+ ", variable " + v.getVarName());
+			System.exit(1);
 		}
 		return leftType;
 	}
@@ -460,7 +488,8 @@ public class SemanticVisitor implements TypeCheckVisitor{
 			Statement rightStatement = vc.getStatement();
 			Type rightType = rightStatement.acceptTypeCheck(this, st);
 			if(!leftType.equals(rightType)) {
-				throw new SemanticException("TypeError : tried to assign " + rightType.getIdentifier() + " to " + leftType.getIdentifier()+ ", variable " + vc.getIdentifier());
+				System.err.println("TypeError : tried to assign " + rightType.getIdentifier() + " to " + leftType.getIdentifier()+ ", variable " + vc.getIdentifier());
+				System.exit(1);
 			}
 		}
 		return leftType;
@@ -471,15 +500,12 @@ public class SemanticVisitor implements TypeCheckVisitor{
 		Operation op = wl.getCondition();
 		Type conditionType = op.acceptTypeCheck(this, st);
 		if(!conditionType.getIdentifier().equals("bool")) {
-			throw new SemanticException("MissingConditionError : " + "Condition Type =" + conditionType.getIdentifier());
+			System.err.println("MissingConditionError : " + "Condition Type =" + conditionType.getIdentifier());
+			System.exit(5);
 		}
 		ArrayList <Statement> statements = wl.getBody();
 		for (Statement s : statements) {
-			try {
-				s.acceptTypeCheck(this, st);
-			} catch (SemanticException e) {
-				e.printStackTrace();
-			}
+			s.acceptTypeCheck(this, st);
 		}
 		return new Type("whileLoop");
 	}

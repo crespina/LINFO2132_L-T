@@ -12,7 +12,7 @@ public class SemanticAnalysis {
     Parser parser;
     ArrayList<Statement> statements;
     TableVisitor symbolVisitor = new SymbolTableVisitor();
-    //Visitor semanticVisitor = new SemanticVisitor();
+    TypeCheckVisitor semanticVisitor = new SemanticVisitor();
     SymbolTable st = new SymbolTable();
 
     /**
@@ -43,15 +43,16 @@ public class SemanticAnalysis {
 		return st;
 	}
 
-/*
+
 	public void doSemanticAnalysis() {
         for (Statement s : statements) {
             try {
-				s.accept(semanticVisitor, st);
+				s.acceptTypeCheck(semanticVisitor, st);
 			} catch (SemanticException e) {
 				// TODO Auto-generated catch block
+				System.out.println("exit");
 				e.printStackTrace();
 			}
         }
-    }*/
+    }
 }

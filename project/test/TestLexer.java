@@ -20,11 +20,12 @@ public class TestLexer {
 	@Test
     public void test0() {
         String input = 
-        		 "struct Point {\r\n"
-        		 + "    int x;\r\n"
-        		 + "    int y;\r\n"
-        		 + "}"
-        		 + "Point p = Point(3,4)";
+        		" struct Person {"
+        		+ "int x;"
+        		+ "int y;"
+        		+ "}"
+        		+ "a[3].x;"
+        		+ "b.y";
         StringReader reader = new StringReader(input);
         Lexer lexer = new Lexer(reader);
         Parser parser = new Parser(lexer);
@@ -34,14 +35,10 @@ public class TestLexer {
 			
             ArrayList<Statement> statements = parser.getAST();
             
-            for (Statement stm : statements) {
-            	System.out.println(stm);
-            }
-
             SemanticAnalysis SA = new SemanticAnalysis(parser);
             SA.setSymbolTable();
-            SymbolTable st = SA.getSt();
-            System.out.println(st);
+
+            SA.doSemanticAnalysis();
             
             
 		} catch (IOException | ParserException e) {
@@ -54,7 +51,7 @@ public class TestLexer {
 	@Test
     public void test1() {
         String input = 
-        		 "i = (i+2)*2;";
+        		 "int i = (i+2)*2;";
         StringReader reader = new StringReader(input);
         Lexer lexer = new Lexer(reader);
         Parser parser = new Parser(lexer);

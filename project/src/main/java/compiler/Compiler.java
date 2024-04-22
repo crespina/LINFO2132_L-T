@@ -8,6 +8,8 @@ import java.util.List;
 import compiler.Lexer.Lexer;
 import compiler.Lexer.Symbol;
 import compiler.Parser.Statement;
+import compiler.Semantic.SemanticAnalysis;
+import compiler.Semantic.SymbolTable;
 import compiler.Parser.Parser;
 import compiler.Parser.ParserException;
 
@@ -35,7 +37,13 @@ public static void main(String ... argv) throws IOException, ParserException {
 				System.out.println(s.toString());
 			}
 		} else {
-			System.out.println("No filePath was passed as an argument");
+			FileReader reader = new FileReader(argv[1]);
+			Lexer lexer = new Lexer(reader);
+			Parser parser = new Parser(lexer);
+			ArrayList<Statement> statements = parser.getAST();
+			SemanticAnalysis SA = new SemanticAnalysis(parser);
+            SA.setSymbolTable();
+            SA.doSemanticAnalysis();
 		}
 	}
 }
