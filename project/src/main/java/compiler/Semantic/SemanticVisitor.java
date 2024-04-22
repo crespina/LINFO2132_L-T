@@ -143,6 +143,7 @@ public class SemanticVisitor implements TypeCheckVisitor{
 			s.acceptTypeCheck(this, newst);
 		}
 		
+		return null;
 	}
 
 	@Override
