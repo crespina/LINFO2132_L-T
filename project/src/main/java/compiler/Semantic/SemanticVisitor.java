@@ -337,9 +337,19 @@ public class SemanticVisitor implements TypeCheckVisitor{
 
 	@Override
 	public Type TypeCheck(ReturnStatement rs, SymbolTable st) throws SemanticException{
+		// On recupere l'id du return et le nom de la methode a qui il appartient
+		int returnId = rs.getId();
+		String methodName = st.getReturn(returnId);
+		// On recupere la valeur de retour de la methode
+		ArrayList<Type> methodTypes = st.get(methodName);
 		Statement s = rs.getReturnStatement();
 		Type return_type = s.acceptTypeCheck(this, st);
-		return return_type;
+		if(methodTypes != null) {
+			if(!return_type.equals(methodTypes.get(methodTypes.size()-1))) {
+				throw new SemanticException("ReturnError");
+			}
+		}
+		return null;
 	}
 
 	@Override

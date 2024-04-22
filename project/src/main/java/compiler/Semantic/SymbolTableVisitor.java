@@ -105,9 +105,14 @@ public class SymbolTableVisitor implements TableVisitor {
 		paramsTypes.add(returnType);
 		
 		st.addEntry(identifier, paramsTypes);
-		
+
 		ArrayList<Statement> body = m.getBody();
 
+		//Ajout des id des returns
+		ArrayList<Integer> returnID = m.getReturnStatements();
+		for(int id : returnID) {
+			st.addReturn(id, identifier);
+		}
 		SymbolTable newst = new SymbolTable();
 		newst.addAll(st);
 		

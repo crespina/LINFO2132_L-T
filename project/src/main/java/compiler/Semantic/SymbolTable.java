@@ -9,6 +9,7 @@ public class SymbolTable {
     HashMap<String, ArrayList<Type>> entries = new HashMap<>();
     HashMap<String, ArrayList<Param>> structures = new HashMap<String, ArrayList<Param>>();
     HashMap<String,SymbolTable> scopes = new HashMap<String,SymbolTable>();
+    HashMap<Integer,String> method_Return = new HashMap<Integer,String>();
 
     public SymbolTable() {
     }
@@ -62,6 +63,23 @@ public class SymbolTable {
     
     public void addAll(SymbolTable other) {
     	this.entries.putAll(other.entries); //this will contain all from other
+    }
+
+    public void addReturn(int id, String functionName) {
+        method_Return.put(id, functionName);
+    }
+
+    public HashMap<Integer,String> getReturnTable() {
+        return method_Return;
+    }
+
+    public String getReturn(int id) {
+        if(method_Return.containsKey(id)) {
+            return method_Return.get(id);
+        }
+        else {
+            return null;
+        }
     }
 
 	@Override
