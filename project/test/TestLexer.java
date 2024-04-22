@@ -16,7 +16,7 @@ import compiler.Semantic.SemanticAnalysis;
 import compiler.Semantic.SymbolTable;
 
 public class TestLexer {
-	
+
 	@Test
     public void test0() {
         String input = "//Good luck\r\n"
@@ -77,17 +77,14 @@ public class TestLexer {
 		}
     }
 	
-/*
+
 	@Test
     public void test1() {
-        String input = "struct Point {"
-        		+ "int x;"
-        		+ "int y;"
+        String input = "def int square(int v) {"
+        		+ "return v*v ;"
         		+ "}"
-        		+ "int a = 1;"
-        		+ "int b = 2;"
-        		+ "def void square(){"
-        		+ "Point p = Point(a, b + a);"
+        		+ "def int sum(int y){"
+        		+ "return y+y ;"
         		+ "}";
         StringReader reader = new StringReader(input);
         Lexer lexer = new Lexer(reader);
@@ -97,7 +94,6 @@ public class TestLexer {
 			List<Symbol> lexedInput = lexer.getLexedInput();
 			
             ArrayList<Statement> statements = parser.getAST();
-            System.out.println(statements.get(0));
 
             SemanticAnalysis SA = new SemanticAnalysis(parser);
             SA.setSymbolTable();
@@ -111,7 +107,7 @@ public class TestLexer {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-    }*/
+    }
 	
     /**
      * 

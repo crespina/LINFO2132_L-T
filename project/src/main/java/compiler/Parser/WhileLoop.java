@@ -12,19 +12,23 @@ import java.util.Objects;
 public class WhileLoop extends Statement implements TableVisitable, TypeCheckVisitable{
     
     Operation condition;
+    String conditionstr;
     ArrayList<Statement> body;
 
     /**
 	 * @param condition
 	 * @param body
 	 */
-	public WhileLoop(Operation condition, ArrayList<Statement> body) {
+	public WhileLoop(Operation condition, String conditionstr, ArrayList<Statement> body) {
 		super();
 		this.condition = condition;
+		this.conditionstr = conditionstr;
         this.body = body;
 	}
 	
-	
+	public String getConditionStr() {
+		return conditionstr;
+	}
 
     public Operation getCondition() {
 		return condition;

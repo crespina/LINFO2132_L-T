@@ -148,7 +148,7 @@ public class SemanticVisitor implements TypeCheckVisitor{
 	    	if (st.contains(conditionstr)) {
 	    		cond = st.get(conditionstr).get(0).getType();
 	    	}
-			if(conditionstr != "true" || conditionstr != "false" || !cond.equals(new Type("bool"))) {
+			if(conditionstr != "true" && conditionstr != "false" && !cond.equals(new Type("bool"))) {
 	    		System.err.println("MissingConditionError : the condition doesnt resolve to a bool but to " + conditionstr);
 	    		System.exit(5);
 			}
@@ -230,8 +230,9 @@ public class SemanticVisitor implements TypeCheckVisitor{
 		if (typeName.equals("int")) {
 			return new Type("int");
 		} else if (typeName.equals("float")) {		
-			Number n = (Number) od.getValue();
-			return n.acceptTypeCheck(this, st); 
+			//Number n = (Number) od.getValue();
+			//return n.acceptTypeCheck(this, st); 
+			return new Type("float");
 		} else if (typeName.equals("identifier")) {
 			
 			String identifier = (String) od.getValue();
@@ -250,6 +251,8 @@ public class SemanticVisitor implements TypeCheckVisitor{
 			return sa.acceptTypeCheck(this, st);
 		} else if (typeName.equals("string")) {
 			return new Type("String");
+		} else if (typeName.equals("bool")) {
+			return new Type("bool");
 		} else {
 			System.err.println("TypeError : Operand not recognized");
 			System.exit(1);
@@ -523,16 +526,62 @@ public class SemanticVisitor implements TypeCheckVisitor{
 	@Override
 	public Type TypeCheck(WhileLoop wl, SymbolTable st) throws SemanticException{
 		Operation op = wl.getCondition();
-		Type conditionType = op.acceptTypeCheck(this, st);
-		if(!conditionType.getIdentifier().equals("bool")) {
-			System.err.println("MissingConditionError : " + "Condition Type =" + conditionType.getIdentifier());
-			System.exit(5);
+		String opstr = wl.getConditionStr();
+		
+		if (op != null) {
+			Type conditionType = op.acceptTypeCheck(this, st);
+			if(!conditionType.getIdentifier().equals("bool")) {
+				System.err.println("MissingConditionError : " + "Condition Type =" + conditionType.getIdentifier());
+				System.exit(5);
+			}
+			ArrayList <Statement> statements = wl.getBody();
+			for (Statement s : statements) {
+				s.acceptTypeCheck(this, st);
+			}
+			return new Type("whileLoop");
 		}
-		ArrayList <Statement> statements = wl.getBody();
-		for (Statement s : statements) {
-			s.acceptTypeCheck(this, st);
+		
+		else if (opstr != null) {
+			
+	    	Type cond = null;
+	    	if (st.contains(opstr)) {
+	    		cond = st.get(opstr).get(0).getType();
+	    	}
+			if(opstr != "true" && opstr != "false" && !cond.equals(new Type("bool"))) {
+	    		System.err.println("MissingConditionError : the condition doesnt resolve to a bool but to " + opstr);
+	    		System.exit(5);
+			}
+		
 		}
-		return new Type("whileLoop");
+		
+		return null;
+
+	}
+	
+	@Override
+	public Type TypeCheck(UnaryOperation uo, SymbolTable sT) throws SemanticException {
+		// TODO Auto-generated method stub
+		Operator op = uo.getOp();
+		Operand operand = uo.getOperand();
+		
+		Type typeOperand = operand.acceptTypeCheck(this, sT);
+		
+		if (op.getOperation().equals("!")) {
+			if (!typeOperand.equals(new Type("bool"))) {
+				System.err.println("OperatorError : " + "tried to do  "+ op.getOperation() + " on  " + typeOperand);
+				System.exit(3);
+			} else {
+				return new Type("bool");
+			}
+		} else if (op.getOperation().equals("-")) {
+			if ( (!typeOperand.equals(new Type("int"))) && (!typeOperand.equals(new Type("float")))  ){
+				System.err.println("OperatorError : " + "tried to do  "+ op.getOperation() + " on  " + typeOperand);
+				System.exit(3);
+			} else {
+				return typeOperand;
+			}
+		} 
+		return null;
 	}
 
 	/**
@@ -548,5 +597,7 @@ public class SemanticVisitor implements TypeCheckVisitor{
         }
         return false;
     }
+
+
 
 }

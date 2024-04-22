@@ -48,4 +48,6 @@ public interface TypeCheckVisitor {
 	Type TypeCheck(VariableCreation vc, SymbolTable st) throws SemanticException;
 
 	Type TypeCheck(WhileLoop wl, SymbolTable st) throws SemanticException;
+
+	Type TypeCheck(UnaryOperation unaryOperation, SymbolTable sT) throws SemanticException;
 }

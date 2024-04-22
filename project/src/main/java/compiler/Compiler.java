@@ -17,7 +17,9 @@ import compiler.Parser.ParserException;
 public class Compiler {
 
 	
-public static int main(String ... argv) throws IOException, ParserException {
+public static void main(String ... argv) throws IOException, ParserException {
+	
+		System.out.println("starting");
 		
 		if (argv[0].equals("-lexer")) {
 			FileReader reader = new FileReader(argv[1]);
@@ -27,7 +29,6 @@ public static int main(String ... argv) throws IOException, ParserException {
 			for (Symbol s : lexedInput) {
 				System.out.println(s);
 			}
-			return 0;
 		} 
 		else if (argv[0].equals("-parser")) {
 			FileReader reader = new FileReader(argv[1]);
@@ -37,16 +38,14 @@ public static int main(String ... argv) throws IOException, ParserException {
 			for (Statement s : statements) {
 				System.out.println(s.toString());
 			}
-			return 0;
 		} else {
+			System.out.println("starting analysis");
 			FileReader reader = new FileReader(argv[0]);
 			Lexer lexer = new Lexer(reader);
 			Parser parser = new Parser(lexer);
-			ArrayList<Statement> statements = parser.getAST();
 			SemanticAnalysis SA = new SemanticAnalysis(parser);
             SA.setSymbolTable();
             SA.doSemanticAnalysis();
-            return 0;
 		}
 	}
 }

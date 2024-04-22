@@ -51,4 +51,6 @@ public interface TableVisitor {
 	void visit(VariableCreation vc, SymbolTable st) throws SemanticException;
 
 	void visit(WhileLoop wl, SymbolTable st) throws SemanticException;
+
+	void visit(UnaryOperation unaryOperation, SymbolTable sT) throws SemanticException;
 }

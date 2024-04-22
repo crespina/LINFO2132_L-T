@@ -112,6 +112,7 @@ public class SymbolTableVisitor implements TableVisitor {
 		for(int id : returnID) {
 			st.addReturn(id, identifier);
 		}
+		
 		SymbolTable newst = new SymbolTable();
 		newst.addAll(st);
 		Set<Entry<String, ArrayList<Param>>> entries = st.entries.entrySet();
@@ -122,9 +123,12 @@ public class SymbolTableVisitor implements TableVisitor {
 				ArrayList<Param> paramsToAdd = entry.getValue();
 				for (int i = 0; i<paramsToAdd.size()-1; i++) {
 					Param p = paramsToAdd.get(i);
-					ArrayList<Param> toAdd = new ArrayList<Param>();
-					toAdd.add(new Param(p.getType(),null));
-					newst.addEntry(p.getName(), toAdd );
+					ArrayList<Param> paramsOfTheFunction = st.paramOfAFunction(identifier);
+					if (paramsOfTheFunction.contains(p)) { //correct scope
+						ArrayList<Param> toAdd = new ArrayList<Param>();
+						toAdd.add(new Param(p.getType(),null));
+						newst.addEntry(p.getName(), toAdd );
+					}					
 				}
 			}
 		}
@@ -188,6 +192,13 @@ public class SymbolTableVisitor implements TableVisitor {
 		// TODO Auto-generated method stub
 		
 		String identifier = s.getName();
+		
+		
+		if (st.structContains(identifier)) {
+			System.err.println("StructError : the structure name is already in use " + identifier);
+			System.exit(2);
+		}
+		
 		ArrayList <Param> params = new ArrayList<>();
 		
 		
@@ -260,5 +271,10 @@ public class SymbolTableVisitor implements TableVisitor {
 
 	}
 
+	@Override
+	public void visit(UnaryOperation unaryOperation, SymbolTable sT) throws SemanticException {
+		// TODO Auto-generated method stub
+		
+	}
 
 }

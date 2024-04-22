@@ -160,6 +160,10 @@ public class SymbolTable {
             return null;
         }
     }
+    
+    public ArrayList<Param> paramOfAFunction(String funcId){
+    	return entries.get(funcId);
+    }
 
 	@Override
 	public String toString() {

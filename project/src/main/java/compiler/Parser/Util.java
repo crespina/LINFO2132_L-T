@@ -22,6 +22,7 @@ public class Util {
 	static String[] keywords_variable = new String[]{"int", "float", "string", "bool"};
 	static String[] keywords_boolean = new String[]{"true", "false"};
 	static String[] keywords_function_call = new String[]{"readInt", "readString", "writeInt", "readFloat", "writeFloat", "write", "writeln", "chr", "len", "floor", "free"};
+	static String[] unary_ops = new String[] {"-", "!"};
 	static List<String> operators = new ArrayList<>(List.of("+","-","*","/","==","!=","!","<",">",">=","<=","%","&&","||"));
 	
 	/**
@@ -306,6 +307,8 @@ public class Util {
 		
 	}
 	
+
+	
 	/**
 	 * @return Operator : accepted types: int float bool string ArrayAccess StructureAccess identifier
 	 * @throws ParserException
@@ -362,6 +365,18 @@ public class Util {
 		}		
 	}
 	
+	public static UnaryOperation parseUnaryOperation() throws ParserException {
+		int startIndex = curIndex;
+		try {
+			Operator op = parseOperator();
+			Operand operand = parseOperand();
+			return new UnaryOperation(op, operand);
+			
+		} catch(ParserException e) {
+			curIndex = startIndex;
+			throw e;
+		}
+	}
 	
 	/**
 	 * @return Operation
@@ -466,6 +481,11 @@ public class Util {
 		}
 		else {
 			int index = curIndex;
+			
+			if (lookahead.getToken().equals("Operation") && isKeyword(lookahead.getAttribute(), unary_ops)) {
+				return parseUnaryOperation();
+			}
+			
 			if(lookahead2.getAttribute() != null) {
 				if( (lookahead.getToken().equals("Identifier")) & (lookahead2.getAttribute().equals("=")) ) {
 					// Variable assign
@@ -767,12 +787,20 @@ public class Util {
 		try {
 			Util.match("Keyword", new ArrayList<>(List.of("while")));
 			Util.match("OpenParenthesis", null);
-			Operation condition = Util.parseOperation();
+			int startIndex2 = curIndex;
+			Operation conditionop = null;
+			String conditionstr = null;
+			try {
+				Operation condition = Util.parseOperation();
+			} catch(ParserException e) {
+				curIndex = startIndex2;
+				conditionstr = Util.match("Identifier", null).getAttribute();
+			}		
 			Util.match("CloseParenthesis", null);
 			Util.match("OpenCurlyBraket", null);
 			ArrayList<Statement> body = Util.parseStatements(curIndex, lexedInput);
 			Util.match("CloseCurlyBraket", null);
-			return new WhileLoop(condition, body);
+			return new WhileLoop(conditionop, conditionstr, body);
 		} catch (ParserException e) {
 			curIndex = startIndex;
 			throw e;
