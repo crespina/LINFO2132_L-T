@@ -196,6 +196,12 @@ public class SemanticVisitor implements TypeCheckVisitor{
 		}
 		
 		SymbolTable newst = st.scopes.get(m.getIdentifier());
+		ArrayList<Param> paramsOfTheFunction = st.paramOfAFunction(m.getIdentifier());
+		for (Param param_funct : paramsOfTheFunction ) {
+			ArrayList<Param> toAdd = new ArrayList<Param>();
+			toAdd.add(param_funct);
+			newst.addEntry(param_funct.getName(), toAdd);
+		}
 		
 		if (newst == null) {
 			System.err.println("ScopeError : the method is not in the symbolTable");
@@ -379,7 +385,8 @@ public class SemanticVisitor implements TypeCheckVisitor{
 		Type return_type = s.acceptTypeCheck(this, st);
 		if(methodTypes != null) {
 			if(!return_type.equals(methodTypes.get(methodTypes.size()-1).getType())) {
-				throw new SemanticException("ReturnError");
+				System.err.println("ReturnError : the return type is not correct : expected type " + methodTypes.get(methodTypes.size()-1).getType() + " received type " + return_type );
+				System.exit(6);
 			}
 		}
 		return null;
