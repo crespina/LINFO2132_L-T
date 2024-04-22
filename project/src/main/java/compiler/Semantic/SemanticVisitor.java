@@ -110,25 +110,29 @@ public class SemanticVisitor implements TypeCheckVisitor{
 
 	@Override
 	public Type TypeCheck(Operand od, SymbolTable st) throws SemanticException{
-		// Rien a faire
-		Type t1;
-		// Check si le type 1 est un identifier/arrayAccess/structureAccess pour mettre a jour le type depuis la ST
-		switch (type1) {
+		Type type = od.getType();
+		String typeName = type.getIdentifier();
+		switch (typeName) {
+			case "int":
+			case "float":
+				Number n = (Number) od.getValue();
+				return n.acceptTypeCheck(this, st);
 			case "identifier":
-				t1 = st.get(ope1.getValue().toString());
-				type1 = t1.getIdentifier();
-				break;
+				String identifier = (String) od.getValue();
+				ArrayList<Type> types = st.get(identifier);
+				if (types == null) {
+					throw new SemanticException("ScopeError : " + "Variable "+ identifier + " is not defined");
+				}
+				return types.get(0);
 			case "arrayAccess":
-				ArrayAccess aa = (ArrayAccess) ope1.getValue();
-				t1 = st.get(aa.getArray());
-				type1 = t1.getIdentifier();
-				break;
+				ArrayAccess aa = (ArrayAccess) od.getValue();
+				return aa.acceptTypeCheck(this, st);
 			case "structureAccess":
-				break;
+				StructureAccess sa = (StructureAccess) od.getValue();
+				return sa.acceptTypeCheck(this, st);
 			default:
-				break;
+				throw new SemanticException("Operand not recognized");
 		}
-		return new Type("operand");
 	}
 
 	@Override
@@ -310,15 +314,19 @@ public class SemanticVisitor implements TypeCheckVisitor{
 
 	@Override
 	public Type TypeCheck(WhileLoop wl, SymbolTable st) throws SemanticException{
-		wl.getCondition().acceptTypeCheck(null, st)(this, st);
+		Operation op = wl.getCondition();
+		Type conditionType = op.acceptTypeCheck(this, st);
+		if(!conditionType.getIdentifier().equals("bool")) {
+			throw new SemanticException("MissingConditionError : " + "Condition Type =" + conditionType.getIdentifier());
+		}
 		ArrayList <Statement> statements = wl.getBody();
 		for (Statement s : statements) {
-            try {
+			try {
 				s.acceptTypeCheck(this, st);
 			} catch (SemanticException e) {
 				e.printStackTrace();
 			}
-        }
+		}
 		return new Type("whileLoop");
 	}
 
