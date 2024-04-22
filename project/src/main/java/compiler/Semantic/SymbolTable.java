@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class SymbolTable {
-    HashMap<String, ArrayList<Type>> entries = new HashMap<>();
+    HashMap<String, ArrayList<Param>> entries = new HashMap<>();
     HashMap<String, ArrayList<Param>> structures = new HashMap<String, ArrayList<Param>>();
     HashMap<String,SymbolTable> scopes = new HashMap<String,SymbolTable>();
     HashMap<Integer,String> method_Return = new HashMap<Integer,String>();
@@ -14,11 +14,11 @@ public class SymbolTable {
     public SymbolTable() {
     }
 
-    public HashMap<String, ArrayList<Type>> getTable() {
+    public HashMap<String, ArrayList<Param>> getTable() {
         return entries;
     }
 
-    public void addEntry(String id, ArrayList<Type> types) {
+    public void addEntry(String id, ArrayList<Param> types) {
     	entries.put(id, types);   
     }
     
@@ -26,7 +26,7 @@ public class SymbolTable {
     	structures.put(name, types);
     }
 
-    public ArrayList<Type> get(String identifier) {
+    public ArrayList<Param> get(String identifier) {
         if(entries.containsKey(identifier)) {
             return entries.get(identifier);
         }
@@ -72,6 +72,7 @@ public class SymbolTable {
     
     public void addAll(SymbolTable other) {
     	this.entries.putAll(other.entries); //this will contain all from other
+    	this.method_Return.putAll(other.method_Return);
     }
 
     public void addReturn(int id, String functionName) {

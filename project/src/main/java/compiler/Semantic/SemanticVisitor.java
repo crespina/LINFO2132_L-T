@@ -26,13 +26,13 @@ public class SemanticVisitor implements TypeCheckVisitor{
 		}
 		
 		String array_name = arrayAccess.getArray();
-		ArrayList<Type> types = st.get(array_name);
+		ArrayList<Param> types = st.get(array_name);
 		if (types == null) {
 			System.err.println("ScopeError : the array we want to access is not in the ST");
 			System.exit(7); //to be modified with correct number
 		}
 		
-		Type typeOfArray = types.get(0);
+		Type typeOfArray = types.get(0).getType();
 		return typeOfArray;
 		
 		
@@ -64,7 +64,8 @@ public class SemanticVisitor implements TypeCheckVisitor{
 	public Type TypeCheck(Bool b, SymbolTable st) throws SemanticException{
 		// TODO Auto-generated method stub
 		
-		if (!b.getContent().equals("true") || !b.getContent().equals("false") ) {
+		
+		if (!(b.getContent().equals("true")) & !(b.getContent().equals("false")) ) {
 			System.err.println("TypeError : a boolean must be true or false");
 			System.exit(1);//to be modified with correct number
 		}
@@ -96,7 +97,7 @@ public class SemanticVisitor implements TypeCheckVisitor{
 	@Override
 	public Type TypeCheck(FunctionCall fc, SymbolTable st) throws SemanticException{
 		// TODO Auto-generated method stub
-		ArrayList<Type> types_ST = st.get(fc.getFunctionName());
+		ArrayList<Param> types_ST = st.get(fc.getFunctionName());
 		ArrayList<Type> types = new ArrayList<Type>();
 		
 		for (Statement s : fc.getParams()){
@@ -104,13 +105,13 @@ public class SemanticVisitor implements TypeCheckVisitor{
 		}
 		
 		for (int i = 0; i<types_ST.size()-1; i++) {
-			if (!types.get(i).equals(types_ST.get(i))) {
+			if (!types.get(i).equals(types_ST.get(i).getType())) {
 				System.err.println("ArgumentError : the parameters at position " + i + "doesnt have the right type : expected type " + types_ST.get(i) + " received type " + types.get(i));
 				System.exit(4);
 			}
 		}
 		
-		return types_ST.get(types_ST.size()-1);
+		return types_ST.get(types_ST.size()-1).getType();
 		
 	}
 
@@ -141,7 +142,7 @@ public class SemanticVisitor implements TypeCheckVisitor{
 	    } else {
 	    	Type cond = null;
 	    	if (st.contains(conditionstr)) {
-	    		cond = st.get(conditionstr).get(0);
+	    		cond = st.get(conditionstr).get(0).getType();
 	    	}
 			if(conditionstr != "true" || conditionstr != "false" || !cond.equals(new Type("bool"))) {
 	    		System.err.println("MissingConditionError : the condition doesnt resolve to a bool but to " + conditionstr);
@@ -172,17 +173,17 @@ public class SemanticVisitor implements TypeCheckVisitor{
 
 	@Override
 	public Type TypeCheck(Method m, SymbolTable st) throws SemanticException{
-		ArrayList<Type> types_ST = st.get(m.getIdentifier());
+		ArrayList<Param> types_ST = st.get(m.getIdentifier());
 		ArrayList<Param> params = m.getParameters();
 		
 		for (int i = 0; i < types_ST.size()-1; i++) {
-			if (!params.get(i).equals(types_ST.get(i))) {
+			if (!params.get(i).getType().equals(types_ST.get(i).getType())) {
 				System.err.println("ArgumentError : the parameters at position " + i + "doesnt have the right type : expected type " + types_ST.get(i) + " received type " + params.get(i));
 				System.exit(4);
 			}
 		}
 		
-		Type expected_returnType = types_ST.get(types_ST.size()-1);
+		Type expected_returnType = types_ST.get(types_ST.size()-1).getType();
 		Type actual_returnType = m.getReturnType();
 		
 		if (!expected_returnType.equals(actual_returnType)) {
@@ -215,6 +216,12 @@ public class SemanticVisitor implements TypeCheckVisitor{
 	@Override
 	public Type TypeCheck(Operand od, SymbolTable st) throws SemanticException{
 		Type type = od.getType();
+		if (type.equals(new Type("identifier"))) {
+			System.out.println((String)od.getValue());
+			if (st.contains((String)od.getValue())) {
+				type = st.get( (String)od.getValue() ).get(0).getType();
+			}
+		}
 		String typeName = type.getIdentifier();
 		switch (typeName) {
 			case "int":
@@ -223,12 +230,12 @@ public class SemanticVisitor implements TypeCheckVisitor{
 				return n.acceptTypeCheck(this, st);
 			case "identifier":
 				String identifier = (String) od.getValue();
-				ArrayList<Type> types = st.get(identifier);
+				ArrayList<Param> types = st.get(identifier);
 				if (types == null) {
 					System.err.println("ScopeError : " + "Variable "+ identifier + " is not defined");
 					System.exit(7);
 				}
-				return types.get(0);
+				return types.get(0).getType();
 			case "arrayAccess":
 				ArrayAccess aa = (ArrayAccess) od.getValue();
 				return aa.acceptTypeCheck(this, st);
@@ -356,11 +363,11 @@ public class SemanticVisitor implements TypeCheckVisitor{
 		int returnId = rs.getId();
 		String methodName = st.getReturn(returnId);
 		// On recupere la valeur de retour de la methode
-		ArrayList<Type> methodTypes = st.get(methodName);
+		ArrayList<Param> methodTypes = st.get(methodName);
 		Statement s = rs.getReturnStatement();
 		Type return_type = s.acceptTypeCheck(this, st);
 		if(methodTypes != null) {
-			if(!return_type.equals(methodTypes.get(methodTypes.size()-1))) {
+			if(!return_type.equals(methodTypes.get(methodTypes.size()-1).getType())) {
 				throw new SemanticException("ReturnError");
 			}
 		}
@@ -443,7 +450,7 @@ public class SemanticVisitor implements TypeCheckVisitor{
 			System.exit(2);
 		}
 		
-		Type type_of_instance = st.get(instanceName).get(0);
+		Type type_of_instance = st.get(instanceName).get(0).getType();
 		
 		if (type_of_instance.equals(new Type(structName))) {
 			System.err.println("ScopeError : the struct you're trying to instanciate is not in the ST");
@@ -473,14 +480,14 @@ public class SemanticVisitor implements TypeCheckVisitor{
 	public Type TypeCheck(Variable v, SymbolTable st) throws SemanticException{
 		// Check if v.getVarName() is already in the ST
 		String name = v.getVarName();
-		ArrayList<Type> types = st.get(name);
+		ArrayList<Param> types = st.get(name);
 		if (types == null) {
 			System.err.println("ScopeError : " + "Variable "+ name + " is not defined");
 			System.exit(7);
 		}
 		Statement righStatement = v.getValue();
 		Type rightType = righStatement.acceptTypeCheck(this, st);
-		Type leftType = types.get(0);
+		Type leftType = types.get(0).getType();
 		if(!leftType.equals(rightType)) {
 			System.err.println("TypeError : tried to assign " + rightType.getIdentifier() + " to " + leftType.getIdentifier()+ ", variable " + v.getVarName());
 			System.exit(1);

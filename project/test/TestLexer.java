@@ -20,8 +20,26 @@ public class TestLexer {
 	@Test
     public void test0() {
         String input = 
-        		" struct Person {"
-        		+ "int x;"
+        		 "def int square(int v) {\r\n"
+        		+ "    return v*v;\r\n"
+        		+ "}\r\n"
+        		+ "\r\n"
+        		+ "def void main() {\r\n"
+        		+ "    int value = readInt();\r\n"
+        		+ "    Point p = Point(a, a+value);\r\n"
+        		+ "    writeInt(square(value));\r\n"
+        		+ "    writeln();\r\n"
+        		+ "    int i;\r\n"
+        		+ "    for (i=1, i<a, i = i+1) {\r\n"
+        		+ "        while (value!=0) {\r\n"
+        		+ "            if (run){\r\n"
+        		+ "                value = value - 1;\r\n"
+        		+ "            } else {\r\n"
+        		+ "                write(message);\r\n"
+        		+ "            }\r\n"
+        		+ "        }\r\n"
+        		+ "    }\r\n"
+        		+ "    i = (i+2)*2;\r\n"
         		+ "}";
         StringReader reader = new StringReader(input);
         Lexer lexer = new Lexer(reader);
@@ -48,7 +66,10 @@ public class TestLexer {
 	@Test
     public void test1() {
         String input = 
-        		 "int i = (i+2)*2;";
+        		"int i = 3;"
+        		 + "def int square(int v) {"
+        		 + "return v*v;"
+        		 + "}";
         StringReader reader = new StringReader(input);
         Lexer lexer = new Lexer(reader);
         Parser parser = new Parser(lexer);
@@ -61,6 +82,8 @@ public class TestLexer {
             SemanticAnalysis SA = new SemanticAnalysis(parser);
             SA.setSymbolTable();
             SymbolTable st = SA.getSt();
+            System.out.println(st);
+            SA.doSemanticAnalysis();
             
             
 		} catch (IOException | ParserException e) {

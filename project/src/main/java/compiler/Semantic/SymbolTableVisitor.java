@@ -2,6 +2,8 @@ package compiler.Semantic;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Map.Entry;
+import java.util.Set;
 
 import compiler.Parser.*;
 import compiler.Parser.Number;
@@ -98,13 +100,10 @@ public class SymbolTableVisitor implements TableVisitor {
 		String identifier = m.getIdentifier();
 		Type returnType = m.getReturnType();
 		ArrayList<Param> params = m.getParameters();
-		ArrayList<Type> paramsTypes = new ArrayList<Type>();
-		for (Param p : params) {
-			paramsTypes.add(p.getType());
-		}
-		paramsTypes.add(returnType);
+
+		params.add(new Param(returnType,null));
 		
-		st.addEntry(identifier, paramsTypes);
+		st.addEntry(identifier, params);
 
 		ArrayList<Statement> body = m.getBody();
 
@@ -115,6 +114,21 @@ public class SymbolTableVisitor implements TableVisitor {
 		}
 		SymbolTable newst = new SymbolTable();
 		newst.addAll(st);
+		Set<Entry<String, ArrayList<Param>>> entries = st.entries.entrySet();
+		for (Entry<String, ArrayList<Param>> entry : entries) {
+			if (entry.getValue().size()==1) {
+				newst.addEntry(entry.getKey(), entry.getValue());
+			} else {
+				ArrayList<Param> paramsToAdd = entry.getValue();
+				for (int i = 0; i<paramsToAdd.size()-1; i++) {
+					Param p = paramsToAdd.get(i);
+					ArrayList<Param> toAdd = new ArrayList<Param>();
+					toAdd.add(new Param(p.getType(),null));
+					newst.addEntry(p.getName(), toAdd );
+				}
+			}
+		}
+		
 		
 		for (Statement stmt : body) {
 			try {
@@ -198,8 +212,8 @@ public class SymbolTableVisitor implements TableVisitor {
 		
 		String identifier = si.getInstanceName();
 		Type type = new Type(si.getStructName());
-		ArrayList<Type> types = new ArrayList<Type>();
-		types.add(type);
+		ArrayList<Param> types = new ArrayList<Param>();
+		types.add(new Param(type,null));
 		st.addEntry(identifier, types);
 	}
 
@@ -225,8 +239,8 @@ public class SymbolTableVisitor implements TableVisitor {
 		
 		String identifier = vc.getIdentifier();
 		Type type = vc.getType();
-		ArrayList<Type> types = new ArrayList<Type>();
-		types.add(type);
+		ArrayList<Param> types = new ArrayList<Param>();
+		types.add(new Param(type,null));
 		st.addEntry(identifier,types);
 		
 	}
