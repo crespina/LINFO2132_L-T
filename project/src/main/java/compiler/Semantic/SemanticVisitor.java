@@ -124,12 +124,45 @@ public class SemanticVisitor implements TypeCheckVisitor{
 		Boolean isElse = ic.getIsElse(); //bool
 	    ArrayList<Statement> elseBody = ic.getElseBody();
 	    
-	    SymbolTable newst = st.getScopes("if");
-	    if (newst == null) {
-	    	System.out.println("there is not if statement in the symbol table");
+	    SymbolTable ifst = st.getScopes("if");
+	    if (ifst == null) {
+	    	System.out.println("there is no if statement in the symbol table");
 	    	System.exit(1);
 	    }
 	    
+	    if(conditionstr == null & conditionop != null) {
+	    	Type conditionop_type = conditionop.acceptTypeCheck(this, st);
+	    	if (!conditionop_type.equals(new Type("bool"))) {
+	    		System.out.println("the condition doesnt resolve to a bool but to " + conditionop_type);
+	    	}
+	    } else {
+	    	Type cond = null;
+	    	if (st.contains(conditionstr)) {
+	    		cond = st.get(conditionstr).get(0);
+	    	}
+			if(conditionstr != "true" || conditionstr != "false" || !cond.equals(new Type("bool"))) {
+	    		System.out.println("the condition doesnt resolve to a bool but to " + conditionstr);
+	    	}
+	    }
+	    
+	    for (Statement s : body) {
+	    	s.acceptTypeCheck(this, ifst);
+	    }
+	    
+	    if(isElse) {
+	    	
+	    	SymbolTable elsest = st.getScopes("else");
+		    if (elsest == null) {
+		    	System.out.println("there is no else statement in the symbol table");
+		    	System.exit(1);
+		    }
+		    
+	    	for (Statement s : elseBody) {
+	    		s.acceptTypeCheck(this, elsest);
+	    	}
+	    }
+	    
+	    return null;
 	    
 	}
 
