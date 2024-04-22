@@ -19,8 +19,19 @@ public class TestLexer {
 	
 	@Test
     public void test0() {
-        String input = 
-        		 "def int square(int v) {\r\n"
+        String input = "//Good luck\r\n"
+        		+ "\r\n"
+        		+ "final string message = \"Hello\";\r\n"
+        		+ "final bool run = true;\r\n"
+        		+ "\r\n"
+        		+ "struct Point {\r\n"
+        		+ "    int x;\r\n"
+        		+ "    int y;\r\n"
+        		+ "}\r\n"
+        		+ "\r\n"
+        		+ "int a = 3;\r\n"
+        		+ "\r\n"
+        		+ "def int square(int v) {\r\n"
         		+ "    return v*v;\r\n"
         		+ "}\r\n"
         		+ "\r\n"
@@ -32,7 +43,7 @@ public class TestLexer {
         		+ "    int i;\r\n"
         		+ "    for (i=1, i<a, i = i+1) {\r\n"
         		+ "        while (value!=0) {\r\n"
-        		+ "            if (run){\r\n"
+        		+ "           ; if (run){\r\n"
         		+ "                value = value - 1;\r\n"
         		+ "            } else {\r\n"
         		+ "                write(message);\r\n"
@@ -40,6 +51,43 @@ public class TestLexer {
         		+ "        }\r\n"
         		+ "    }\r\n"
         		+ "    i = (i+2)*2;\r\n"
+        		+ "}";
+        		 
+        StringReader reader = new StringReader(input);
+        Lexer lexer = new Lexer(reader);
+        Parser parser = new Parser(lexer);
+        try {
+			lexer.lex();
+			List<Symbol> lexedInput = lexer.getLexedInput();
+			
+            ArrayList<Statement> statements = parser.getAST();
+            
+            SemanticAnalysis SA = new SemanticAnalysis(parser);
+            SA.setSymbolTable();
+
+            SA.doSemanticAnalysis();
+            
+            System.out.println("end");
+            
+            
+		} catch (IOException | ParserException e) {
+			// TODO Auto-generated catch block
+			
+			e.printStackTrace();
+		}
+    }
+	
+/*
+	@Test
+    public void test1() {
+        String input = "struct Point {"
+        		+ "int x;"
+        		+ "int y;"
+        		+ "}"
+        		+ "int a = 1;"
+        		+ "int b = 2;"
+        		+ "def void square(){"
+        		+ "Point p = Point(a, b + a);"
         		+ "}";
         StringReader reader = new StringReader(input);
         Lexer lexer = new Lexer(reader);
@@ -49,48 +97,21 @@ public class TestLexer {
 			List<Symbol> lexedInput = lexer.getLexedInput();
 			
             ArrayList<Statement> statements = parser.getAST();
-            
-            SemanticAnalysis SA = new SemanticAnalysis(parser);
-            SA.setSymbolTable();
-
-            SA.doSemanticAnalysis();
-            
-            
-		} catch (IOException | ParserException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-    }
-	
-/*	
-	@Test
-    public void test1() {
-        String input = 
-        		"int i = 3;"
-        		 + "def int square(int v) {"
-        		 + "return v*v;"
-        		 + "}";
-        StringReader reader = new StringReader(input);
-        Lexer lexer = new Lexer(reader);
-        Parser parser = new Parser(lexer);
-        try {
-			lexer.lex();
-			List<Symbol> lexedInput = lexer.getLexedInput();
-			
-            ArrayList<Statement> statements = parser.getAST();
+            System.out.println(statements.get(0));
 
             SemanticAnalysis SA = new SemanticAnalysis(parser);
             SA.setSymbolTable();
             SymbolTable st = SA.getSt();
             System.out.println(st);
             SA.doSemanticAnalysis();
+            System.out.println("end");
             
             
 		} catch (IOException | ParserException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-    } */
+    }*/
 	
     /**
      * 

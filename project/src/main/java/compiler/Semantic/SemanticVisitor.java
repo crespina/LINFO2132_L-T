@@ -104,12 +104,16 @@ public class SemanticVisitor implements TypeCheckVisitor{
 			types.add(s.acceptTypeCheck(this, st));
 		}
 		
-		for (int i = 0; i<types_ST.size()-1; i++) {
-			if (!types.get(i).equals(types_ST.get(i).getType())) {
-				System.err.println("ArgumentError : the parameters at position " + i + "doesnt have the right type : expected type " + types_ST.get(i) + " received type " + types.get(i));
-				System.exit(4);
+		if (types.size() != 0 ) {
+			for (int i = 0; i<types_ST.size()-1; i++) {
+				if (!types.get(i).equals(types_ST.get(i).getType())) {
+					System.err.println("ArgumentError : the parameters at position " + i + "doesnt have the right type : expected type " + types_ST.get(i) + " received type " + types.get(i));
+					System.exit(4);
+				}
 			}
 		}
+		
+
 		
 		return types_ST.get(types_ST.size()-1).getType();
 		
@@ -217,7 +221,6 @@ public class SemanticVisitor implements TypeCheckVisitor{
 	public Type TypeCheck(Operand od, SymbolTable st) throws SemanticException{
 		Type type = od.getType();
 		if (type.equals(new Type("identifier"))) {
-			System.out.println((String)od.getValue());
 			if (st.contains((String)od.getValue())) {
 				type = st.get( (String)od.getValue() ).get(0).getType();
 			}
@@ -225,6 +228,7 @@ public class SemanticVisitor implements TypeCheckVisitor{
 		String typeName = type.getIdentifier();
 		switch (typeName) {
 			case "int":
+				return new Type("int");
 			case "float":
 				Number n = (Number) od.getValue();
 				return n.acceptTypeCheck(this, st);
@@ -242,6 +246,8 @@ public class SemanticVisitor implements TypeCheckVisitor{
 			case "structureAccess":
 				StructureAccess sa = (StructureAccess) od.getValue();
 				return sa.acceptTypeCheck(this, st);
+			case "string":
+				return new Type("String");
 			default:
 				System.err.println("TypeError : Operand not recognized");
 				System.exit(1);
@@ -452,7 +458,7 @@ public class SemanticVisitor implements TypeCheckVisitor{
 		
 		Type type_of_instance = st.get(instanceName).get(0).getType();
 		
-		if (type_of_instance.equals(new Type(structName))) {
+		if (!type_of_instance.equals(new Type(structName))) {
 			System.err.println("ScopeError : the struct you're trying to instanciate is not in the ST");
 			System.exit(7);
 		}
@@ -460,7 +466,7 @@ public class SemanticVisitor implements TypeCheckVisitor{
 		ArrayList<Param> params_ST = st.structures.get(structName);
 		for (int i = 0; i < parameters.size(); i++) {
 			t = parameters.get(i).acceptTypeCheck(this, st);
-			if (t.equals(params_ST.get(i).getType())) {
+			if (!t.equals(params_ST.get(i).getType())) {
 				System.err.println("TypeError : the parameters at position " + i + "doesnt have the right type : expected type " +  params_ST.get(i).getType() + " actual type :" + t);
 				System.exit(1);
 			}

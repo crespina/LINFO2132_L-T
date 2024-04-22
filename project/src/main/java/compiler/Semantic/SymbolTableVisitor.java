@@ -240,7 +240,7 @@ public class SymbolTableVisitor implements TableVisitor {
 		String identifier = vc.getIdentifier();
 		Type type = vc.getType();
 		ArrayList<Param> types = new ArrayList<Param>();
-		types.add(new Param(type,null));
+		types.add(new Param(type,vc.getIdentifier()));
 		st.addEntry(identifier,types);
 		
 	}
