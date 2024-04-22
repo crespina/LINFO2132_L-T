@@ -79,8 +79,16 @@ public class SemanticVisitor implements TypeCheckVisitor{
 
 	@Override
 	public Type TypeCheck(ForLoop fl, SymbolTable st) throws SemanticException{
-		// TODO Auto-generated method stub
-		return new Type("for");
+		Variable initValue = fl.getInitValue();
+		Type initValueType = initValue.acceptTypeCheck(this, st);
+		Operation endValue = fl.getEndValue();
+		Type endValueType = endValue.acceptTypeCheck(this, st);
+		if(!endValueType.getIdentifier().equals("bool")) {
+			throw new SemanticException("MissingConditionError : " + "Condition "+ endValue.toString() + " is not a boolean"); 
+		}
+		Variable increment = fl.getIncrement();
+		Type incrementType = increment.acceptTypeCheck(this, st);
+		return null;
 	}
 
 	@Override
