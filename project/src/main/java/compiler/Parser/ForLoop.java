@@ -3,6 +3,8 @@ package compiler.Parser;
 import compiler.Semantic.*;
 import java.util.ArrayList;
 import java.util.Objects;
+
+
 import java.util.HashMap;
 
 /**
@@ -11,9 +13,9 @@ import java.util.HashMap;
  */
 public class ForLoop extends Statement implements TableVisitable, TypeCheckVisitable{
 
-    Operation initValue;
+    Variable initValue;
     Operation endValue;
-    Operation increment;
+    Variable increment;
     ArrayList<Statement> body;
 
     /**
@@ -22,7 +24,7 @@ public class ForLoop extends Statement implements TableVisitable, TypeCheckVisit
 	 * @param increment
 	 * @param body
 	 */
-	public ForLoop(Operation initValue, Operation endValue, Operation increment, ArrayList<Statement> body) {
+	public ForLoop(Variable initValue, Operation endValue, Variable increment, ArrayList<Statement> body) {
 		super();
 		this.initValue = initValue;
 		this.endValue = endValue;
@@ -33,14 +35,14 @@ public class ForLoop extends Statement implements TableVisitable, TypeCheckVisit
 	
 	
 	
-    public Operation getInitValue() {
+    public Variable getInitValue() {
 		return initValue;
 	}
 
 
 
 
-	public void setInitValue(Operation initValue) {
+	public void setInitValue(Variable initValue) {
 		this.initValue = initValue;
 	}
 
@@ -61,14 +63,14 @@ public class ForLoop extends Statement implements TableVisitable, TypeCheckVisit
 
 
 
-	public Operation getIncrement() {
+	public Variable getIncrement() {
 		return increment;
 	}
 
 
 
 
-	public void setIncrement(Operation increment) {
+	public void setIncrement(Variable increment) {
 		this.increment = increment;
 	}
 
