@@ -226,12 +226,14 @@ public class SemanticVisitor implements TypeCheckVisitor{
 			}
 		}
 		String typeName = type.getIdentifier();
-		if(typeName == "int") {
-				return new Type("int");
-		} else if (typeName == "float") {		
+		
+		if (typeName.equals("int")) {
+			return new Type("int");
+		} else if (typeName.equals("float")) {		
 			Number n = (Number) od.getValue();
 			return n.acceptTypeCheck(this, st); 
-		} else if (typeName == "identifier") {
+		} else if (typeName.equals("identifier")) {
+			
 			String identifier = (String) od.getValue();
 			ArrayList<Param> types = st.get(identifier);
 			if (types == null) {
@@ -239,13 +241,14 @@ public class SemanticVisitor implements TypeCheckVisitor{
 					System.exit(7);
 				}
 			return types.get(0).getType(); 
-		} else if (typeName == "arrayAccess") {
+			
+		} else if (typeName.equals("arrayAccess")) {
 			ArrayAccess aa = (ArrayAccess) od.getValue();
 			return aa.acceptTypeCheck(this, st);
-		} else if (typeName == "structureAccess") {
+		} else if (typeName.equals("structureAccess")) {
 			StructureAccess sa = (StructureAccess) od.getValue();
 			return sa.acceptTypeCheck(this, st);
-		} else if (typeName == "string") {
+		} else if (typeName.equals("string")) {
 			return new Type("String");
 		} else {
 			System.err.println("TypeError : Operand not recognized");
