@@ -14,6 +14,7 @@ public class Method extends Statement implements TableVisitable, TypeCheckVisita
 	Type returnType;
 	ArrayList<Param> parameters;
 	ArrayList<Statement> body;
+	ArrayList<Integer> returnStatements;
 	
 	/**
 	 * @param identifier
@@ -21,12 +22,13 @@ public class Method extends Statement implements TableVisitable, TypeCheckVisita
 	 * @param parameters
 	 * @param body
 	 */
-	public Method(String identifier, Type returnType, ArrayList<Param> parameters, ArrayList<Statement> body) {
+	public Method(String identifier, Type returnType, ArrayList<Param> parameters, ArrayList<Statement> body, ArrayList<Integer> returnStatements) {
 		super();
 		this.identifier = identifier;
 		this.returnType = returnType;
 		this.parameters = parameters;
 		this.body = body;
+		this.returnStatements = returnStatements;
 	}
 	
 	
@@ -77,7 +79,13 @@ public class Method extends Statement implements TableVisitable, TypeCheckVisita
 		this.body = body;
 	}
 
+	public ArrayList<Integer> getReturnStatements() {
+		return returnStatements;
+	}
 
+	public void setReturnStatements(ArrayList<Integer> returnStatements) {
+		this.returnStatements = returnStatements;
+	}
 
 	public String toString() {
 		return "Method : " + "ReturnType = " + returnType + ", identifier = " + identifier + ", parameters = " + parameters + ", body = " + body;

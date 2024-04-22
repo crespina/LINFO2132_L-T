@@ -12,13 +12,15 @@ import java.util.HashMap;
 public class ReturnStatement extends Statement implements TableVisitable, TypeCheckVisitable{
 	
 	Statement returnStmt;
+	int id;
 
 	/**
 	 * @param returnStmt
 	 */
-	public ReturnStatement(Statement returnStmt) {
+	public ReturnStatement(Statement returnStmt, int id) {
 		super();
 		this.returnStmt = returnStmt;
+		this.id = id;
 	}	
 
 	public String toString() {
@@ -36,6 +38,14 @@ public class ReturnStatement extends Statement implements TableVisitable, TypeCh
 
 	public Type getType() {
 		return new Type("ReturnStatement");
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	@Override

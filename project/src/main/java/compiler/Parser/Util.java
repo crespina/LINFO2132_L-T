@@ -78,7 +78,6 @@ public class Util {
 				Util.match("CloseSquareBraket", null);
 				return new Type((String) identifier.attribute + "[]");
 			} catch (ParserException e) {
-				curIndex--;
 				return new Type((String) identifier.attribute);
 			}	
 		} catch (ParserException e2) {
@@ -109,7 +108,7 @@ public class Util {
 					type = new Type(typeSymbol.getAttribute());
 				}				
 			}	
-			curIndex++;
+			//curIndex++;
 			Symbol identifier = Util.match("Identifier", null);
 			return new Param(type, (String) identifier.attribute);
 		} catch (ParserException e) {
@@ -175,9 +174,23 @@ public class Util {
 			ArrayList<Param> parameters = Util.parseParams();
 			Util.match("CloseParenthesis", null);
 			Util.match("OpenCurlyBraket", null);
-			ArrayList<Statement> body = Util.parseStatements(curIndex, lexedInput);
-			Util.match("CloseCurlyBraket", null);
-			return new Method(name, returnType, parameters, body);
+			ArrayList<Integer> returnStatements = new ArrayList<Integer>();
+			ArrayList<Statement> body = new ArrayList<Statement>();
+			while(true) {
+				if(curIndex > lexedInput.size()-2) {
+					break;
+				}
+				Statement s = parseStatement();
+				if(s==null){
+					break;
+				}
+				if(s instanceof ReturnStatement) {
+					ReturnStatement rs = (ReturnStatement) s;
+					returnStatements.add(rs.getId());
+				}
+				body.add(s);
+			}			Util.match("CloseCurlyBraket", null);
+			return new Method(name, returnType, parameters, body, returnStatements);
 		} catch (ParserException e) {
 			curIndex = startIndex;
 			throw e;
@@ -643,7 +656,8 @@ public class Util {
 		try {
 			Util.match("Keyword", new ArrayList<>(List.of("return")));
 			Statement stmt = Util.parseStatement();
-			return new ReturnStatement(stmt);
+			int id = curIndex;
+			return new ReturnStatement(stmt, id);
 		} catch (ParserException e) {
 			curIndex = startIndex;
 			throw e;
