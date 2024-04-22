@@ -173,9 +173,9 @@ public class SymbolTableVisitor implements TableVisitor {
 		
 		
 		for (Statement stmt : s.getBody()) {
-			VariableCreation vc = (VariableCreation) stmt;
-			Type type_p = vc.getType();
-			params.add(new Param(type_p, vc.getIdentifier()));
+			Param param = (Param) stmt;
+			Type type_p = param.getType();
+			params.add(new Param(type_p, param.getName()));
 		}
 		
 		st.addStructure(identifier, params);

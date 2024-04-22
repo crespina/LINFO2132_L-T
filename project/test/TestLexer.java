@@ -19,10 +19,12 @@ public class TestLexer {
 	
 	@Test
     public void test0() {
-        String input = "struct Point {"
-        		+ "    int x;"
-        		+ "    int y;"
-        		+ "}";
+        String input = 
+        		 "struct Point {\r\n"
+        		 + "    int x;\r\n"
+        		 + "    int y;\r\n"
+        		 + "}"
+        		 + "Point p = Point(3,4)";
         StringReader reader = new StringReader(input);
         Lexer lexer = new Lexer(reader);
         Parser parser = new Parser(lexer);

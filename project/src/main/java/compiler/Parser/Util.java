@@ -201,6 +201,7 @@ public class Util {
 				Util.match("Semicolon",null);
 				lookahead = lexedInput.get(curIndex);
 			}
+			Util.match("CloseCurlyBraket", null);
 			return new Structure(name, parameters);
 		} catch (ParserException e) {
 			curIndex = startIndex;
@@ -470,15 +471,17 @@ public class Util {
 				}
 				else if(lookahead2.getToken().equals("OpenSquareBraket")) {
 					int index2 = curIndex;
+									
 					try {
-						//Structure Access
+							//Structure Access
 						Statement s = parseStructAccess();
 						return s;
-					} catch (ParserException e) {
+					} catch (ParserException e2) {
 						// Structure instance
 						curIndex = index2;
 						return parseArrayAccess();
-					}								
+					}		
+						
 				}
 				else if((operators.contains(lookahead2.getAttribute())) && (lookahead2.getAttribute() != null) && (!lookahead2.getAttribute().equals("="))) {
 					// identifier operation

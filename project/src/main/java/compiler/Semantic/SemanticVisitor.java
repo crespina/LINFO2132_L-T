@@ -374,11 +374,18 @@ public class SemanticVisitor implements TypeCheckVisitor{
 				}
 			}			
 		}
-		
+		/*
 		else if (instanceInArray != null) {
 			String array = instanceInArray.getArray();
+			Statement s = instanceInArray.getIndex();
 			
-		}
+			ArrayList<Param> params_ST = st.structures.get(array);
+			for (Param param_ST : params_ST) {
+				if (param_ST.getName().equals(param)) {
+					correctParam = param_ST;
+				}
+			}
+		}*/ //Doesnt work because the parser doesnt allow yet to create an array of struct
 		
 		if (correctParam == null) {
 			System.out.println("the parameter tried to be accessed" + param +" is not in the structure" + instance);
@@ -396,15 +403,28 @@ public class SemanticVisitor implements TypeCheckVisitor{
 	@Override
 	public Type TypeCheck(StructureInstanciation si, SymbolTable st) throws SemanticException{
 		// Check that structure name exists in the SymbolTable
-		ArrayList <Statement> statements = si.getStatements();
-		for (Statement s : statements) {
-            try {
-				s.acceptTypeCheck(this, st);
-			} catch (SemanticException e) {
-				e.printStackTrace();
+		String structName = si.getStructName();
+		String instanceName = si.getInstanceName();
+		ArrayList<Statement> parameters = si.getStatements();
+		
+		Type type_of_instance = st.get(instanceName).get(0);
+		
+		if (type_of_instance.equals(new Type(structName))) {
+			System.out.println("the struct you're trying to instanciate is not in the ST");
+			System.exit(1);
+		}
+		Type t = null;
+		ArrayList<Param> params_ST = st.structures.get(structName);
+		for (int i = 0; i < parameters.size(); i++) {
+			t = parameters.get(i).acceptTypeCheck(this, st);
+			if (t.equals(params_ST.get(i).getType())) {
+				System.out.println("the parameters at position " + i + "doesnt have the right type : expected type " +  params_ST.get(i).getType() + " actual type :" + t);
+				System.exit(1);
 			}
-        }
-		return new Type("structInst");
+		}
+		
+		return new Type(structName);
+		
 	}
 
 	@Override
