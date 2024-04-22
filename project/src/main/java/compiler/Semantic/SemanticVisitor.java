@@ -113,8 +113,6 @@ public class SemanticVisitor implements TypeCheckVisitor{
 			}
 		}
 		
-
-		
 		return types_ST.get(types_ST.size()-1).getType();
 		
 	}
@@ -132,6 +130,7 @@ public class SemanticVisitor implements TypeCheckVisitor{
 	    ArrayList<Statement> elseBody = ic.getElseBody();
 	    
 	    SymbolTable ifst = st.getScopes("if");
+	    
 	    if (ifst == null) {
 	    	System.err.println("ScopeError : there is no if statement in the symbol table");
 	    	System.exit(7);

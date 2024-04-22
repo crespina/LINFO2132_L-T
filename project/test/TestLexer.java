@@ -16,7 +16,7 @@ import compiler.Semantic.SemanticAnalysis;
 import compiler.Semantic.SymbolTable;
 
 public class TestLexer {
-/*
+
 	@Test
     public void test0() {
         String input = "//Good luck\r\n"
@@ -75,17 +75,17 @@ public class TestLexer {
 			
 			e.printStackTrace();
 		}
-    }*/
+    }
 	
 
 	@Test
     public void test1() {
-        String input = "bool v = true;"
-        		+ "def int sum(int a){"
-        		+ "return a;"
+        String input = "bool b = true;"
+        		+ "if (b){"
+        		+ "int a = 2;"
         		+ "}"
-        		+ "def int square(int v) {"
-        		+ "return v*v ;"
+        		+ "else {"
+        		+ "a = 3;"
         		+ "}";
         StringReader reader = new StringReader(input);
         Lexer lexer = new Lexer(reader);

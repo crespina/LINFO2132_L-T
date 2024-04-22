@@ -15,7 +15,7 @@ public class SymbolTable {
     	//adding the built-in function 
     	//{"readInt", "readString", "writeInt", "readFloat", "writeFloat", "write", "writeln", "chr", "len", "floor", "free"};
     	
-    	/*
+    	
     	//readInt
     	ArrayList<Param> param_ReadInt = new ArrayList<Param>();
     	param_ReadInt.add(new Param(new Type("int"),null)); //return Type
@@ -78,7 +78,7 @@ public class SymbolTable {
     	param_floor.add(new Param(new Type("int"),null)); //return Type
     	this.entries.put("floor", param_floor);
     	
-    	*/
+    	
     	
     }
 

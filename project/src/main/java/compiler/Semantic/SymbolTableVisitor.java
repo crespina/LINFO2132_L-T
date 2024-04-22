@@ -63,25 +63,28 @@ public class SymbolTableVisitor implements TableVisitor {
 		Boolean isElse = ic.getIsElse();
 		ArrayList<Statement> elseBody = ic.getElseBody();
 		
-		SymbolTable newst = new SymbolTable();
-		newst.addAll(st);
+		SymbolTable ifst = new SymbolTable();
+		ifst.addAll(st);
 		
 		
 		for (Statement stmt : body) {
 			try {
-				stmt.accept(this, newst);
+				stmt.accept(this, ifst);
 			} catch (SemanticException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
 		
-		st.addScope("if",newst);
+		st.addScope("if",ifst);
+		
+		SymbolTable elsest = new SymbolTable();
+		elsest.addAll(st);
 		
 		if (isElse) {
 			for (Statement stmt : elseBody) {
 				try {
-					stmt.accept(this, newst);
+					stmt.accept(this, elsest);
 				} catch (SemanticException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -89,7 +92,7 @@ public class SymbolTableVisitor implements TableVisitor {
 			}
 		}
 		
-		st.addScope("else",newst);
+		st.addScope("else",elsest);
 
 	}
 
@@ -237,7 +240,7 @@ public class SymbolTableVisitor implements TableVisitor {
 	public void visit(Variable v, SymbolTable st) {
 		// TODO Auto-generated method stub
 		if (!st.contains(v.getVarName())) {
-			System.out.println("The ST doesnt contains the variable " + v.getVarName());
+			System.err.println("ScopeError : The ST doesnt contains the variable " + v.getVarName());
 			System.exit(6);
 		}
 		
