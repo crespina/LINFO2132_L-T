@@ -8,8 +8,10 @@ import compiler.Parser.*;
 import compiler.Parser.Number;
 
 public class SemanticVisitor implements TypeCheckVisitor{
-
+	
 	static String[] comp_operators = new String[]{"==","!=","<",">",">=","<="};
+	static String[] arith_operators = new String[]{"+","-","*","/"};
+	static String[] boolean_operators = new String[]{"&&","||","==","!="};
 
 	@Override
 	public Type TypeCheck(ArrayAccess arrayAccess, SymbolTable st) throws SemanticException{
@@ -78,89 +80,37 @@ public class SemanticVisitor implements TypeCheckVisitor{
 	@Override
 	public Type TypeCheck(ForLoop fl, SymbolTable st) throws SemanticException{
 		// TODO Auto-generated method stub
-		
+		return new Type("for");
 	}
 
 	@Override
 	public Type TypeCheck(FunctionCall fc, SymbolTable st) throws SemanticException{
 		// TODO Auto-generated method stub
-		if(st.contains(fc.getFunctionName())) {
-			for (Param p : funcT.get(fc.getFunctionName())) {
-				// Verifier que chaque statement dans le funtionCall est du même type que la liste de param
-			}
-		}
+		return new Type("functionCall");
 		
 	}
 
 	@Override
 	public Type TypeCheck(IfCond ic, SymbolTable st) throws SemanticException{
 		// TODO Auto-generated method stub
-		
+		return new Type("ifCOnd");
 	}
 
 	@Override
 	public Type TypeCheck(Method m, SymbolTable st) throws SemanticException{
-		for (Param p : m.getParameters()) {
-			st.addEntry(p.getName(), p.getType());
-		}
 		ArrayList <Statement> body = m.getBody();
-
-		if(body.get(body.size()-1).getType().getIdentifier().equals("ReturnStatement")) {
-			ReturnStatement returnStmt = (ReturnStatement) body.get(body.size()-1);
-			if(m.getReturnType().getIdentifier().equals("void")) {
-				throw new SemanticException("ReturnError" + "void function " + m.getIdentifier() +  "cannot return anything");
-			}
-			// Je voulaias check le type de retour mais impossible, trop trop de cas pour le Statement dans ReturnStatement
-			/* 
-			if(!returnStmt.getReturnStatement().getType().equals(m.getReturnType().getIdentifier())) {
-				throw new SemanticException("ReturnError" + m.getReturnType().getIdentifier() + " function " + m.getIdentifier() +  "returns" + body.get(body.size()-1).getType().getIdentifier());
-			}*/
-		}
-		else {
-			if(!m.getReturnType().getIdentifier().equals("void")) {
-				throw new SemanticException("ReturnError" + m.getReturnType().getIdentifier() + " function " + m.getIdentifier() +  "must return something");
-			}
-		}
-		for (Statement statement : body) {
-            try {
-				statement.accept(this, st, funcT);
-			} catch (SemanticException e) {
-				e.printStackTrace();
-			}
-        }
+		return new Type("method");
 	}
 
 	@Override
 	public Type TypeCheck(Number n, SymbolTable st) throws SemanticException {
-		// Rien a faire
+		return n.getType();
 		
 	}
 
 	@Override
 	public Type TypeCheck(Operand od, SymbolTable st) throws SemanticException{
 		// Rien a faire
-		
-	}
-
-	@Override
-	public Type TypeCheck(Operation op, SymbolTable st) throws SemanticException{
-		String type1;
-		Operand ope1;
-		String type2;
-		try {
-			Operation op1 = op.getOp1();
-			op1.accept(this, st, funcT);
-			ope1 = null;
-			type1 = op1.getVType().getIdentifier();
-		} catch (Exception e) {
-			ope1 = op.getOperand1();
-			type1 = ope1.getType().getIdentifier();
-		}
-		Operator operator = op.getOperation();
-		Operand ope2 = op.getOperand2();
-		type2 = ope2.getType().getIdentifier();
-
-		System.out.println(type1);
 		Type t1;
 		// Check si le type 1 est un identifier/arrayAccess/structureAccess pour mettre a jour le type depuis la ST
 		switch (type1) {
@@ -178,100 +128,130 @@ public class SemanticVisitor implements TypeCheckVisitor{
 			default:
 				break;
 		}
-		Type t2;
-		// Check si le type 2 est un identifier/arrayAccess/structureAccess pour mettre a jour le type depuis la ST
-		switch (type2) {
-			case "identifier":
-				t2 = st.get(ope2.getValue().toString());
-				type2 = t2.getIdentifier();
-				break;
-			case "arrayAccess":
-				ArrayAccess aa = (ArrayAccess) ope1.getValue();
-				t2 = st.get(aa.getArray());
-				type1 = t2.getIdentifier();
-				break;
-			case "structureAccess":
-				break;
-		
-			default:
-				break;
+		return new Type("operand");
+	}
+
+	@Override
+	public Type TypeCheck(Operation op, SymbolTable st) throws SemanticException{
+		Type type1;
+		try {
+			Operation op1 = op.getOp1();
+			type1 = op1.acceptTypeCheck(this, st);
+
+		} catch (Exception e) {
+			Operand ope1 = op.getOperand1();
+			type1 = ope1.acceptTypeCheck(null, st);
 		}
+
+		Operator operator = op.getOperation();
+		Operand ope2 = op.getOperand2();
+		Type type2 = ope2.acceptTypeCheck(this, st);
 
 		// 2 float
 		if(type1.equals("float") && type1.equals(type2)) {
 			// si comparaison alors Boolean
 			if(isSpecialStr(operator.getOperation(), comp_operators)) {
-				op.setVType(new Type("bool"));
+				return new Type("bool");
+			}
+			// si operation arithmétique alors float
+			else if(isSpecialStr(operator.getOperation(), arith_operators)) {
+				return new Type("float");
 			}
 			else {
-				op.setVType(new Type("float"));
+				throw new SemanticException("OperatorError : " + "tried to do  "+ type1.getIdentifier() + " " + operator.getOperation() + " " + type2.getIdentifier());
 			}
 		}
 		// float int && int float
 		else if(type1.equals("float") && type2.equals("int") || type1.equals("int") && type2.equals("float")) {
 			// si comparaison alors Boolean
 			if(isSpecialStr(operator.getOperation(), comp_operators)) {
-				op.setVType(new Type("bool"));
+				return new Type("bool");
+			}
+			// si operation arithmétique alors float
+			else if(isSpecialStr(operator.getOperation(), arith_operators)) {
+				return new Type("float");
 			}
 			else {
-				op.setVType(new Type("float"));
+				throw new SemanticException("OperatorError : " + "tried to do  "+ type1.getIdentifier() + " " + operator.getOperation() + " " + type2.getIdentifier());
 			}
 		}
 		// 2 int
 		else if(type1.equals("int") && type1.equals(type2)) {
 			// si / ou % alors float
 			if(operator.getOperation().equals("/") || operator.getOperation().equals("%")) {
-				op.setVType(new Type("float"));
+				return new Type("float");
+			}
+			// si operation arithmétique alors int
+			else if(isSpecialStr(operator.getOperation(), arith_operators)) {
+				return new Type("int");
 			}
 			// si comparaison alors Boolean
 			else if(isSpecialStr(operator.getOperation(), comp_operators)) {
-				op.setVType(new Type("bool"));
+				return new Type("bool");
 			}
 			else {
-				op.setVType(new Type("int"));
+				throw new SemanticException("OperatorError : " + "tried to do  "+ type1.getIdentifier() + " " + operator.getOperation() + " " + type2.getIdentifier());
 			}
 		}
 		// 2 bool
 		else if(type1.equals("bool") && type1.equals(type2)) {
-			op.setVType(new Type("bool"));
+			// si operation ok
+			if(isSpecialStr(operator.getOperation(), boolean_operators)) {
+				return new Type("bool");
+			}
+			else {
+				throw new SemanticException("OperatorError : " + "tried to do  "+ type1.getIdentifier() + " " + operator.getOperation() + " " + type2.getIdentifier());
+			}
 		}
-
+		// 2 string
+		else if(type1.equals("string") && type1.equals(type2)) {
+			if(operator.getOperation().equals("+") || operator.getOperation().equals("==") || operator.getOperation().equals("!=")) {
+				return new Type("string");
+			}
+			else {
+				throw new SemanticException("OperatorError : " + "tried to do  "+ type1.getIdentifier() + " " + operator.getOperation() + " " + type2.getIdentifier());
+			}
+		}
+		else {
+			throw new SemanticException("OperatorError : " + "tried to do  "+ type1.getIdentifier() + " " + operator.getOperation() + " " + type2.getIdentifier());
+		}
+	
 	}
 
 	@Override
 	public Type TypeCheck(Operator or, SymbolTable st) throws SemanticException{
 		// Rien a faire 
-		
+		return new Type(or.getOperation());
 	}
 
 	@Override
 	public Type TypeCheck(Param p, SymbolTable st) throws SemanticException{
 		// Rien a faire 
-		
+		return p.getType();
 	}
 
 	@Override
 	public Type TypeCheck(ReturnStatement rs, SymbolTable st) throws SemanticException{
 		// Peut etre check que le type du return est le meme que celui de la methode
 		// JSP trop comment
-		
+		return new Type("return");
 	}
 
 	@Override
 	public Type TypeCheck(StringStmt ss, SymbolTable st) throws SemanticException{
-		// Rien a faire
+		return new Type("string");
 	}
 
 	@Override
 	public Type TypeCheck(Structure s, SymbolTable st) throws SemanticException{
-		
+		return new Type("structure");
 	}
 
 	@Override
 	public Type TypeCheck(StructureAccess sa, SymbolTable st) throws SemanticException{
 		// Check that instance already in the symbol table
 		// Check that param is a param of the structure in the ST
-		
+		return new Type("structAcc");
 	}
 
 	@Override
@@ -280,94 +260,65 @@ public class SemanticVisitor implements TypeCheckVisitor{
 		ArrayList <Statement> statements = si.getStatements();
 		for (Statement s : statements) {
             try {
-				s.accept(this, st, funcT);
+				s.acceptTypeCheck(this, st);
 			} catch (SemanticException e) {
 				e.printStackTrace();
 			}
         }
-		
+		return new Type("structInst");
 	}
 
 	@Override
 	public Type TypeCheck(Type t, SymbolTable st) throws SemanticException{
 		// Rien a faire
-		
+		return t;
 	}
 
 	@Override
 	public Type TypeCheck(Variable v, SymbolTable st) throws SemanticException{
 		// Check if v.getVarName() is already in the ST
-		
+		String name = v.getVarName();
+		ArrayList<Type> types = st.get(name);
+		if (types == null) {
+			throw new SemanticException("ScopeError : " + "Variable "+ name + " is not defined");
+		}
+		Statement righStatement = v.getValue();
+		Type rightType = righStatement.acceptTypeCheck(this, st);
+		Type leftType = types.get(0);
+		if(!leftType.equals(rightType)) {
+			throw new SemanticException("TypeError : tried to assign " + rightType.getIdentifier() + " to " + leftType.getIdentifier()+ ", variable " + vc.getIdentifier());
+		}
+		return leftType;
 	}
 
 	@Override
 	public Type TypeCheck(VariableCreation vc, SymbolTable st) throws SemanticException{
 		String identifier = vc.getIdentifier();
-		Type type = vc.getType();
-		// Ajout de la variable dans la ST et check si final ou pas
-		if(vc.getIsFinal())
-			st.addEntry(identifier, new Type(type.getIdentifier()+"final"));
-		else {
-			st.addEntry(identifier, type);
-		}
+		Type leftType = vc.getType();
+		// Check si cette variable existe deja 
 
 		if(vc.getStatement() != null) {
-			// can be a Number (float/int), a String, a Boolean, an Operation, 
-			Type t = vc.getStatement().getType();
-			//Number float
-			switch (t.getIdentifier()) {
-				case "float":
-					if(!vc.getType().equals(t)) {
-						throw new SemanticException("TypeError : tried to assign " + t.getIdentifier() + " to " + vc.getType().getIdentifier()+ " variable " + vc.getIdentifier());
-					}
-					break;
-				case "int":
-					if(!vc.getType().equals(t)) {
-						throw new SemanticException("TypeError : tried to assign " + t.getIdentifier() + " to " + vc.getType().getIdentifier()+ " variable " + vc.getIdentifier());
-					}
-					break;
-				case "String":
-					if(!vc.getType().equals(t)) {
-						throw new SemanticException("TypeError : tried to assign " + t.getIdentifier() + " to " + vc.getType().getIdentifier()+ " variable " + vc.getIdentifier());
-					}
-					break;
-				case "Bool":
-					if(!vc.getType().equals(t)) {
-						throw new SemanticException("TypeError : tried to assign " + t.getIdentifier() + " to " + vc.getType().getIdentifier()+ " variable " + vc.getIdentifier());
-					}
-					break;
-				case "FunctionCall":
-					FunctionCall fc = (FunctionCall) vc.getStatement();
-					if(!st.contains(fc.getFunctionName())) {
-						throw new SemanticException("ScopeError : " + "Function " + fc.getFunctionName() + " do not exists");
-					}
-					else if(!vc.getType().equals(st.get(fc.getFunctionName()))) {
-						throw new SemanticException("TypeError : tried to assign " + st.get(fc.getFunctionName()) + " to " + vc.getType().getIdentifier()+ " variable " + vc.getIdentifier());
-					}
-				case "Operation":
-					vc.getStatement().accept(this, st, funcT);
-					Operation ope = (Operation) vc.getStatement();
-					if(!vc.getType().equals(ope.getVType())) {
-						throw new SemanticException("TypeError : tried to assign " + t.getIdentifier() + " " + ope.getVType().getIdentifier()+ " to " + vc.getType().getIdentifier() + " variable " + vc.getIdentifier());
-					}
-					break;
-				default:
-					break;
+			Statement rightStatement = vc.getStatement();
+			Type rightType = rightStatement.acceptTypeCheck(this, st);
+			if(!leftType.equals(rightType)) {
+				throw new SemanticException("TypeError : tried to assign " + rightType.getIdentifier() + " to " + leftType.getIdentifier()+ ", variable " + vc.getIdentifier());
 			}
 		}
+		return leftType;
 	}
 
 	@Override
 	public Type TypeCheck(WhileLoop wl, SymbolTable st) throws SemanticException{
-		wl.getCondition().accept(this, st, funcT);
+		wl.getCondition().acceptTypeCheck(null, st)(this, st);
 		ArrayList <Statement> statements = wl.getBody();
 		for (Statement s : statements) {
             try {
-				s.accept(this, st, funcT);
+				s.acceptTypeCheck(this, st);
 			} catch (SemanticException e) {
 				e.printStackTrace();
 			}
         }
+		return new Type("whileLoop");
 	}
 
 	/**

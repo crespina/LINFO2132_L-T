@@ -40,7 +40,7 @@ public class Variable extends Statement implements TableVisitable, TypeCheckVisi
 
 
 
-	public Object getValue() {
+	public Statement getValue() {
 		return value;
 	}
 
