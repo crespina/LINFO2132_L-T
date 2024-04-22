@@ -715,11 +715,11 @@ public class Util {
 		try {
 			Util.match("Keyword", new ArrayList<>(List.of("for")));
 			Util.match("OpenParenthesis", null);
-			Operation initValue = Util.parseOperation();
+			Variable initValue = Util.parseVariableAssign();
 			Util.match("Comma", null);
-			Operation endValue = Util.parseOperation();
+			Operation endValue = Util.parseOperations();
 			Util.match("Comma", null);
-			Operation increment = Util.parseOperations();
+			Variable increment = Util.parseVariableAssign();
 			Util.match("CloseParenthesis", null);
 			Util.match("OpenCurlyBraket", null);
 			ArrayList<Statement> body = Util.parseStatements(curIndex, lexedInput);
