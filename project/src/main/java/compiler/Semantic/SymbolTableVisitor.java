@@ -38,16 +38,22 @@ public class SymbolTableVisitor implements TableVisitor {
 	@Override
 	public void visit(ForLoop fl, SymbolTable st) {
 		// TODO Auto-generated method stub
-		 
 		ArrayList<Statement> body = fl.getBody();
+		
+		SymbolTable forst = new SymbolTable();
+		forst.addAll(st);
+		
+		
 		for (Statement stmt : body) {
 			try {
-				stmt.accept(this, st);
+				stmt.accept(this, forst);
 			} catch (SemanticException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
+		
+		st.addScope("for",forst);
 	}
 
 	@Override
@@ -263,14 +269,21 @@ public class SymbolTableVisitor implements TableVisitor {
 	public void visit(WhileLoop wl, SymbolTable st) {
 		
 		ArrayList<Statement> body = wl.getBody();
+		
+		SymbolTable whilest = new SymbolTable();
+		whilest.addAll(st);
+		
+		
 		for (Statement stmt : body) {
 			try {
-				stmt.accept(this, st);
+				stmt.accept(this, whilest);
 			} catch (SemanticException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
+		
+		st.addScope("while",whilest);
 
 	}
 

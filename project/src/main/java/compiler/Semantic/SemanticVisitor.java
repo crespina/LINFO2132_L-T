@@ -85,12 +85,26 @@ public class SemanticVisitor implements TypeCheckVisitor{
 		Type initValueType = initValue.acceptTypeCheck(this, st);
 		Operation endValue = fl.getEndValue();
 		Type endValueType = endValue.acceptTypeCheck(this, st);
+		
+		SymbolTable forst = st.getScopes("for");
+	    if (forst == null) {
+	    	System.err.println("ScopeError : there is no else statement in the symbol table");
+	    	System.exit(7);
+	    }
+	    
 		if(!endValueType.getIdentifier().equals("bool")) {
 			System.err.println("MissingConditionError : " + "Condition "+ endValue.toString() + " is not a boolean");
 			System.exit(5);
 		}
+		
 		Variable increment = fl.getIncrement();
 		Type incrementType = increment.acceptTypeCheck(this, st);
+		
+		
+		for (Statement s : fl.getBody()) {
+			s.acceptTypeCheck(this, forst);
+		}
+		
 		return null;
 	}
 
@@ -423,6 +437,10 @@ public class SemanticVisitor implements TypeCheckVisitor{
 		
 		if (instance != null) { //a.y
 			ArrayList<Param> params_ST = st.structures.get(instance);
+			if (params_ST == null) {
+				System.err.println("ScopeError : the struct you're trying to access is not in the ST");
+				System.exit(7);
+			}
 			for (Param param_ST : params_ST) {
 				if (param_ST.getName().equals(param)) {
 					correctParam = param_ST;
@@ -534,15 +552,22 @@ public class SemanticVisitor implements TypeCheckVisitor{
 		Operation op = wl.getCondition();
 		String opstr = wl.getConditionStr();
 		
+    	SymbolTable whilest = st.getScopes("while");
+	    if (whilest == null) {
+	    	System.err.println("ScopeError : there is no else statement in the symbol table");
+	    	System.exit(7);
+	    }
+	    
+		
 		if (op != null) {
-			Type conditionType = op.acceptTypeCheck(this, st);
+			Type conditionType = op.acceptTypeCheck(this, whilest);
 			if(!conditionType.getIdentifier().equals("bool")) {
 				System.err.println("MissingConditionError : " + "Condition Type =" + conditionType.getIdentifier());
 				System.exit(5);
 			}
 			ArrayList <Statement> statements = wl.getBody();
 			for (Statement s : statements) {
-				s.acceptTypeCheck(this, st);
+				s.acceptTypeCheck(this, whilest);
 			}
 			return new Type("whileLoop");
 		}
@@ -550,8 +575,8 @@ public class SemanticVisitor implements TypeCheckVisitor{
 		else if (opstr != null) {
 			
 	    	Type cond = null;
-	    	if (st.contains(opstr)) {
-	    		cond = st.get(opstr).get(0).getType();
+	    	if (whilest.contains(opstr)) {
+	    		cond = whilest.get(opstr).get(0).getType();
 	    	}
 			if(opstr != "true" && opstr != "false" && !cond.equals(new Type("bool"))) {
 	    		System.err.println("MissingConditionError : the condition doesnt resolve to a bool but to " + opstr);

@@ -594,6 +594,8 @@ public class Util {
 				}
 			}	
 		}
+    	System.err.println("ScopeError");
+    	System.exit(7);
 		throw new ParserException("Cannot begin statement with " + lookahead.toString());
 	}
 	

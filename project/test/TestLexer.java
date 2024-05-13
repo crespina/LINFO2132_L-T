@@ -67,8 +67,6 @@ public class TestLexer {
 
             SA.doSemanticAnalysis();
             
-            System.out.println("end test 0");
-            
             
 		} catch (IOException | ParserException e) {
 			// TODO Auto-generated catch block
@@ -80,13 +78,14 @@ public class TestLexer {
 
 	@Test
     public void test1() {
-        String input = "bool b = true;"
-        		+ "if (b){"
-        		+ "int a = 2;"
+        String input = "struct Point{"
+        		+ "int x;"
         		+ "}"
-        		+ "else {"
-        		+ "a = 3;"
-        		+ "}";
+        		+ "bool b = true ;"
+        		+ "while(b){"
+        		+ "Point p = Point(5);"
+        		+ "}"
+        		+ "p.x = 5 ;";
         StringReader reader = new StringReader(input);
         Lexer lexer = new Lexer(reader);
         Parser parser = new Parser(lexer);
@@ -110,12 +109,9 @@ public class TestLexer {
 		}
     }
 	
-    /**
-     * 
-     */
-	/*
+
     @Test
-    public void test1() {
+    public void test10() {
         String input = "int a = 2";
         StringReader reader = new StringReader(input);
         Lexer lexer = new Lexer(reader);
@@ -134,6 +130,13 @@ public class TestLexer {
             VariableCreation t = new VariableCreation(false, new Type("int"), "a", a);
             statements.get(0).equals(t);
             assertEquals(statements.get(0), t);
+            
+            Parser parser = new Parser(lexer);
+            SemanticAnalysis SA = new SemanticAnalysis(parser);
+            SA.setSymbolTable();
+            SA.doSemanticAnalysis();
+            
+            
 		} catch (IOException | ParserException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -151,12 +154,16 @@ public class TestLexer {
 			List<Symbol> lexedInput = lexer.getLexedInput();
             ArrayList<Statement> statements = Util.parseStatements(0, lexedInput);
             assertEquals(statements.get(0).getClass(), Method.class);
+            Parser parser = new Parser(lexer);
+            SemanticAnalysis SA = new SemanticAnalysis(parser);
+            SA.setSymbolTable();
+            SA.doSemanticAnalysis();
 		} catch (IOException | ParserException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
     }
-
+    
     @Test
     public void testParser_SimpleStructure() {
         String input = "struct Point { int x; int y;}";
@@ -167,6 +174,10 @@ public class TestLexer {
             List<Symbol> lexedInput = lexer.getLexedInput();
             ArrayList<Statement> statements = Util.parseStatements(0, lexedInput);
             assertEquals(statements.get(0).getClass(), Structure.class);
+            Parser parser = new Parser(lexer);
+            SemanticAnalysis SA = new SemanticAnalysis(parser);
+            SA.setSymbolTable();
+            SA.doSemanticAnalysis();
         } catch (IOException | ParserException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -184,15 +195,19 @@ public class TestLexer {
             List<Symbol> lexedInput = lexer.getLexedInput();
             ArrayList<Statement> statements = Util.parseStatements(0, lexedInput);
             assertEquals(statements.get(0).getClass(), Structure.class);
+            Parser parser = new Parser(lexer);
+            SemanticAnalysis SA = new SemanticAnalysis(parser);
+            SA.setSymbolTable();
+            SA.doSemanticAnalysis();
         } catch (IOException | ParserException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
 
-
+    
     @Test
-    public void test3() {
+    public void test3() throws ParserException {
 
         String input = "for string bool while * !=";
         StringReader reader = new StringReader(input);
@@ -203,11 +218,14 @@ public class TestLexer {
         assertEquals(lexer.getNextSymbol().getToken(), "Keyword");
         assertEquals(lexer.getNextSymbol().getAttribute(), "*");
         assertEquals(lexer.getNextSymbol().getAttribute(), "!=");
-
+        Parser parser = new Parser(lexer);
+        SemanticAnalysis SA = new SemanticAnalysis(parser);
+        SA.setSymbolTable();
+        SA.doSemanticAnalysis();
     }
-
+    
     @Test
-    public void test4() throws IOException {
+    public void test4() throws IOException, ParserException {
 
         String input = 
         		"\r\n"
@@ -251,11 +269,15 @@ public class TestLexer {
         assertEquals(lexer.getNextSymbol().getAttribute(), "b");
         assertEquals(lexer.getNextSymbol().getToken(), "CloseParenthesis");
         assertEquals(lexer.getNextSymbol().getToken(), "Semicolon");
+        Parser parser = new Parser(lexer);
+        SemanticAnalysis SA = new SemanticAnalysis(parser);
+        SA.setSymbolTable();
+        SA.doSemanticAnalysis();
     }
-
+    
     @Test
     public void bigtest() {
-    	String file = "def void main() {\r\n"
+    	String file = "def void main(int a, int value) {\r\n"
     			+ "    int value = readInt();\r\n"
     			+ "    Point p = Point(a, a+value);\r\n"
     			+ "    writeInt(square(value));\r\n"
@@ -284,6 +306,6 @@ public class TestLexer {
 			fail("sould not fail");
 		}
         
-    }*/
+    }
     
 }
