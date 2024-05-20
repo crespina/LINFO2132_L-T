@@ -1,7 +1,12 @@
 package compiler.Parser;
 
+import compiler.Generator.GenVisitable;
+import compiler.Generator.GenVisitor;
 import compiler.Semantic.*;
 import java.util.Objects;
+
+import org.objectweb.asm.MethodVisitor;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -10,7 +15,7 @@ import java.util.HashMap;
  *
  */
 
-public class Operand extends Statement implements TableVisitable, TypeCheckVisitable{
+public class Operand extends Statement implements TableVisitable, TypeCheckVisitable, GenVisitable{
 	
 	//accepted types: int float bool string ArrayAccess StructureAccess identifier
 	String type;
@@ -83,6 +88,13 @@ public class Operand extends Statement implements TableVisitable, TypeCheckVisit
 	public Type acceptTypeCheck(TypeCheckVisitor visitor, SymbolTable ST) throws SemanticException {
 		// TODO Auto-generated method stub
 		return visitor.TypeCheck(this, ST);
+	}
+
+
+
+	@Override
+	public void accept(GenVisitor visitor, MethodVisitor mv) throws SemanticException {
+		visitor.visit(this, mv);
 	}
 
 }

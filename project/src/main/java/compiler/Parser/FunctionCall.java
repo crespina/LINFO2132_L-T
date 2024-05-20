@@ -1,15 +1,20 @@
 package compiler.Parser;
 
+import compiler.Generator.GenVisitable;
+import compiler.Generator.GenVisitor;
 import compiler.Semantic.*;
 import java.util.ArrayList;
 import java.util.Objects;
+
+import org.objectweb.asm.MethodVisitor;
+
 import java.util.HashMap;
 
 /**
  * @author A. Crespin & R. De Oliveira
  *
  */
-public class FunctionCall extends Statement implements TableVisitable, TypeCheckVisitable{
+public class FunctionCall extends Statement implements TableVisitable, TypeCheckVisitable, GenVisitable{
 	
 	String functionName;
 	ArrayList<Statement> params;
@@ -56,6 +61,11 @@ public class FunctionCall extends Statement implements TableVisitable, TypeCheck
 	public Type acceptTypeCheck(TypeCheckVisitor visitor, SymbolTable ST) throws SemanticException {
 		// TODO Auto-generated method stub
 		return visitor.TypeCheck(this, ST);
+	}
+
+	@Override
+	public void accept(GenVisitor visitor, MethodVisitor mv) throws SemanticException {
+		visitor.visit(this, mv);
 	}
 
 }

@@ -1,15 +1,19 @@
 package compiler.Parser;
 
+import compiler.Generator.GenVisitable;
+import compiler.Generator.GenVisitor;
 import compiler.Semantic.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
 
+import org.objectweb.asm.MethodVisitor;
+
 /**
  * @author A. Crespin & R. De Oliveira
  *
  */
-public class IfCond extends Statement implements TableVisitable, TypeCheckVisitable{
+public class IfCond extends Statement implements TableVisitable, TypeCheckVisitable, GenVisitable{
 	
 	// e.g. if (op) {} else {}
 	//      if (op) {}
@@ -118,5 +122,10 @@ public class IfCond extends Statement implements TableVisitable, TypeCheckVisita
 	public Type acceptTypeCheck(TypeCheckVisitor visitor, SymbolTable ST) throws SemanticException {
 		// TODO Auto-generated method stub
 		return visitor.TypeCheck(this, ST);
+	}
+
+	@Override
+	public void accept(GenVisitor visitor, MethodVisitor mv) throws SemanticException {
+		visitor.visit(this, mv);
 	}
 }

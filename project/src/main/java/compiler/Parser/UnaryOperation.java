@@ -1,11 +1,16 @@
 package compiler.Parser;
 
+import compiler.Generator.GenVisitable;
+import compiler.Generator.GenVisitor;
 import compiler.Semantic.*;
 import java.util.Objects;
+
+import org.objectweb.asm.MethodVisitor;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class UnaryOperation extends Statement implements TableVisitable, TypeCheckVisitable {
+public class UnaryOperation extends Statement implements TableVisitable, TypeCheckVisitable, GenVisitable {
 
 	Operator op;
 	Operand operand;
@@ -64,6 +69,12 @@ public class UnaryOperation extends Statement implements TableVisitable, TypeChe
 			return false;
 		UnaryOperation other = (UnaryOperation) obj;
 		return Objects.equals(op, other.op) && Objects.equals(operand, other.operand);
+	}
+
+
+	@Override
+	public void accept(GenVisitor visitor, MethodVisitor mv) throws SemanticException {
+		visitor.visit(this, mv);
 	}
 
 	

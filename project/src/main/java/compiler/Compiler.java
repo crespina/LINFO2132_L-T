@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import compiler.Generator.CodeGenerator;
 import compiler.Lexer.Lexer;
 import compiler.Lexer.Symbol;
 import compiler.Parser.Statement;
@@ -21,6 +22,7 @@ public static void main(String ... argv) throws IOException, ParserException {
 	
 		System.out.println("starting");
 		
+		/* 
 		if (argv[0].equals("-lexer")) {
 			FileReader reader = new FileReader(argv[1]);
 			Lexer lexer = new Lexer(reader);
@@ -47,5 +49,19 @@ public static void main(String ... argv) throws IOException, ParserException {
             SA.setSymbolTable();
             SA.doSemanticAnalysis();
 		}
+		*/
+		FileReader reader = new FileReader(argv[0]);
+		Lexer lexer = new Lexer(reader);
+		Parser parser = new Parser(lexer);
+		SemanticAnalysis SA = new SemanticAnalysis(parser);
+		SA.setSymbolTable();
+		SA.doSemanticAnalysis();
+		ArrayList<Statement> statements = parser.getAST();
+		try {
+			CodeGenerator cg = new CodeGenerator(statements, argv[1]);
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+
 	}
 }
